@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace E_Food.Data
+namespace EFood.AccesoDatos.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
