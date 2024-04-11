@@ -10,14 +10,18 @@ namespace EFood.Modelos
 {
     public class PrecioProducto
     {
+        [Key]
+        [Column(Order = 1)]
         [Required(ErrorMessage = "ID del producto es requerido")]
         public int IdProducto { get; set; }
 
-        [ForeignKey("IdProducto")]
-        public Producto Producto { get; set; }
-
+        [Key]
+        [Column(Order = 2)]
         [Required(ErrorMessage = "ID del tipo de precio es requerido")]
         public int IdTipoPrecio { get; set; }
+
+        [ForeignKey("IdProducto")]
+        public Producto Producto { get; set; }
 
         [ForeignKey("IdTipoPrecio")]
         public TipoPrecio TipoPrecio { get; set; }
