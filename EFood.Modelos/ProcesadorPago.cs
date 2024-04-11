@@ -25,7 +25,7 @@ namespace EFood.Modelos
         public int TipoId { get; set; }
 
         [ForeignKey("TipoId")]
-        public virtual TipoProcesadorPago Tipo { get; set; }
+        public virtual TipoProcesadorPago IdTipo { get; set; }
 
         [Required(ErrorMessage = "El estado es requerido")]
         public bool Estado { get; set; }
