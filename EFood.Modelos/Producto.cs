@@ -17,6 +17,7 @@ namespace EFood.Modelos
         [MaxLength(60, ErrorMessage = "Nombre debe tener máximo 60 caracteres")]
         public string Nombre { get; set; }
 
+
         [Required(ErrorMessage = "ID de línea de comida es requerido")]
         public int IdLineaComida { get; set; }
 
