@@ -28,12 +28,18 @@ namespace EFood.Modelos
         public virtual TipoProcesadorPago IdTipo { get; set; }
 
         [Required(ErrorMessage = "El estado es requerido")]
-        public bool Estado { get; set; }
+        public EstadoProcesadorPago Estado { get; set; }
 
         [Required(ErrorMessage = "Es requerido especificar si requiere verificación")]
         public bool RequiereVerificacion { get; set; }
 
         [MaxLength(200, ErrorMessage = "El método debe ser máximo de 200 caracteres")]
         public string Metodo { get; set; }
+
+        public enum EstadoProcesadorPago
+        {
+            Activo,
+            Inactivo
+        }
     }
 }
