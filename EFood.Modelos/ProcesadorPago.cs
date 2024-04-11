@@ -35,11 +35,11 @@ namespace EFood.Modelos
 
         [MaxLength(200, ErrorMessage = "El método debe ser máximo de 200 caracteres")]
         public string Metodo { get; set; }
+    }
 
-        public enum EstadoProcesadorPago
-        {
-            Activo,
-            Inactivo
-        }
+    public enum EstadoProcesadorPago
+    {
+        Activo,
+        Inactivo
     }
 }
