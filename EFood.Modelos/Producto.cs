@@ -30,6 +30,6 @@ namespace EFood.Modelos
         public string UbicacionImagen { get; set; }
 
         [Required(ErrorMessage = "Precio es requerido")]
-        public decimal Precio { get; set; }
+        public float Precio { get; set; }
     }
 }
