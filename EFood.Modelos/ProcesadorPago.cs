@@ -35,6 +35,10 @@ namespace EFood.Modelos
 
         [MaxLength(200, ErrorMessage = "El método debe ser máximo de 200 caracteres")]
         public string Metodo { get; set; }
+
+
+        //PARA CREAR TABLA INTERMEDIA TarjetaProcesador
+        public List<Tarjeta> Tarjetas { get; set; }
     }
 
     public enum EstadoProcesadorPago

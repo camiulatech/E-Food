@@ -29,7 +29,13 @@ namespace EFood.Modelos
 
         public string UbicacionImagen { get; set; }
 
-        [Required(ErrorMessage = "Precio es requerido")]
-        public float Precio { get; set; }
+        //[Required(ErrorMessage = "Precio es requerido")]
+        //public float Precio { get; set; }   //mejor si lo cambiamos a decimal
+
+        //PARA CREAR TABLA INTERMEDIA PedidoProducto
+        public List<Pedido> Pedidos { get; set; }
+
+        // Relación con TipoPrecioProducto
+        public List<TipoPrecio> TipoPrecios { get; set; }
     }
 }

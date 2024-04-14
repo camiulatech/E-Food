@@ -32,6 +32,10 @@ namespace EFood.Modelos
 
         [ForeignKey("ProcesadorPagoId")]
         public virtual ProcesadorPago ProcesadorPago { get; set; } // Propiedad de navegación
+
+        
+        //PARA CREAR TABLA INTERMEDIA PedidoProducto
+        public List<Producto> Productos { get; set; }
     }
 
     public enum EstadoPedido

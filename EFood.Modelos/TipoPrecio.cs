@@ -16,5 +16,10 @@ namespace EFood.Modelos
         [MaxLength(100, ErrorMessage = "Descripcion debe ser Maximo 100 caracteres")]
         public string Descripcion { get; set; }
 
+        [Required(ErrorMessage = "El monto es requerido")]
+        public decimal Monto { get; set; }
+
+        // Relación con TipoPrecioProducto
+        public List<Producto> Productos { get; set; }
     }
 }
