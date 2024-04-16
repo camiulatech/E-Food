@@ -12,9 +12,11 @@ namespace EFood.AccesoDatos.Repositorio
     {
 
         private readonly ApplicationDbContext _db;
+        public ILineaComidaRepositorio LineaComida { get; private set; }
 
         public UnidadTrabajo(ApplicationDbContext db) {
             _db = db;
+            LineaComida = new LineaComidaRepositorio(_db);
         }
 
         public void Dispose()

@@ -8,7 +8,7 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
 {
     public interface IUnidadTrabajo : IDisposable
     {
-
+        ILineaComidaRepositorio LineaComida { get; }
         Task Guardar();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EFood.Modelos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EFood.AccesoDatos.Repositorio.IRepositorio
 {
-    public interface ILineaComida : IRepositorio<LineaComida>
+    public interface ILineaComidaRepositorio : IRepositorio<LineaComidaRepositorio>
     {
         void Update(LineaComida lineaComida);
 
