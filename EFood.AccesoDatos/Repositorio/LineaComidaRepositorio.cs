@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EFood.AccesoDatos.Repositorio
 {
-    public class LineaComidaRepositorio : Repositorio<LineaComidaRepositorio>, ILineaComidaRepositorio
+    public class LineaComidaRepositorio : Repositorio<LineaComida>, ILineaComidaRepositorio
     {
 
         private readonly ApplicationDbContext _db;

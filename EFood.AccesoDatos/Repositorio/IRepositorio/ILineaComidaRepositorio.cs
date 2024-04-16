@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EFood.AccesoDatos.Repositorio.IRepositorio
 {
-    public interface ILineaComidaRepositorio : IRepositorio<LineaComidaRepositorio>
+    public interface ILineaComidaRepositorio : IRepositorio<LineaComida>
     {
         void Update(LineaComida lineaComida);
 
