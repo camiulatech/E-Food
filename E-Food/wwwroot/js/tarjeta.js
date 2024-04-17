@@ -23,13 +23,13 @@ function loadDatatable() {
                 "next": "Siguiente",
                 "previous": "Anterior"
             }
-        }, a
+        }, 
         "ajax": {
             "url": "/Admin/Tarjeta/ObtenerTodos"
         },
         "columns": [
             { "data": "id", "width": "10%" },
-            { "data": "name", "width": "20%" },
+            { "data": "nombre", "width": "20%" },
 
             {
                 "data": "id",
