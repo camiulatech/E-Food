@@ -55,7 +55,7 @@ function loadDatatable() {
     });
 }
 
-function Delete(url) {
+function Eliminar(url) {
     swal({
         title: "Esta seguro de Eliminar la Tarjeta?",
         text: "Este proceso es irreversible!",
