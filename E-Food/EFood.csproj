@@ -27,8 +27,4 @@
     <ProjectReference Include="..\EFood.Utilidades\EFood.Utilidades.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
-  </ItemGroup>
-
 </Project>
