@@ -1,9 +1,8 @@
-﻿@model EFood.Modelos.LineaComida
-
+﻿@model EFood.Modelos.Tarjeta
 @{
 
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var titulo = "Crear Linea de Comida";
+    var titulo = "Crear Tarjeta";
 
 }
 
@@ -13,10 +12,10 @@
             <div asp-asp-validation-summary="ModelOnly" class="text-danger"></div>
         </div>
 
-        @if (Model.Id !=0)
+        @if (Model.Id != 0)
         {
             //Actualizar
-            titulo= "Actualizar Linea de Comida";
+            titulo = "Actualizar Tarjeta";
             <input type="hidden" asp-for="Id" id="id" />
         }
         <div class="col-12 border-bottom p-0">
@@ -26,29 +25,27 @@
         {
             <div class="row mb-2 mt-2">
                 <div class="form-group col-md-6">
-                <label>Id</label>
-                <div id="Id" class="form-control">
-                    @Model.Id
+                    <label>Id</label>
+                    <div id="Id" class="form-control">
+                        @Model.Id
+                    </div>
                 </div>
             </div>
-        </div>
         }
 
         <div class="row mb-2 mt-2">
             <div class="form-group col-md-6">
                 <label>Nombre</label>
-                <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre del Linea de Comida" id="name"/>
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+                <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre de la Tarjeta" id="nombre" />
+                <span asp-validation-formaction="Nombre" class="text-danger"></span>
             </div>
         </div>
 
-
-
         <br />
         <div>
-            @if (Model.Id !=0)
+            @if (Model.Id != 0)
             {
-                <partial name="_BotonesActualizarYRegresar" model="Model.Id"/>
+                <partial name="_BotonesActualizarYRegresar" model="Model.Id" />
             }
             else
             {
@@ -58,25 +55,25 @@
 
 
     </div>
-    
+
 </form>
 
-@section Scripts{
+@section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
     <script>
 
-        document.getElementById("nombre").addEventListener('change', function () { 
+        document.getElementById("nombre").addEventListener('change', function () {
             validarNombre();
-        
+
         });
 
         function validarNombre() {
-            var url = '@Url.Content("~/")' + "Admin/LineaComida/ValidarNombre";
+            var url = '@Url.Content("~/")' + "Admin/Tarjeta/ValidarNombre";
             var id = '#id';
             var name = '#nombre';
-            
-            $.getJSON(url, { id: $(id).val(), name: $(nombre).val() }, function (data) { 
+
+            $.getJSON(url, { id: $(id).val(), name: $(nombre).val() }, function (data) {
                 $.each(data, function (key, value) {
                     if (value) {
                         var name = document.getElementById("nombre");

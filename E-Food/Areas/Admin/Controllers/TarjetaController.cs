@@ -3,16 +3,17 @@ using EFood.Modelos;
 using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 
 namespace E_Food.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class LineaComidaController : Controller
+    public class TarjetaController : Controller
     {
 
         private readonly IUnidadTrabajo _unidadTrabajo;
 
-        public LineaComidaController(IUnidadTrabajo unidadTrabajo)
+        public TarjetaController(IUnidadTrabajo unidadTrabajo)
         {
             _unidadTrabajo = unidadTrabajo;
         }
@@ -23,79 +24,81 @@ namespace E_Food.Areas.Admin.Controllers
             return View();
         }
 
-        //Es un get por defecto
         public async Task<IActionResult> Upsert(int? id)
         {
-            LineaComida lineaComida = new LineaComida();
+            Tarjeta tarjeta = new Tarjeta();
 
             if (id == null)
             {
-                //Crear nueva Linea de Comida
+                //Crear nueva Tarjeta
 
-                return View(lineaComida);
+                return View(tarjeta);
             }
-            //Actualizar Linea de Comida
-            lineaComida = await _unidadTrabajo.LineaComida.Obtener(id.GetValueOrDefault());
-            if (lineaComida == null)
+            //Editar Tarjeta
+            tarjeta = await _unidadTrabajo.Tarjeta.Obtener(id.GetValueOrDefault());
+            if (tarjeta == null)
             {
                 return NotFound();
             }
-            return View(lineaComida);
+            return View(tarjeta);
 
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upsert(LineaComida lineaComida)
+        public async Task<IActionResult> Upsert(Tarjeta tarjeta)
         {
 
             if (ModelState.IsValid)
             {
-                if (lineaComida.Id == 0)
+                if (tarjeta.Id == 0)
                 {
-                    await _unidadTrabajo.LineaComida.Agregar(lineaComida);
-                    TempData[DS.Exitosa] = "Linea de Comida creada exitosamente";
+                    await _unidadTrabajo.Tarjeta.Agregar(tarjeta);
+                    TempData[DS.Exitosa] = "Tarjeta creada exitosamente";
                 }
                 else
                 {
-                    _unidadTrabajo.LineaComida.Actualizar(lineaComida);
-                    TempData[DS.Exitosa] = "Linea de Comida actualizada exitosamente";
+                    _unidadTrabajo.Tarjeta.Actualizar(tarjeta);
+                    TempData[DS.Exitosa] = "Tarjeta actualizada exitosamente";
                 }
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
             }
-            TempData[DS.Error] = "Error al guardar la Linea de Comida";
-            return View(lineaComida);
+            TempData[DS.Error] = "Error al guardar Tarjeta";
+            return View(tarjeta);
         }
+
+
 
         #region API
 
         [HttpGet]
         public async Task<IActionResult> ObtenerTodos()
         {
-            var todos = await _unidadTrabajo.LineaComida.ObtenerTodos();
-            return Json(new { data = todos });
+            var all = await _unidadTrabajo.Tarjeta.ObtenerTodos();
+            return Json(new { data = all });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Eliminar(int id) //Delete video
+        public async Task<IActionResult> Eliminar(int id)
         {
 
-            var LineaComidaDB = await _unidadTrabajo.LineaComida.Obtener(id);
-            if (LineaComidaDB == null)
+            var tarjetaBD = await _unidadTrabajo.Tarjeta.Obtener(id);
+            if (tarjetaBD == null)
             {
-                return Json(new { success = false, message = "Error al borrar el Linea de Comida" });
+                return Json(new { success = false, message = "Error al borrar la tarjeta" });
             }
-            _unidadTrabajo.LineaComida.Remover(LineaComidaDB);
+            _unidadTrabajo.Tarjeta.Remover(tarjetaBD);
             await _unidadTrabajo.Guardar();
-            return Json(new { success = true, message = "Linea de Comida borrado correctamente" });
+            return Json(new { success = true, message = "Tarjeta borrada correctamente" });
         }
 
         [ActionName("ValidarNombre")]
         public async Task<IActionResult> ValidarNombre(string nombre, int id = 0)
         {
             bool valor = false;
-            var lista = await _unidadTrabajo.LineaComida.ObtenerTodos();
+            var lista = await _unidadTrabajo.Tarjeta.ObtenerTodos();
             if (id == 0)
             {
                 valor = lista.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim());
