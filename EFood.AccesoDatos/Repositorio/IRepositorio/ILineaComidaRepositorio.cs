@@ -9,7 +9,7 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
 {
     public interface ILineaComidaRepositorio : IRepositorio<LineaComida>
     {
-        void Update(LineaComida lineaComida);
+        void Actualizar(LineaComida lineaComida);
 
     }
 }

@@ -23,6 +23,7 @@ namespace E_Food.Areas.Admin.Controllers
             return View();
         }
 
+        //Es un get por defecto
         public async Task<IActionResult> Upsert(int? id)
         {
             LineaComida lineaComida = new LineaComida();
@@ -57,7 +58,7 @@ namespace E_Food.Areas.Admin.Controllers
                 }
                 else
                 {
-                    _unidadTrabajo.LineaComida.Update(lineaComida);
+                    _unidadTrabajo.LineaComida.Actualizar(lineaComida);
                     TempData[DS.Exitosa] = "Linea de Comida actualizada exitosamente";
                 }
                 await _unidadTrabajo.Guardar();

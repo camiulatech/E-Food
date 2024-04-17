@@ -20,7 +20,7 @@ namespace EFood.AccesoDatos.Repositorio
             _db = db;
         }
 
-        public void Update(LineaComida lineaComida)
+        public void Actualizar(LineaComida lineaComida)
         {
             var lineaComidaBD = _db.LineaComidas.FirstOrDefault(c => c.Id == lineaComida.Id);
             if (lineaComida != null)
