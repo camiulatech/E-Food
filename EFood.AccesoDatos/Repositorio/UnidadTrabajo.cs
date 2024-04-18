@@ -15,10 +15,16 @@ namespace EFood.AccesoDatos.Repositorio
         public ILineaComidaRepositorio LineaComida { get; private set; }
         public ITarjetaRepositorio Tarjeta { get; private set; }
 
+
+        public ITiquetesDescuentoRepositorio TiqueteDescuento { get; private set; }
+
         public UnidadTrabajo(ApplicationDbContext db) {
             _db = db;
             LineaComida = new LineaComidaRepositorio(_db);
+
             Tarjeta = new TarjetaRepositorio(_db);
+
+            TiqueteDescuento = new TiqueteDescuentoRepositorio(_db);
         }
 
         public void Dispose()
