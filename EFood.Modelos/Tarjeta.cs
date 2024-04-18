@@ -17,6 +17,6 @@ namespace EFood.Modelos
         public string Nombre { get; set; }
 
         //PARA CREAR TABLA INTERMEDIA TarjetaProcesador
-        public List<ProcesadorPago> ProcesadorPagos { get; set; }
+        public List<ProcesadorPago>? ProcesadorPagos { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace EFood.AccesoDatos.Repositorio
 
         private readonly ApplicationDbContext _db;
         public ILineaComidaRepositorio LineaComida { get; private set; }
+        public ITarjetaRepositorio Tarjeta { get; private set; }
 
 
         public ITiquetesDescuentoRepositorio TiqueteDescuento { get; private set; }
@@ -21,6 +22,7 @@ namespace EFood.AccesoDatos.Repositorio
             _db = db;
             LineaComida = new LineaComidaRepositorio(_db);
 
+            Tarjeta = new TarjetaRepositorio(_db);
 
             TiqueteDescuento = new TiqueteDescuentoRepositorio(_db);
         }

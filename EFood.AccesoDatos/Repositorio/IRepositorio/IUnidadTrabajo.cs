@@ -10,8 +10,10 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
     {
         ILineaComidaRepositorio LineaComida { get; }
 
+        ITarjetaRepositorio Tarjeta { get; }
 
         ITiquetesDescuentoRepositorio TiqueteDescuento { get; }
+
         Task Guardar();
     }
 }
