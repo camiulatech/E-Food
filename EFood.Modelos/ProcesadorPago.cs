@@ -38,7 +38,7 @@ namespace EFood.Modelos
 
 
         //PARA CREAR TABLA INTERMEDIA TarjetaProcesador
-        public List<Tarjeta> Tarjetas { get; set; }
+        public List<Tarjeta>? Tarjetas { get; set; }
     }
 
     public enum EstadoProcesadorPago
