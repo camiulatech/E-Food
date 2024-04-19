@@ -37,9 +37,9 @@ namespace EFood.AccesoDatos.Repositorio
             }
         }
 
-        public IEnumerable<SelectListItem> ObtenerLineasComidasListaDesplegable (string obj) 
+        public IEnumerable<SelectListItem> ObtenerLineasComidasListaDesplegable (string objeto) 
         {
-            if (obj == "LineaComida")
+            if (objeto == "LineaComida")
             {
                 return _db.LineaComidas.Select(c => new SelectListItem()
                 {

@@ -3,6 +3,8 @@ using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
 using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
+using EFood.Modelos.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 
 namespace E_Food.Areas.Admin.Controllers
 {
@@ -11,10 +13,12 @@ namespace E_Food.Areas.Admin.Controllers
     {
 
         private readonly IUnidadTrabajo _unidadTrabajo;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductoController(IUnidadTrabajo unidadTrabajo)
+        public ProductoController(IUnidadTrabajo unidadTrabajo, IWebHostEnvironment webHostEnvironment)
         {
             _unidadTrabajo = unidadTrabajo;
+            _webHostEnvironment = webHostEnvironment;
         }
 
 
@@ -23,50 +27,84 @@ namespace E_Food.Areas.Admin.Controllers
             return View();
         }
 
-        //Es un get por defecto
         public async Task<IActionResult> Upsert(int? id)
         {
-            Producto producto = new Producto();
-            //LineaComidaLista = _unidadTrabajo.Producto.ObtenerTodosDropdownLista("LineaComida");
+            ProductoVM productoVM = new ProductoVM()
+            {
+                Producto = new Producto(),
+                LineasComidas = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida")
 
+            };
             if (id == null)
             {
-                //Crear nueva Linea de Comida
-
-                return View(producto);
+                return View(productoVM);
             }
-            //Actualizar Linea de Comida
-            producto = await _unidadTrabajo.Producto.Obtener(id.GetValueOrDefault());
-            if (producto == null)
+
+            productoVM.Producto = await _unidadTrabajo.Producto.Obtener(id.GetValueOrDefault());
+            if (productoVM.Producto == null)
             {
                 return NotFound();
             }
-            return View(producto);
-
+            return View(productoVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upsert(Producto producto)
+        public async Task<IActionResult> Upsert(ProductoVM productoVM)
         {
 
             if (ModelState.IsValid)
             {
-                if (producto.Id == 0)
+                var archivos = HttpContext.Request.Form.Files;
+                string webRootPath = _webHostEnvironment.WebRootPath;
+
+                if (productoVM.Producto.Id == 0)
                 {
-                    await _unidadTrabajo.Producto.Agregar(producto);
-                    TempData[DS.Exitosa] = "Producto creado exitosamente";
+                    string upload = webRootPath + DS.ImagenRuta;
+                    string fileName = Guid.NewGuid().ToString();
+                    string extension = Path.GetExtension(archivos[0].FileName);
+
+                    using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    {
+                        archivos[0].CopyTo(fileStream);
+                    }
+                    productoVM.Producto.UbicacionImagen = fileName + extension;
+                    await _unidadTrabajo.Producto.Agregar(productoVM.Producto);
                 }
                 else
                 {
-                    _unidadTrabajo.Producto.Actualizar(producto);
-                    TempData[DS.Exitosa] = "Producto actualizado exitosamente";
+                    // Actualizar
+                    var objProducto = await _unidadTrabajo.Producto.ObtenerPrimero(p => p.Id == productoVM.Producto.Id, isTracking: false);
+                    if (archivos.Count > 0) //Se carga una nueva imagen
+                    {
+                        string upload = webRootPath + DS.ImagenRuta;
+                        string fileName = Guid.NewGuid().ToString();
+                        string extension = Path.GetExtension(archivos[0].FileName);
+
+                        //Borar la imagen anterior
+                        var anteriorFile = Path.Combine(upload, objProducto.UbicacionImagen);
+                        if (System.IO.File.Exists(anteriorFile))
+                        {
+                            System.IO.File.Delete(anteriorFile);
+                        }
+                        using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                        {
+                            archivos[0].CopyTo(fileStream);
+                        }
+                        productoVM.Producto.UbicacionImagen = fileName + extension;
+                    } //Caso no se carga imagen
+                    else
+                    {
+                        productoVM.Producto.UbicacionImagen = objProducto.UbicacionImagen;
+                    }
+                    _unidadTrabajo.Producto.Actualizar(productoVM.Producto);
                 }
+                TempData[DS.Exitosa] = "Transaccion exitosa!";
                 await _unidadTrabajo.Guardar();
-                return RedirectToAction(nameof(Index));
-            }
-            TempData[DS.Error] = "Error al guardar el Productos";
-            return View(producto);
+                return View("Index");
+            } // If not Valid
+            productoVM.LineasComidas = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
+            return View(productoVM);
         }
 
         #region API
@@ -74,7 +112,7 @@ namespace E_Food.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> ObtenerTodos()
         {
-            var todos = await _unidadTrabajo.Producto.ObtenerTodos();
+            var todos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
             return Json(new { data = todos });
         }
 
@@ -87,9 +125,17 @@ namespace E_Food.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Error al borrar el Producto" });
             }
+            // Remover imagen
+            string upload = _webHostEnvironment.WebRootPath + DS.ImagenRuta;
+            var anteriorFile = Path.Combine(upload, ProductoBD.UbicacionImagen);
+            if (System.IO.File.Exists(anteriorFile))
+            {
+                System.IO.File.Delete(anteriorFile);
+            }
+
             _unidadTrabajo.Producto.Remover(ProductoBD);
             await _unidadTrabajo.Guardar();
-            return Json(new { success = true, message = "Producto borrado correctamente" });
+            return Json(new { success = true, message = "Producto borrado exitosamente" });
         }
 
         [ActionName("ValidarNombre")]
