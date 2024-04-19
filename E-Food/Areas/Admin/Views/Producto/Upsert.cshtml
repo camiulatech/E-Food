@@ -1,0 +1,116 @@
+﻿@model EFood.Modelos.Producto
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var titulo = "Crear Producto";
+
+}
+
+<form method="post">
+    <div style="padding-left:15%; padding-right:15%; padding-bottom:inherit.4rem;">
+        <div class="row border-0">
+            <div asp-asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>
+
+        @if (Model.Id != 0)
+        {
+            //Actualizar
+            titulo = "Actualizar Producto";
+            <input type="hidden" asp-for="Id" id="id" />
+        }
+        <div class="col-12 border-bottom p-0">
+            <h2 class="text-primary">@titulo</h2>
+        </div>
+        @if (Model.Id != 0)
+        {
+            <div class="row mb-2 mt-2">
+                <div class="form-group col-md-6">
+                    <label>Id</label>
+                    <div id="Id" class="form-control">
+                        @Model.Id
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre del Producto" id="name" />
+                <span asp-validation-formaction="Nombre" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <label>Linea de Comida </label>
+                <input type="number" asp-for="IdLineaComida" class="form-control" placeholder="Linea de Comida" />
+                <span asp-validation-formaction="Disponibles" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <label>Contenido</label>
+                <input type="text" asp-for="Contenido" class="form-control" placeholder="Contenido" />
+                <span asp-validation-formaction="Contenido" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <label>Imagen</label>
+                <input type="text" asp-for="UbicacionImagen" class="form-control" placeholder="Imagen" />
+                <span asp-validation-formaction="Imagen" class="text-danger"></span>
+            </div>
+        </div>
+
+
+
+        <br />
+        <div>
+            @if (Model.Id != 0)
+            {
+                <partial name="_BotonesActualizarYRegresar" model="Model.Id" />
+            }
+            else
+            {
+                <partial name="_BotonesCrearYRegresar" />
+            }
+        </div>
+
+
+    </div>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.getElementById("nombre").addEventListener('change', function () {
+            validarNombre();
+
+        });
+
+        function validarNombre() {
+            var url = '@Url.Content("~/")' + "Admin/Producto/ValidarNombre";
+            var id = '#id';
+            var name = '#nombre';
+
+            $.getJSON(url, { id: $(id).val(), name: $(nombre).val() }, function (data) {
+                $.each(data, function (key, value) {
+                    if (value) {
+                        var name = document.getElementById("nombre");
+                        swal("Error", "Nombre ya Existe", "error");
+                        name.value = "";
+                    }
+                });
+            })
+
+        }
+
+    </script>
+}

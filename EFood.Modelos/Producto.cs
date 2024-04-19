@@ -33,9 +33,9 @@ namespace EFood.Modelos
         //public float Precio { get; set; }   //mejor si lo cambiamos a decimal
 
         //PARA CREAR TABLA INTERMEDIA PedidoProducto
-        public List<Pedido> Pedidos { get; set; }
+        public List<Pedido>? Pedidos { get; set; } //poner que acepte nulos
 
         // Relación con TipoPrecioProducto
-        public List<TipoPrecio> TipoPrecios { get; set; }
+        public List<TipoPrecio>? TipoPrecios { get; set; } //poner que acepte nulos
     }
 }
