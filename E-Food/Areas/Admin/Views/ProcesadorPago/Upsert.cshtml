@@ -43,6 +43,13 @@
             </div>
         </div>
         <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <label>Nombre en opcion de pago</label>
+                <input type="text" asp-for="NombreOpcionDePago" class="form-control" placeholder="Nombre del procesador de pago" id="name" />
+                <span asp-validation-formaction="NombreOpcionDePago" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-2 mt-2">
             <div class="row mb-2 mt-2">
                 <div class="form-group col-md-6">
                     <label>Tipo de Procesador</label>
@@ -72,6 +79,13 @@
                     <input type="checkbox" asp-for="RequiereVerificacion" class="form-check-input" />
                     <label class="form-check-label">Requiere Verificación</label>
                 </div>
+            </div>
+        </div>
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <label>Metodo</label>
+                <input type="text" asp-for="Metodo" class="form-control" placeholder="Metodo del procesador de pago" id="method" />
+                <span asp-validation-formaction="Metodo" class="text-danger"></span>
             </div>
         </div>
 

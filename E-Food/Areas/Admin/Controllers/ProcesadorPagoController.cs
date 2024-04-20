@@ -69,14 +69,14 @@ namespace E_Food.Areas.Admin.Controllers
         #region API
 
         [HttpGet]
-        public async Task<IActionResult> getAll()
+        public async Task<IActionResult> ObtenerTodos()
         {
             var all = await _unidadTrabajo.ProcesadorPago.ObtenerTodos();
             return Json(new { data = all });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Eliminar(int id)
         {
 
             var procesadorPagoDB = await _unidadTrabajo.ProcesadorPago.Obtener(id);
@@ -90,8 +90,8 @@ namespace E_Food.Areas.Admin.Controllers
         }
 
 
-        [ActionName("NameValidate")]
-        public async Task<IActionResult> NameValidate(string procesador, int id = 0)
+        [ActionName("ValidarNombre")]
+        public async Task<IActionResult> ValidarNombre(string procesador, int id = 0)
         {
             bool valor = false;
             var lista = await _unidadTrabajo.ProcesadorPago.ObtenerTodos();
