@@ -1,0 +1,163 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using EFood.AccesoDatos.Repositorio.IRepositorio;
+using EFood.Modelos;
+using EFood.Utilidades;
+using Microsoft.AspNetCore.Authorization;
+using EFood.Modelos.ViewModels;
+using Microsoft.AspNetCore.Hosting;
+
+namespace E_Food.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class ProductoController : Controller
+    {
+
+        private readonly IUnidadTrabajo _unidadTrabajo;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public ProductoController(IUnidadTrabajo unidadTrabajo, IWebHostEnvironment webHostEnvironment)
+        {
+            _unidadTrabajo = unidadTrabajo;
+            _webHostEnvironment = webHostEnvironment;
+        }
+
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Upsert(int? id)
+        {
+            ProductoVM productoVM = new ProductoVM()
+            {
+                Producto = new Producto(),
+                LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida")
+
+            };
+            if (id == null)
+            {
+                return View(productoVM);
+            }
+
+            productoVM.Producto = await _unidadTrabajo.Producto.Obtener(id.GetValueOrDefault());
+            if (productoVM.Producto == null)
+            {
+                return NotFound();
+            }
+            return View(productoVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Upsert(ProductoVM productoVM)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var archivos = HttpContext.Request.Form.Files;
+                string webRootPath = _webHostEnvironment.WebRootPath;
+
+                if (productoVM.Producto.Id == 0)
+                {
+                    string upload = webRootPath + DS.ImagenRuta;
+                    string fileName = Guid.NewGuid().ToString();
+                    string extension = Path.GetExtension(archivos[0].FileName);
+
+                    using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    {
+                        archivos[0].CopyTo(fileStream);
+                    }
+                    productoVM.Producto.UbicacionImagen = fileName + extension;
+                    await _unidadTrabajo.Producto.Agregar(productoVM.Producto);
+                }
+                else
+                {
+                    // Actualizar
+                    var objProducto = await _unidadTrabajo.Producto.ObtenerPrimero(p => p.Id == productoVM.Producto.Id, isTracking: false);
+                    if (archivos.Count > 0) //Se carga una nueva imagen
+                    {
+                        string upload = webRootPath + DS.ImagenRuta;
+                        string fileName = Guid.NewGuid().ToString();
+                        string extension = Path.GetExtension(archivos[0].FileName);
+
+                        //Borar la imagen anterior
+                        var anteriorFile = Path.Combine(upload, objProducto.UbicacionImagen);
+                        if (System.IO.File.Exists(anteriorFile))
+                        {
+                            System.IO.File.Delete(anteriorFile);
+                        }
+                        using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                        {
+                            archivos[0].CopyTo(fileStream);
+                        }
+                        productoVM.Producto.UbicacionImagen = fileName + extension;
+                    } //Caso no se carga imagen
+                    else
+                    {
+                        productoVM.Producto.UbicacionImagen = objProducto.UbicacionImagen;
+                    }
+                    _unidadTrabajo.Producto.Actualizar(productoVM.Producto);
+                }
+                TempData[DS.Exitosa] = "Transaccion exitosa!";
+                await _unidadTrabajo.Guardar();
+                return View("Index");
+            } // If not Valid
+            productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
+            return View(productoVM);
+        }
+
+        #region API
+
+        [HttpGet]
+        public async Task<IActionResult> ObtenerTodos()
+        {
+            var todos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
+            return Json(new { data = todos });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Eliminar(int id) //Delete video
+        {
+
+            var ProductoBD = await _unidadTrabajo.Producto.Obtener(id);
+            if (ProductoBD == null)
+            {
+                return Json(new { success = false, message = "Error al borrar el Producto" });
+            }
+            // Remover imagen
+            string upload = _webHostEnvironment.WebRootPath + DS.ImagenRuta;
+            var anteriorFile = Path.Combine(upload, ProductoBD.UbicacionImagen);
+            if (System.IO.File.Exists(anteriorFile))
+            {
+                System.IO.File.Delete(anteriorFile);
+            }
+
+            _unidadTrabajo.Producto.Remover(ProductoBD);
+            await _unidadTrabajo.Guardar();
+            return Json(new { success = true, message = "Producto borrado exitosamente" });
+        }
+
+        [ActionName("ValidarNombre")]
+        public async Task<IActionResult> ValidarNombre(string nombre, int id = 0)
+        {
+            bool value = false;
+            var list = await _unidadTrabajo.Producto.ObtenerTodos();
+            if (id == 0)
+            {
+                value = list.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim());
+            }
+            else
+            {
+                value = list.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim() && c.Id != id);
+            }
+            if (value)
+            {
+                return Json(new { data = true });
+            }
+            return Json(new { data = false });
+
+        }
+        #endregion
+    }
+}
