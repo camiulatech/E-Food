@@ -22,15 +22,15 @@ function loadDatatable() {
             }
         },
         "ajax": {
-            "url": "/Admin/PaymentProcessor/getAll"
+            "url": "/Admin/ProcesadorPago/ObtenerTodos"
         },
 
         "columns": [
             { "data": "id" },
-            { "data": "processor" },
-            { "data": "type" },
+            { "data": "procesador" },
+            { "data": "tipo" },
             {
-                "data": "status",
+                "data": "estado",
                 "render": function (data, type, row) {
                     return data ? 'sí' : 'no';
                 }
@@ -40,15 +40,12 @@ function loadDatatable() {
                 "render": function (data) {
                     return `
                         <div class="text-center">
-                            <a href="/Admin/PaymentProcessorCard/index/${data}" class="btn btn-primary text-white" style="cursor:pointer">
-                                <i class="bi bi-credit-card-fill"></i>
-                            </a>
-                            <a href="/Admin/PaymentProcessor/Upsert/${data}" class="btn btn-success text-white" style="cursor:pointer">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-                            <a onclick=Delete("/Admin/PaymentProcessor/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                           <a href="/Admin/ProcesadorPago/Upsert/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                              <i class="bi bi-pencil-square"></i>  
+                           </a>
+                           <a onclick=Eliminar("/Admin/ProcesadorPago/Eliminar/${data}") class="btn btn-danger text-white" style="cursor:pointer">
                                 <i class="bi bi-trash3-fill"></i>
-                            </a>
+                           </a> 
                         </div>
                     `;
 
@@ -61,7 +58,7 @@ function loadDatatable() {
 
 
 
-function Delete(url) {
+function Eliminar(url) {
     swal({
         title: "Esta seguro de Eliminar el Procesador de pago?",
         text: "Este proceso es irreversible!",
