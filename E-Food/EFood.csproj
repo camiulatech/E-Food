@@ -27,4 +27,8 @@
     <ProjectReference Include="..\EFood.Utilidades\EFood.Utilidades.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\imagenes\producto\" />
+  </ItemGroup>
+
 </Project>

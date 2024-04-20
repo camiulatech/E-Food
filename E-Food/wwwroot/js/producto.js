@@ -26,9 +26,8 @@ function loadDataTable() {
         "columns": [
             { "data": "id", "width": "20%" },
             { "data": "nombre", "width": "20%" },
-            { "data": "lineacomida.id", "width": "20%" },
+            { "data": "lineaComida.nombre", "width": "20%" },
             { "data": "contenido", "width": "20%" },
-            { "data": "imgaen", "width": "20%" },
             {
                 "data": "id",
                 "render": function (data) {
