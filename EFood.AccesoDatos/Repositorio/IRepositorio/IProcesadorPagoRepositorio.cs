@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace EFood.AccesoDatos.Repositorio.IRepositorio
 {
-    public interface IProcesadorPagoRepositorio : IRepositorio<ProcesadorPagoRepositorio>
+    public interface IProcesadorPagoRepositorio : IRepositorio<ProcesadorPago>
     {
-        void Update(ProcesadorPagoRepositorio procesadorPago);
+        void Actualizar(ProcesadorPago procesadorPago);
     }
 }

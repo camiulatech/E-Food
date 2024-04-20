@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EFood.AccesoDatos.Repositorio
 {
-    public class ProcesadorPagoRepositorio : Repositorio<ProcesadorPagoRepositorio>, IProcesadorPagoRepositorio
+    public class ProcesadorPagoRepositorio : Repositorio<ProcesadorPago>, IProcesadorPagoRepositorio
     {
         private readonly ApplicationDbContext _db;
 
@@ -18,7 +18,7 @@ namespace EFood.AccesoDatos.Repositorio
             _db = db;
         }
 
-        public void Update(ProcesadorPago procesadorPago)
+        public void Actualizar(ProcesadorPago procesadorPago)
         {
             var procesadorPagoDB = _db.ProcesadorPagos.FirstOrDefault(p => p.Id == procesadorPago.Id);
             if (procesadorPagoDB != null)
