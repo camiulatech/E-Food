@@ -31,6 +31,7 @@
     <Folder Include="wwwroot\imagenes\producto\" />
     <Folder Include="wwwroot\imagenes\producto\" />
     <Folder Include="wwwroot\imagenes\producto\" />
+    <Folder Include="wwwroot\imagenes\producto\" />
   </ItemGroup>
 
 </Project>
