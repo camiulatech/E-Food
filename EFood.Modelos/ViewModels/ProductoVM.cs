@@ -1,5 +1,4 @@
-﻿using EFood.Modelos;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace EFood.Modelos.ViewModels
     {
         public Producto Producto { get; set; }
 
-        public IEnumerable<SelectListItem> LineasComidas { get; set; }
+        public IEnumerable<SelectListItem> LineaComidaLista { get; set; }
 
     }
 }

@@ -32,7 +32,7 @@ namespace E_Food.Areas.Admin.Controllers
             ProductoVM productoVM = new ProductoVM()
             {
                 Producto = new Producto(),
-                LineasComidas = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida")
+                LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida")
 
             };
             if (id == null)
@@ -103,7 +103,7 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Guardar();
                 return View("Index");
             } // If not Valid
-            productoVM.LineasComidas = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
+            productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
             return View(productoVM);
         }
 

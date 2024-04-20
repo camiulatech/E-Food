@@ -27,7 +27,7 @@ namespace EFood.Modelos
         [Required(ErrorMessage = "Contenido es requerido")]
         public string Contenido { get; set; }
 
-        public string UbicacionImagen { get; set; }
+        public string? UbicacionImagen { get; set; }
 
         //[Required(ErrorMessage = "Precio es requerido")]
         //public float Precio { get; set; }   //mejor si lo cambiamos a decimal

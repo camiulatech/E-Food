@@ -33,7 +33,7 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <label>Descripcion</label>
+                            <label>Contenido</label>
                             <input asp-for="Producto.Contenido" class="form-control" />
                             <span asp-validation-for="Producto.Contenido" class="text-danger"></span>
                         </div>
@@ -50,7 +50,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label>Linea de Comida</label>
-                            <select asp-for="Producto.IdLineaComida" asp-items="@Model.LineasComidas" class="form-select">
+                            <select asp-for="Producto.IdLineaComida" asp-items="@Model.LineaComidaLista" class="form-select">
                                 <option disabled selected>-- Seleccione Linea de Comida --</option>
                             </select>
                             <span asp-validation-for="Producto.IdLineaComida" class="text-danger"></span>
@@ -61,7 +61,7 @@
                     <div class="d-grid gap-2 d-md-block">
                         @if (Model.Producto.Id != 0)
                         {
-                            <partial name="_ButtonsUpdateBack" model="Model.Producto.Id" />
+                            <partial name="_BotonesActualizarYRegresar" model="Model.Producto.Id" />
                         }
                         else
                         {
@@ -93,26 +93,6 @@
             return true;
         }
 
-        document.getElementById("name").addEventListener('change', function () {
-            validateName();
-
-        });
-
-        function validateName() {
-            var url = '@Url.Content("~/")' + "Admin/PriceType/ValidateName";
-            var id = '#id';
-            var name = '#name';
-
-            $.getJSON(url, { id: $(id).val(), name: $(name).val() }, function (data) {
-                $.each(data, function (key, value) {
-                    if (value) {
-                        var name = document.getElementById("name");
-                        swal("Error", "Nombre ya Existe", "error");
-                        name.value = "";
-                    }
-                });
-            })
-
-        }
+        
     </script>
 }
