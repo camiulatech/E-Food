@@ -24,8 +24,8 @@ namespace EFood.Modelos
         [Required(ErrorMessage = "El tipo de procesador de pago es requerido")]
         public int TipoId { get; set; }
 
-        [ForeignKey("TipoId")]
-        public virtual TipoProcesadorPago IdTipo { get; set; }
+        [Required(ErrorMessage = "El tipo del procesador es requerido")]
+        public TipoProcesadorPago Tipo { get; set; }
 
         [Required(ErrorMessage = "El estado es requerido")]
         public EstadoProcesadorPago Estado { get; set; }
@@ -45,5 +45,12 @@ namespace EFood.Modelos
     {
         Activo,
         Inactivo
+    }
+
+    public enum TipoProcesadorPago
+    {
+        Efectivo, 
+        ChequeElectronico, 
+        TarjetaDebitoCredito
     }
 }
