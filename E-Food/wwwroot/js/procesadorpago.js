@@ -1,12 +1,12 @@
 ﻿let datatable;
-$(document).ready(function () {
-    loadDatatable();
 
+$(document).ready(function () {
+    loadDataTable();
 });
 
 
 function loadDatatable() {
-    datatable = $('#tblData').DataTable({
+    datatable = $('#tblDatos').DataTable({
         "language": {
             "lengthMenu": "Mostrar _MENU_ Registros Por Pagina",
             "zeroRecords": "Ningun Registro",
