@@ -1,0 +1,124 @@
+﻿@model EFood.models.PaymentProcessor
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var titulo = "Crear Procesador de pago";
+
+}
+
+<form method="post">
+    <div style="padding-left:15%; padding-right:15%; padding-bottom:inherit.4rem;">
+        <div class="row border-0">
+            <div asp-asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>
+
+        @if (Model.Id !=0)
+        {
+            //Actualizar
+            titulo= "Actualizar Procesador de pago";
+            <input type="hidden" asp-for="Id" id="id" />
+        }
+        <div class="col-12 border-bottom p-0">
+            <h2 class="text-primary">@titulo</h2>
+        </div>
+
+        @if (Model.Id != 0)
+        {
+            <div class="row mb-2 mt-2">
+                <div class="form-group col-md-6">
+                    <label>Id</label>
+                    <div id="Id" class="form-control">
+                        @Model.Id
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <label>Nombre Procesador</label>
+                <input type="text" asp-for="Procesador" class="form-control" placeholder="Nombre Procesador de pago" id="name" />
+                <span asp-validation-formaction="Procesador" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-2 mt-2">
+            <div class="form-floating col-md-6">
+                    <lable asp-for="Type">Tipo</lable>
+                    <select asp-for="Type" class="form-select" asp-items="new SelectList(@Model.ProcessorType)">
+                        <option value="">--Seleccione el tipo</option>
+                    </select> 
+            </div>
+        </div>
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <label>Estado</label>
+                <div class="form-check">
+                    <input type="checkbox" asp-for="Status" class="form-check-input" />
+                    <label class="form-check-label">Activo</label>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <div class="form-check">
+                    <input type="checkbox" asp-for="Verification" class="form-check-input" />
+                    <label class="form-check-label">Requiere Verificación</label>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <label>Metodo</label>
+                <input type="text" asp-for="Method" class="form-control" placeholder="Metodo del procesador de pago" id="method" />
+                <span asp-validation-formaction="Method" class="text-danger"></span>
+            </div>
+        </div>
+
+
+        <br />
+        <div>
+            @if (Model.Id !=0)
+            {
+                <partial name="_ButtonsUpdateBack" model="Model.Id"/>
+            }
+            else
+            {
+                <partial name="_ButtonsCreateBack" />
+            }
+        </div>
+
+
+    </div>
+    
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.getElementById("name").addEventListener('change', function () { 
+            validateName();
+        
+        });
+
+        function validateName() {
+            var url = '@Url.Content("~/")' + "Admin/PaymentProcessor/NameValidate";
+            var id = '#id';
+            var name = '#name';
+            
+            $.getJSON(url, { id: $(id).val(), name: $(name).val() }, function (data) { 
+                $.each(data, function (key, value) {
+                    if (value) {
+                        var name = document.getElementById("name");
+                        swal("Error", "Nombre ya Existe", "error");
+                        name.value = "";
+                    }
+                });
+            })
+
+        }
+
+    </script>
+}

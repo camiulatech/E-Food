@@ -1,0 +1,37 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <h2 class="text-primary">Lista de Procesadores de pago</h2>
+    </div>
+    <div class="col-lg-6">
+        <a class="btn btn-outline-primary" asp-action="Upsert"><i class="bi bi-plus-square-fill"></i> Crear Nuevo Procesador de pago</a>
+    </div>
+</div>
+
+<br />
+
+<div class="p-4 border rounded bg-light">
+    <table id="tblData" class="table table-responsive table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Procesador</th>
+                <th>Tipo</th>
+                <th>Activo</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/procesadorpago.js"></script>
+}
