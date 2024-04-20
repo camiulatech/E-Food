@@ -28,7 +28,7 @@ namespace EFood.Modelos
         public TipoProcesadorPago Tipo { get; set; }
 
         [Required(ErrorMessage = "El estado es requerido")]
-        public EstadoProcesadorPago Estado { get; set; }
+        public bool Estado { get; set; }
 
         [Required(ErrorMessage = "Es requerido especificar si requiere verificación")]
         public bool RequiereVerificacion { get; set; }
@@ -39,12 +39,6 @@ namespace EFood.Modelos
 
         //PARA CREAR TABLA INTERMEDIA TarjetaProcesador
         public List<Tarjeta>? Tarjetas { get; set; }
-    }
-
-    public enum EstadoProcesadorPago
-    {
-        Activo,
-        Inactivo
     }
 
     public enum TipoProcesadorPago

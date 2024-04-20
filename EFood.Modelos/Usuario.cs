@@ -41,16 +41,10 @@ namespace EFood.Modelos
         //public Rol Rol { get; set; }
 
         [Required(ErrorMessage = "Estado es requerido")]
-        public EstadoUsuario Estado { get; set; }
+        public bool Estado { get; set; }
 
         [Required(ErrorMessage = "Rol es requerido")]
         public RolUsuario Rol { get; set; }
-    }
-
-    public enum EstadoUsuario
-    {
-        Activo,
-        Inactivo
     }
 
     public enum RolUsuario
