@@ -21,9 +21,6 @@ namespace EFood.Modelos
         [MaxLength(100, ErrorMessage = "El nombre de la opción de pago debe ser máximo de 100 caracteres")]
         public string NombreOpcionDePago { get; set; }
 
-        [Required(ErrorMessage = "El tipo de procesador de pago es requerido")]
-        public int TipoId { get; set; }
-
         [Required(ErrorMessage = "El tipo del procesador es requerido")]
         public TipoProcesadorPago Tipo { get; set; }
 

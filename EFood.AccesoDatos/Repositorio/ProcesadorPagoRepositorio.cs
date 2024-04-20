@@ -24,7 +24,7 @@ namespace EFood.AccesoDatos.Repositorio
             if (procesadorPagoDB != null)
             {
                 procesadorPagoDB.Procesador = procesadorPago.Procesador;
-                procesadorPagoDB.TipoId = procesadorPago.TipoId;
+                procesadorPagoDB.Tipo = procesadorPago.Tipo;
                 procesadorPagoDB.RequiereVerificacion = procesadorPago.RequiereVerificacion;
                 procesadorPagoDB.Metodo = procesadorPago.Metodo;
                 procesadorPagoDB.Estado = procesadorPago.Estado;
