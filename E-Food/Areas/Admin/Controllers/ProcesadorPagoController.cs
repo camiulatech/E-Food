@@ -91,19 +91,19 @@ namespace E_Food.Areas.Admin.Controllers
 
 
         [ActionName("ValidarNombre")]
-        public async Task<IActionResult> ValidarNombre(string procesador, int id = 0)
+        public async Task<IActionResult> ValidarNombre(string nombre, int id = 0)
         {
-            bool valor = false;
-            var lista = await _unidadTrabajo.ProcesadorPago.ObtenerTodos();
+            bool value = false;
+            var list = await _unidadTrabajo.ProcesadorPago.ObtenerTodos();
             if (id == 0)
             {
-                valor = lista.Any(p => p.Procesador.ToLower().Trim() == procesador.ToLower().Trim());
+                value = list.Any(c => c.Procesador.ToLower().Trim() == nombre.ToLower().Trim());
             }
             else
             {
-                valor = lista.Any(p => p.Procesador.ToLower().Trim() == procesador.ToLower().Trim() && p.Id != id);
+                value = list.Any(c => c.Procesador.ToLower().Trim() == nombre.ToLower().Trim() && c.Id != id);
             }
-            if (valor)
+            if (value)
             {
                 return Json(new { data = true });
             }

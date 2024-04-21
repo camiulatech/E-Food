@@ -4,8 +4,7 @@ $(document).ready(function () {
     loadDataTable();
 });
 
-
-function loadDatatable() {
+function loadDataTable() {
     datatable = $('#tblDatos').DataTable({
         "language": {
             "lengthMenu": "Mostrar _MENU_ Registros Por Pagina",

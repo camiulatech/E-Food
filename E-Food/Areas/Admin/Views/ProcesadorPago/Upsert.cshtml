@@ -38,7 +38,7 @@
         <div class="row mb-2 mt-2">
             <div class="form-group col-md-6">
                 <label>Nombre Procesador</label>
-                <input type="text" asp-for="Procesador" class="form-control" placeholder="Nombre Procesador de pago" id="name" />
+                <input type="text" asp-for="Procesador" class="form-control" placeholder="Nombre Procesador de pago" id="nombre"/>
                 <span asp-validation-formaction="Procesador" class="text-danger"></span>
             </div>
         </div>
@@ -49,6 +49,7 @@
                 <span asp-validation-formaction="NombreOpcionDePago" class="text-danger"></span>
             </div>
         </div>
+
         <div class="row mb-2 mt-2">
             <div class="row mb-2 mt-2">
                 <div class="form-group col-md-6">
@@ -64,6 +65,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row mb-2 mt-2">
             <div class="form-group col-md-6">
                 <label>Estado</label>
@@ -73,6 +75,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row mb-2 mt-2">
             <div class="form-group col-md-6">
                 <div class="form-check">
@@ -81,6 +84,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row mb-2 mt-2">
             <div class="form-group col-md-6">
                 <label>Metodo</label>
@@ -114,25 +118,23 @@
 
         document.getElementById("nombre").addEventListener('change', function () {
             validarNombre();
-
         });
 
         function validarNombre() {
-            var url = '@Url.Content("~/")' + "Admin/LineaComida/ValidarNombre";
+            var url = '@Url.Content("~/")' + "Admin/ProcesadorPago/ValidarNombre";
             var id = '#id';
-            var name = '#nombre';
+            var nombre = '#nombre';
 
-            $.getJSON(url, { id: $(id).val(), name: $(nombre).val() }, function (data) {
+            $.getJSON(url, { id: $(id).val(), nombre: $(nombre).val() }, function (data) {
                 $.each(data, function (key, value) {
                     if (value) {
-                        var name = document.getElementById("nombre");
-                        swal("Error", "Nombre ya Existe", "error");
-                        name.value = "";
+                        var nombre = document.getElementById("nombre");
+                        swal("Error", "Nombre de Procesador Pago ya existe", "error");
+                        nombre.value = "";
                     }
                 });
             })
 
         }
-
     </script>
 }
