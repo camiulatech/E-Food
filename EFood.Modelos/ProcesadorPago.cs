@@ -21,14 +21,11 @@ namespace EFood.Modelos
         [MaxLength(100, ErrorMessage = "El nombre de la opción de pago debe ser máximo de 100 caracteres")]
         public string NombreOpcionDePago { get; set; }
 
-        [Required(ErrorMessage = "El tipo de procesador de pago es requerido")]
-        public int TipoId { get; set; }
-
-        [ForeignKey("TipoId")]
-        public virtual TipoProcesadorPago IdTipo { get; set; }
+        [Required(ErrorMessage = "El tipo del procesador es requerido")]
+        public TipoProcesadorPago Tipo { get; set; }
 
         [Required(ErrorMessage = "El estado es requerido")]
-        public EstadoProcesadorPago Estado { get; set; }
+        public bool Estado { get; set; }
 
         [Required(ErrorMessage = "Es requerido especificar si requiere verificación")]
         public bool RequiereVerificacion { get; set; }
@@ -41,9 +38,10 @@ namespace EFood.Modelos
         public List<Tarjeta>? Tarjetas { get; set; }
     }
 
-    public enum EstadoProcesadorPago
+    public enum TipoProcesadorPago
     {
-        Activo,
-        Inactivo
+        Efectivo, 
+        ChequeElectronico, 
+        TarjetaDebitoCredito
     }
 }

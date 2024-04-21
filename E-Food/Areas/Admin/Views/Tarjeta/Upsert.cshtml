@@ -36,7 +36,7 @@
         <div class="row mb-2 mt-2">
             <div class="form-group col-md-6">
                 <label>Nombre</label>
-                <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre de la Tarjeta" id="name" />
+                <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre de la Tarjeta" id="nombre" />
                 <span asp-validation-formaction="Nombre" class="text-danger"></span>
             </div>
         </div>
@@ -65,25 +65,23 @@
 
         document.getElementById("nombre").addEventListener('change', function () {
             validarNombre();
-
         });
 
         function validarNombre() {
             var url = '@Url.Content("~/")' + "Admin/Tarjeta/ValidarNombre";
             var id = '#id';
-            var name = '#nombre';
+            var nombre = '#nombre';
 
-            $.getJSON(url, { id: $(id).val(), name: $(nombre).val() }, function (data) {
+            $.getJSON(url, { id: $(id).val(), nombre: $(nombre).val() }, function (data) {
                 $.each(data, function (key, value) {
                     if (value) {
-                        var name = document.getElementById("nombre");
-                        swal("Error", "Nombre ya Existe", "error");
-                        name.value = "";
+                        var nombre = document.getElementById("nombre");
+                        swal("Error", "Nombre de Tarjeta ya existe", "error");
+                        nombre.value = "";
                     }
                 });
             })
 
         }
-
     </script>
 }

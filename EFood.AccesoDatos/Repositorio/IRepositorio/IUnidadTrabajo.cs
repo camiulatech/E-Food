@@ -16,6 +16,8 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
 
         IProductoRepositorio Producto { get; }
 
+        IProcesadorPagoRepositorio ProcesadorPago { get; }
+
         Task Guardar();
     }
 }
