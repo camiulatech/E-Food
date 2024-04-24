@@ -10,12 +10,14 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using EFood.Modelos;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
@@ -105,6 +107,9 @@ namespace E_Food.Areas.Identity.Pages.Account
 
             [Required]
             public string RespuestaSeguridad { get; set; }
+
+            public string Rol { get; set; }
+            public IEnumerable<SelectListItem> ListaRol { get; set; }
         }
 
 
@@ -120,8 +125,17 @@ namespace E_Food.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                //var user = CreateUser();
 
+                var user = new Usuario
+                {
+                    UserName = Input.UserName,
+                    Email = Input.Email,
+                    PreguntaSolicitud = Input.PreguntaSolicitud,
+                    RespuestaSeguridad = Input.RespuestaSeguridad,
+                    Rol = Input.Rol,
+                };
+                
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
