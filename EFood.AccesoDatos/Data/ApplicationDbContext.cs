@@ -19,5 +19,7 @@ namespace EFood.AccesoDatos.Data
         public DbSet<TipoPrecio> TipoPrecios { get; set; }
         public DbSet<TiqueteDescuento> TiqueteDescuentos { get; set; }
 
+        public DbSet<Usuario> Usuarios { get; set; }
+
     }
 }
