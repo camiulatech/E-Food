@@ -16,6 +16,6 @@ namespace EFood.Utilidades
         public const string Rol_Seguridad = "Seguridad";
         public const string Rol_Mantemiento = "Mantenimiento";
         public const string Rol_Consulta = "Consulta";
-        //public const string Role_Cliente = "Cliente"; 
+        public const string Role_Cliente = "Cliente"; 
     }
 }

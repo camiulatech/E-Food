@@ -115,12 +115,23 @@ namespace E_Food.Areas.Identity.Pages.Account
 
             public string Rol { get; set; }
             public IEnumerable<SelectListItem> ListaRol { get; set; }
+
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
+
+            Input = new InputModel()
+            {
+                ListaRol = _roleManager.Roles.Where(r => r.Name != DS.Role_Cliente).Select(n => n.Name).Select(l => new SelectListItem
+                {
+                    Text = l,
+                    Value = l
+                })
+            };
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
