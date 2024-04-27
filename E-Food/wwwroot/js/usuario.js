@@ -25,7 +25,7 @@ function loadDataTable() {
         },
         "columns": [
             { "data": "email" },
-            { "data": "username" },
+            { "data": "userName" },
             { "data": "rol" },
             {
                 "data": {
