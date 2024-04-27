@@ -180,7 +180,22 @@ namespace E_Food.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(DS.Rol_Seguridad));
                     }
 
-                    await _userManager.AddToRoleAsync(user, DS.Rol_Admin);
+                    //if (!await _roleManager.RoleExistsAsync(DS.Role_Cliente))
+                    //{
+                    //    await _roleManager.CreateAsync(new IdentityRole(DS.Role_Cliente));
+                    //}
+
+                    if(user.Rol == null)
+                    {
+                        await _userManager.AddToRoleAsync(user, DS.Role_Cliente);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, user.Rol);
+                    }
+
+                    //ESTO HACE QUE TODOS LOS QUE SE CREEN SEAN ADMINISTRADORES
+                    //await _userManager.AddToRoleAsync(user, DS.Rol_Admin);
 
                     //var userId = await _userManager.GetUserIdAsync(user);
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -200,8 +215,17 @@ namespace E_Food.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        if (user.Rol ==null)
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            //Administrator esta registrando un nuevo usuario 
+                            return RedirectToAction("Index", "Usuario", new { Area = "Admin" });
+                        }
+                        
                     }
                 }
                 foreach (var error in result.Errors)
