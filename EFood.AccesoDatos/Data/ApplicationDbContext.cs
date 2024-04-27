@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFood.AccesoDatos.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<Usuario>
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
