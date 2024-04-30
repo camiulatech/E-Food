@@ -19,5 +19,17 @@ namespace EFood.AccesoDatos.Repositorio
             _db = db;
         }
 
+        public void Actualizar(Usuario usuario)
+        {
+            var usuarioBD = _db.Usuarios.FirstOrDefault(c => c.Id == usuario.Id);
+            if (usuarioBD != null)
+            {
+                usuarioBD.Estado = usuario.Estado;
+                usuarioBD.Rol = usuario.Rol;
+
+                _db.SaveChanges();
+            }
+        }
+
     }
 }

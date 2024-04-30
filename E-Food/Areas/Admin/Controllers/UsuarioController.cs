@@ -1,5 +1,6 @@
 ﻿using EFood.AccesoDatos.Data;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
+using EFood.Modelos;
 using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,37 @@ namespace E_Food.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        //Es un get por defecto
+        public async Task<IActionResult> Edit(int? id)
+        {
+            Usuario usuario = new Usuario();
+
+            //Actualizar Linea de Comida
+            usuario = await _unidadTrabajo.Usuario.Obtener(id.GetValueOrDefault());
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            return View(usuario);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Usuario usuario)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _unidadTrabajo.Usuario.Actualizar(usuario);
+                TempData[DS.Exitosa] = "Usuario actualizado exitosamente";
+                await _unidadTrabajo.Guardar();
+                return RedirectToAction(nameof(Index));
+            }
+            TempData[DS.Error] = "Error al actualizar el Usuario";
+            return View(usuario);
         }
 
 

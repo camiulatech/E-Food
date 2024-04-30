@@ -29,30 +29,38 @@ function loadDataTable() {
             { "data": "rol" },
             {
                 "data": {
-                    id: "id", lockoutEnd: "lockoutEnd"
-                },
+                    id: "id",
                 "render": function (data) {
-                    let hoy = new Date().getTime();
-                    let bloqueo = new Date(data.lockoutEnd).getTime();
-                    if (bloqueo > hoy) {
-                        // Usuario esta Bloqueado
-                        return `
-                            <div class="text-center">
-                               <a onclick=BloquearDesbloquear('${data.id}') class="btn btn-danger text-white" style="cursor:pointer", width:150px >
-                                    <i class="bi bi-unlock-fill"></i> Desbloquear
-                               </a> 
-                            </div>
-                        `;
-                    }
-                    else {
-                        return `
-                            <div class="text-center">
-                               <a onclick=BloquearDesbloquear('${data.id}') class="btn btn-success text-white" style="cursor:pointer", width:150px >
-                                    <i class="bi bi-lock-fill"></i> Bloquear
-                               </a> 
-                            </div>
-                        `;
-                    }
+                    return `
+                        <div class="text-center">
+                           <a href="/Admin/Producto/Upsert/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                              <i class="bi bi-pencil-square"></i>  
+                           </a>
+                        </div>
+                    `;
+                }, "width": "20%"
+                    //let hoy = new Date().getTime();
+                    //let bloqueo = new Date(data.lockoutEnd).getTime();
+                    //if (bloqueo > hoy) {
+                    //    // Usuario esta Bloqueado
+                    //    return `
+                    //        <div class="text-center">
+                    //           <a onclick=BloquearDesbloquear('${data.id}') class="btn btn-danger text-white" style="cursor:pointer", width:150px >
+                    //                <i class="bi bi-unlock-fill"></i> Desbloquear
+                    //           </a>
+                    //        </div>
+                    //    `;
+                    //}
+                    //else {
+                    //    return `
+                    //        <div class="text-center">
+                    //           <a onclick=BloquearDesbloquear('${data.id}') class="btn btn-success text-white" style="cursor:pointer", width:150px >
+                    //                <i class="bi bi-lock-fill"></i> Bloquear
+                    //           </a>
+                    //        </div>
+                    //    `;
+                    //}
+
 
                 }
             }
