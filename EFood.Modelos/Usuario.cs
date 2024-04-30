@@ -50,12 +50,4 @@ namespace EFood.Modelos
         public string Rol {  get; set; }
     }
 
-    public enum RolUsuario
-    {
-        Administrador,
-        Seguridad,
-        Mantenimiento,
-        Consulta
-    }
-
 }
