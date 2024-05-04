@@ -28,19 +28,23 @@ namespace E_Food.Areas.Admin.Controllers
             return View();
         }
 
-        //Es un get por defecto
-        public async Task<IActionResult> Edit(string? id)
+        public async Task<IActionResult> Edit(string id)
         {
-            Usuario usuario = new Usuario();
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            usuario = await _unidadTrabajo.Usuario.ObtenerId(id);
+            Usuario usuario = await _unidadTrabajo.Usuario.ObtenerPorIdAsync(id);
+
             if (usuario == null)
             {
                 return NotFound();
             }
-            return View(usuario);
 
+            return View(usuario);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

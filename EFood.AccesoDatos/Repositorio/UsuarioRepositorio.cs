@@ -1,6 +1,7 @@
 ﻿using EFood.AccesoDatos.Data;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,5 +32,9 @@ namespace EFood.AccesoDatos.Repositorio
             }
         }
 
+        public async Task<Usuario> ObtenerPorIdAsync(string id)
+        {
+            return await _db.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+        }
     }
 }
