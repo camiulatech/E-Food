@@ -180,12 +180,12 @@ namespace E_Food.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(DS.Rol_Seguridad));
                     }
 
-                    //if (!await _roleManager.RoleExistsAsync(DS.Role_Cliente))
-                    //{
-                    //    await _roleManager.CreateAsync(new IdentityRole(DS.Role_Cliente));
-                    //}
+                    if (!await _roleManager.RoleExistsAsync(DS.Role_Cliente))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(DS.Role_Cliente));
+                    }
 
-                    if(user.Rol == null)
+                    if (user.Rol == null)
                     {
                         await _userManager.AddToRoleAsync(user, DS.Role_Cliente);
                     }

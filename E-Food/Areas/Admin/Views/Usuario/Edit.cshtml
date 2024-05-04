@@ -2,51 +2,37 @@
 @using EFood.Utilidades
 
 @{
-
     Layout = "~/Views/Shared/_Layout.cshtml";
     var titulo = "Editar Usuario";
-
 }
 
 <form method="post">
     <div style="padding-left:15%; padding-right:15%; padding-bottom:inherit.4rem;">
         <div class="row border-0">
-            <div asp-asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         </div>
 
         @if (Model.Id != null)
         {
-            //Actualizar
-            titulo = "Editar Usuario";
             <input type="hidden" asp-for="Id" id="id" />
         }
         <div class="col-12 border-bottom p-0">
             <h2 class="text-primary">@titulo</h2>
         </div>
-        @if (Model.Id != null)
-        {
-            <div class="row mb-2 mt-2">
-                <div class="form-group col-md-6">
-                    <label>Id</label>
-                    <div id="Id" class="form-control">
-                        @Model.Id
-                    </div>
-                </div>
-            </div>
-        }
 
         <div class="form-floating mb-3">
-            <lable asp-for="Rol">Rol</lable>
-            <select asp-for="Rol" class="form-select" asp-items="@Model.">
-                <option value="">--Seleccione el rol--</option>
-            </select>
+            <label asp-for="Rol">Rol</label>
+            <input asp-for="Rol" class="form-control" />
         </div>
 
-
+        <div class="form-check">
+            <input asp-for="Estado" class="form-check-input" />
+            <label asp-for="Estado" class="form-check-label">Estado</label>
+        </div>
 
         <br />
         <div>
-            @if (Model.Id != 0)
+            @if (Model.Id != null)
             {
                 <partial name="_BotonesActualizarYRegresar" model="Model.Id" />
             }
@@ -55,9 +41,5 @@
                 <partial name="_BotonesCrearYRegresar" />
             }
         </div>
-
-
     </div>
-
 </form>
-}
