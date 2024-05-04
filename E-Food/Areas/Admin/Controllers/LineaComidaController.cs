@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace E_Food.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = DS.Rol_Admin + "," + DS.Rol_Mantemiento + "," + DS.Rol_Consulta)]
     public class LineaComidaController : Controller
     {
 

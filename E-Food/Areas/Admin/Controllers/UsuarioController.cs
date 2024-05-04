@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace E_Food.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = DS.Rol_Admin)]
+    [Authorize(Roles = DS.Rol_Admin + "," + DS.Rol_Seguridad)]
     public class UsuarioController : Controller
     {
 

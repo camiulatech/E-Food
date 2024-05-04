@@ -1,11 +1,13 @@
 ﻿using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
 using EFood.Utilidades;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Food.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = DS.Rol_Admin)]
     public class ProcesadorPagoController : Controller
     {
         
