@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 namespace E_Food.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = DS.Rol_Admin + "," + DS.Rol_Mantemiento)]
     public class ProductoController : Controller
     {
 

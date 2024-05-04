@@ -8,6 +8,7 @@ using System.Drawing;
 namespace E_Food.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = DS.Rol_Admin)]
     public class TarjetaController : Controller
     {
 
