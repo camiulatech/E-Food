@@ -40,9 +40,6 @@ function loadDatatable() {
                             <a href="/Admin/Usuario/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
-                            <a onclick=Eliminar("/Admin/Tarjeta/Eliminar/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-                                <i class="bi bi-trash3-fill"></i>
-                            </a>
                         </div>
                     `;
 

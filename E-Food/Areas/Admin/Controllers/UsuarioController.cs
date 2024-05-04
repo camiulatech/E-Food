@@ -5,6 +5,7 @@ using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace E_Food.Areas.Admin.Controllers
 {
@@ -41,7 +42,8 @@ namespace E_Food.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
+            var roleId = _db.UserRoles.FirstOrDefault(u => u.UserId == usuario.Id).RoleId;
+            usuario.Rol = _db.Roles.FirstOrDefault(u => u.Id == roleId).Name;
             return View(usuario);
         }
 
@@ -51,15 +53,10 @@ namespace E_Food.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(Usuario usuario)
         {
 
-            if (ModelState.IsValid)
-            {
-                _unidadTrabajo.Usuario.Actualizar(usuario);
-                TempData[DS.Exitosa] = "Usuario actualizado exitosamente";
-                await _unidadTrabajo.Guardar();
-                return RedirectToAction(nameof(Index));
-            }
-            TempData[DS.Error] = "Error al actualizar el Usuario";
-            return View(usuario);
+            _unidadTrabajo.Usuario.Actualizar(usuario);
+            TempData[DS.Exitosa] = "Usuario actualizado exitosamente";
+            await _unidadTrabajo.Guardar();
+            return RedirectToAction(nameof(Index));
         }
 
 
