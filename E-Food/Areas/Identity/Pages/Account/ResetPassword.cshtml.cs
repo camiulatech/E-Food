@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using EFood.AccesoDatos.Data;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
+using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,11 @@ namespace E_Food.Areas.Identity.Pages.Account
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [DataType(DataType.Password)]
+            public string OldPassword { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -106,14 +112,18 @@ namespace E_Food.Areas.Identity.Pages.Account
             }
 
             var user = await _userManager.FindByEmailAsync(Input.Email);
-            if (user == null)
+            var password = await _userManager.CheckPasswordAsync(user, Input.OldPassword);
+
+            if (user == null || !password)
             {
                 // Don't reveal that the user does not exist
-                return RedirectToPage("./ResetPasswordConfirmation");
+                TempData[DS.Error] = "No se pudo cambiar la contraseña, verifique que la contraseña actual sea correcta.";
+                return Page();
             }
             var result = await _userManager.ResetPasswordAsync(user, await _userManager.GeneratePasswordResetTokenAsync(user), Input.Password);
             if (result.Succeeded)
             {
+                TempData[DS.Exitosa] = "Contraseña cambiada exitosamente.";
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 
