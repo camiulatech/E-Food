@@ -6,6 +6,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
+using EFood.AccesoDatos.Data;
+using EFood.AccesoDatos.Repositorio.IRepositorio;
+using EFood.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +20,12 @@ namespace E_Food.Areas.Identity.Pages.Account
     public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _db;
 
-        public ResetPasswordModel(UserManager<IdentityUser> userManager)
+        public ResetPasswordModel(UserManager<IdentityUser> userManager, ApplicationDbContext db)
         {
             _userManager = userManager;
+            _db = db;
         }
 
         /// <summary>
@@ -40,9 +45,6 @@ namespace E_Food.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -67,23 +69,32 @@ namespace E_Food.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            public string Code { get; set; }
+            [EmailAddress]
+            public string Email { get; set; }
 
         }
 
-        public IActionResult OnGet(string code = null)
+        public IActionResult OnGet(string email = null)
         {
-            if (code == null)
+            if (email == null)
             {
-                return BadRequest("A code must be supplied for password reset.");
+                return BadRequest("Se debe ingresar un email para cambiar contraseña.");
             }
             else
             {
-                Input = new InputModel
+                Usuario usuario = _db.Usuarios.FirstOrDefault(u => u.Email == email);
+                if (usuario != null)
                 {
-                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
-                };
-                return Page();
+                    Input = new InputModel
+                    {
+                        Email = email
+                    };
+                    return Page();
+                }
+                else
+                {
+                    return BadRequest("Email no encontrado.");
+                }
             }
         }
 
@@ -100,8 +111,7 @@ namespace E_Food.Areas.Identity.Pages.Account
                 // Don't reveal that the user does not exist
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
-
-            var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
+            var result = await _userManager.ResetPasswordAsync(user, await _userManager.GeneratePasswordResetTokenAsync(user), Input.Password);
             if (result.Succeeded)
             {
                 return RedirectToPage("./ResetPasswordConfirmation");
