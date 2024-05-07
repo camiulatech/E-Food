@@ -43,16 +43,11 @@ namespace EFood.Modelos
         [Required(ErrorMessage = "Estado es requerido")]
         public bool Estado { get; set; }
 
-        [Required(ErrorMessage = "Rol es requerido")]
-        public RolUsuario Rol { get; set; }
-    }
+        //[Required(ErrorMessage = "Rol es requerido")]
+        //public RolUsuario Rol { get; set; }
 
-    public enum RolUsuario
-    {
-        Administrador,
-        Seguridad,
-        Mantenimiento,
-        Consulta
+        [NotMapped] //No se agrega a la tabla
+        public string Rol {  get; set; }
     }
 
 }

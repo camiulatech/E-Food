@@ -11,5 +11,11 @@ namespace EFood.Utilidades
         public const string Exitosa = "Exitosa";
         public const string Error = "Error";
         public const string ImagenRuta = @"\imagenes\producto\";
+
+        public const string Rol_Admin = "Admin";
+        public const string Rol_Seguridad = "Seguridad";
+        public const string Rol_Mantemiento = "Mantenimiento";
+        public const string Rol_Consulta = "Consulta";
+        public const string Role_Cliente = "Cliente"; 
     }
 }

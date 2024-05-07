@@ -1,10 +1,11 @@
 ﻿using EFood.Modelos;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace EFood.AccesoDatos.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<Usuario>
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -18,6 +19,14 @@ namespace EFood.AccesoDatos.Data
         public DbSet<Tarjeta> Tarjetas { get; set; }
         public DbSet<TipoPrecio> TipoPrecios { get; set; }
         public DbSet<TiqueteDescuento> TiqueteDescuentos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
 
     }
 }
