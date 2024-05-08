@@ -14,6 +14,8 @@ namespace EFood.Modelos
         [Key]
         public int Id { get; set; }
 
+        public string Usuario { get; set; }
+
         [Required]
         public DateTime Fecha { get; set; }
 
@@ -24,10 +26,13 @@ namespace EFood.Modelos
         [MaxLength(250)]
         public string Descripcion { get; set; }
 
-        [Required]
-        public string UsuarioId { get; set; }
 
-        [ForeignKey("UsuarioId")]
-        public Usuario Usuario { get; set; }
+
+        //    [Required]
+        //    public string UsuarioId { get; set; }
+
+        //    [ForeignKey("UsuarioId")]
+        //    public Usuario Usuario { get; set; }
+        //}
     }
 }
