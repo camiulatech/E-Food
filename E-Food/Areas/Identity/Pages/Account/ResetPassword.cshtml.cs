@@ -78,9 +78,12 @@ namespace E_Food.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
 
+            [Required]
+            public string Opcion { get; set; }
+
         }
 
-        public IActionResult OnGet(string email = null)
+        public IActionResult OnGet(string email = null, string opcion = null)
         {
             if (email == null)
             {
@@ -93,7 +96,8 @@ namespace E_Food.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = email
+                        Email = email,
+                        Opcion = opcion
                     };
                     return Page();
                 }
