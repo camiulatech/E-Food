@@ -16,12 +16,12 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace E_Food.Areas.Identity.Pages.Account
 {
-    public class ForgotPasswordModel : PageModel
+    public class NewPasswordModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public ForgotPasswordModel(UserManager<IdentityUser> userManager, IEmailSender emailSender)
+        public NewPasswordModel(UserManager<IdentityUser> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;
@@ -57,7 +57,7 @@ namespace E_Food.Areas.Identity.Pages.Account
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
-                    string resetUrl = Url.Page("./ForgotPasswordQuestion", pageHandler: null, values: new { Input.Email }, protocol: Request.Scheme);
+                    string resetUrl = Url.Page("./ResetPassword", pageHandler: null, values: new { Input.Email }, protocol: Request.Scheme);
                     return Redirect(resetUrl);
                     //return RedirectToPage("./ForgotPasswordConfirmation");
                 }
