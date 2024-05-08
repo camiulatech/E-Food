@@ -18,6 +18,7 @@ namespace EFood.AccesoDatos.Repositorio
         public ITiquetesDescuentoRepositorio TiqueteDescuento { get; private set; }
         public IProcesadorPagoRepositorio ProcesadorPago { get; private set; }
         public IUsuarioRepositorio Usuario { get; private set; }
+        public IErrorRepositorio Error {  get; private set; }
 
         public UnidadTrabajo(ApplicationDbContext db) {
             _db = db;
@@ -32,6 +33,8 @@ namespace EFood.AccesoDatos.Repositorio
             ProcesadorPago = new ProcesadorPagoRepositorio(db);
 
             Usuario = new UsuarioRepositorio(db);
+            
+            Error = new ErrorRepositorio(_db);
         }
 
         public void Dispose()

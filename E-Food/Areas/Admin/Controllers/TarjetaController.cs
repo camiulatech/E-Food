@@ -57,6 +57,9 @@ namespace E_Food.Areas.Admin.Controllers
                 {
                     await _unidadTrabajo.Tarjeta.Agregar(tarjeta);
                     TempData[DS.Exitosa] = "Tarjeta creada exitosamente";
+                    ModelState.AddModelError("Nombre", "Este es un mensaje de error de validación");
+                    var mensajeError = TempData[DS.Error] = "Error al guardar Tarjeta";
+                    await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 409);
                 }
                 else
                 {
@@ -66,7 +69,7 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
             }
-            TempData[DS.Error] = "Error al guardar Tarjeta";
+            
             return View(tarjeta);
         }
 
