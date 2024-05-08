@@ -68,7 +68,7 @@ namespace E_Food.Areas.Admin.Controllers
                     TempData[DS.Exitosa] = "Linea de Comida creada exitosamente";
 
                     // Registra en la bitácora
-                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro, $"Se insertó la línea de comida '{lineaComida.Nombre}' con ID: {idRegistro}");
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó la línea de comida '{lineaComida.Nombre}' con ID: {idRegistro}");
                 }
                 else
                 {
@@ -76,7 +76,7 @@ namespace E_Food.Areas.Admin.Controllers
                     TempData[DS.Exitosa] = "Linea de Comida actualizada exitosamente";
 
                     // Registra en la bitácora
-                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, lineaComida.Id, $"Se actualizó la línea de comida '{lineaComida.Nombre}' con ID: {lineaComida.Id}");
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, lineaComida.Id.ToString(), $"Se actualizó la línea de comida '{lineaComida.Nombre}' con ID: {lineaComida.Id}");
                 }
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
@@ -107,7 +107,7 @@ namespace E_Food.Areas.Admin.Controllers
             _unidadTrabajo.LineaComida.Remover(LineaComidaDB);
             await _unidadTrabajo.Guardar();
 
-            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, LineaComidaDB.Id, $"Se eliminó la línea de comida '{LineaComidaDB.Nombre}' con ID: {LineaComidaDB.Id}");
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, LineaComidaDB.Id.ToString(), $"Se eliminó la línea de comida '{LineaComidaDB.Nombre}' con ID: {LineaComidaDB.Id}");
 
             return Json(new { success = true, message = "Linea de Comida borrado correctamente" });
         }

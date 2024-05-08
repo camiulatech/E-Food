@@ -60,14 +60,14 @@ namespace E_Food.Areas.Admin.Controllers
                     TempData[DS.Exitosa] = "Procesador de pago creado exitosamente";
 
                     var idRegistro = procesadorPago.Id;
-                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro, $"Se insertó el procesador de pago '{procesadorPago.Procesador}' con ID: {idRegistro}");
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó el procesador de pago '{procesadorPago.Procesador}' con ID: {idRegistro}");
                 }
                 else
                 {
                     _unidadTrabajo.ProcesadorPago.Actualizar(procesadorPago);
                     TempData[DS.Exitosa] = "Procesador de pago actualizado exitosamente";
 
-                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, procesadorPago.Id, $"Se actualizó el procesador de pago '{procesadorPago.Procesador}' con ID: {procesadorPago.Id}");
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, procesadorPago.Id.ToString(), $"Se actualizó el procesador de pago '{procesadorPago.Procesador}' con ID: {procesadorPago.Id}");
 
                 }
                 await _unidadTrabajo.Guardar();
@@ -100,7 +100,7 @@ namespace E_Food.Areas.Admin.Controllers
             _unidadTrabajo.ProcesadorPago.Remover(procesadorPagoDB);
             await _unidadTrabajo.Guardar();
 
-            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, procesadorPagoDB.Id, $"Se eliminó el procesador de pago '{procesadorPagoDB.Procesador}' con ID: {procesadorPagoDB.Id}");
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, procesadorPagoDB.Id.ToString(), $"Se eliminó el procesador de pago '{procesadorPagoDB.Procesador}' con ID: {procesadorPagoDB.Id}");
 
             return Json(new { success = true, message = "Procesador de pago borrado correctamente" });
         }

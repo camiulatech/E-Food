@@ -56,6 +56,8 @@ namespace E_Food.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var usuarioNombre = User.Identity.Name;
+
                 var archivos = HttpContext.Request.Form.Files;
                 string webRootPath = _webHostEnvironment.WebRootPath;
 
@@ -71,6 +73,11 @@ namespace E_Food.Areas.Admin.Controllers
                     }
                     productoVM.Producto.UbicacionImagen = fileName + extension;
                     await _unidadTrabajo.Producto.Agregar(productoVM.Producto);
+                    await _unidadTrabajo.Guardar();
+
+                    var idRegistro = productoVM.Producto.Id;
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó el producto '{productoVM.Producto.Nombre}' con ID: {idRegistro}");
+
                 }
                 else
                 {
@@ -93,12 +100,15 @@ namespace E_Food.Areas.Admin.Controllers
                             archivos[0].CopyTo(fileStream);
                         }
                         productoVM.Producto.UbicacionImagen = fileName + extension;
+
                     } //Caso no se carga imagen
                     else
                     {
                         productoVM.Producto.UbicacionImagen = objProducto.UbicacionImagen;
                     }
                     _unidadTrabajo.Producto.Actualizar(productoVM.Producto);
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, productoVM.Producto.Id.ToString(), $"Se actualizó el producto '{productoVM.Producto.Nombre}' con ID: {productoVM.Producto.Id}");
+
                 }
                 TempData[DS.Exitosa] = "Transaccion exitosa!";
                 await _unidadTrabajo.Guardar();
@@ -118,8 +128,9 @@ namespace E_Food.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Eliminar(int id) //Delete video
+        public async Task<IActionResult> Eliminar(int id)
         {
+            var usuarioNombre = User.Identity.Name;
 
             var ProductoBD = await _unidadTrabajo.Producto.Obtener(id);
             if (ProductoBD == null)
@@ -136,6 +147,8 @@ namespace E_Food.Areas.Admin.Controllers
 
             _unidadTrabajo.Producto.Remover(ProductoBD);
             await _unidadTrabajo.Guardar();
+
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, ProductoBD.Id.ToString(), $"Se eliminó el producto '{ProductoBD.Nombre}' con ID: {ProductoBD.Id}");
             return Json(new { success = true, message = "Producto borrado exitosamente" });
         }
 

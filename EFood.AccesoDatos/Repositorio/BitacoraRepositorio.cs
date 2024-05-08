@@ -19,7 +19,7 @@ namespace EFood.AccesoDatos.Repositorio
             _db = db;
         }
 
-        public async Task RegistrarBitacora(string usuario, int codigoRegistro, string descripcion)
+        public async Task RegistrarBitacora(string usuario, string codigoRegistro, string descripcion)
         {
             // Crear una nueva instancia de Bitacora con la información proporcionada
             var bitacora = new Bitacora

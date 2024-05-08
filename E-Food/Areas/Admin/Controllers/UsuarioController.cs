@@ -58,10 +58,9 @@ namespace E_Food.Areas.Admin.Controllers
             TempData[DS.Exitosa] = "Usuario actualizado exitosamente";
             await _unidadTrabajo.Guardar();
 
-            // Convierte el ID del usuario de string a int
-            int usuarioId = usuario.Id.GetHashCode();   //*******************
+ 
 
-            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, usuarioId, $"Se actualizó el usuario '{usuario.UserName}' con ID: {usuario.Id}");    //*******************
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, usuario.Id, $"Se actualizó el usuario '{usuario.UserName}' con ID: {usuario.Id}");    //*******************
 
             return RedirectToAction(nameof(Index));
         }

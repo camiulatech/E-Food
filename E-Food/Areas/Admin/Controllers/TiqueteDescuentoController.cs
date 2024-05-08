@@ -62,14 +62,14 @@ namespace E_Food.Areas.Admin.Controllers
                     TempData[DS.Exitosa] = "Tiquete de Descuento creado exitosamente";
 
                     var idRegistro = tiqueteDescuento.Id;
-                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro, $"Se insertó el tiquete de descuento '{tiqueteDescuento.Descripcion}' con ID: {idRegistro}");
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó el tiquete de descuento '{tiqueteDescuento.Descripcion}' con ID: {idRegistro}");
                 }
                 else
                 {
                     _unidadTrabajo.TiqueteDescuento.Actualizar(tiqueteDescuento);
                     TempData[DS.Exitosa] = "Tiquete de Descuento actualizado exitosamente";
 
-                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, tiqueteDescuento.Id, $"Se actualizó el tiquete de descuento '{tiqueteDescuento.Descripcion}' con ID: {tiqueteDescuento.Id}");
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, tiqueteDescuento.Id.ToString(), $"Se actualizó el tiquete de descuento '{tiqueteDescuento.Descripcion}' con ID: {tiqueteDescuento.Id}");
 
                 }
                 await _unidadTrabajo.Guardar();
@@ -101,7 +101,7 @@ namespace E_Food.Areas.Admin.Controllers
             _unidadTrabajo.TiqueteDescuento.Remover(TiqueteDescuentoBD);
             await _unidadTrabajo.Guardar();
 
-            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, TiqueteDescuentoBD.Id, $"Se eliminó la tarjeta '{TiqueteDescuentoBD.Descripcion}' con ID: {TiqueteDescuentoBD.Id}");
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, TiqueteDescuentoBD.Id.ToString(), $"Se eliminó la tarjeta '{TiqueteDescuentoBD.Descripcion}' con ID: {TiqueteDescuentoBD.Id}");
 
             return Json(new { success = true, message = "Tiquete de Descuento borrado correctamente" });
         }

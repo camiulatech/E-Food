@@ -10,7 +10,7 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
     public interface IBitacoraRepositorio : IRepositorio<Bitacora>
     {
 
-        Task RegistrarBitacora(string usuario, int codigoRegistro, string descripcion);
+        Task RegistrarBitacora(string usuario, string codigoRegistro, string descripcion);
 
         Task<IEnumerable<Bitacora>> ObtenerPorFecha(DateTime fecha);
     }

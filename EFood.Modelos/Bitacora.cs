@@ -20,19 +20,10 @@ namespace EFood.Modelos
         public DateTime Fecha { get; set; }
 
         [Required]
-        public int CodigoRegistro { get; set; }
+        public string CodigoRegistro { get; set; }
 
         [Required]
         [MaxLength(250)]
         public string Descripcion { get; set; }
-
-
-
-        //    [Required]
-        //    public string UsuarioId { get; set; }
-
-        //    [ForeignKey("UsuarioId")]
-        //    public Usuario Usuario { get; set; }
-        //}
     }
 }
