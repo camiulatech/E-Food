@@ -53,15 +53,24 @@ namespace E_Food.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var usuarioNombre = User.Identity.Name;
+
                 if (tarjeta.Id == 0)
                 {
                     await _unidadTrabajo.Tarjeta.Agregar(tarjeta);
+                    await _unidadTrabajo.Guardar();
                     TempData[DS.Exitosa] = "Tarjeta creada exitosamente";
+
+                    var idRegistro = tarjeta.Id;
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó la tarjeta '{tarjeta.Nombre}' con ID: {idRegistro}");
                 }
                 else
                 {
                     _unidadTrabajo.Tarjeta.Actualizar(tarjeta);
                     TempData[DS.Exitosa] = "Tarjeta actualizada exitosamente";
+
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, tarjeta.Id.ToString(), $"Se actualizó la tarjeta '{tarjeta.Nombre}' con ID: {tarjeta.Id}");
+
                 }
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
@@ -84,6 +93,7 @@ namespace E_Food.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Eliminar(int id)
         {
+            var usuarioNombre = User.Identity.Name;
 
             var tarjetaBD = await _unidadTrabajo.Tarjeta.Obtener(id);
             if (tarjetaBD == null)
@@ -92,6 +102,9 @@ namespace E_Food.Areas.Admin.Controllers
             }
             _unidadTrabajo.Tarjeta.Remover(tarjetaBD);
             await _unidadTrabajo.Guardar();
+
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, tarjetaBD.Id.ToString(), $"Se eliminó la tarjeta '{tarjetaBD.Nombre}' con ID: {tarjetaBD.Id}");
+
             return Json(new { success = true, message = "Tarjeta borrada correctamente" });
         }
 

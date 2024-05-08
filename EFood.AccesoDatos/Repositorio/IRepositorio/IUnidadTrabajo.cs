@@ -20,6 +20,8 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
 
         IUsuarioRepositorio Usuario { get; }
 
+        IBitacoraRepositorio Bitacora { get; }
+
         Task Guardar();
     }
 }

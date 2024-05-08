@@ -25,7 +25,7 @@ namespace E_Food.Areas.Admin.Controllers
             return View();
         }
 
-        //Es un get por defecto
+
         public async Task<IActionResult> Upsert(int? id)
         {
             TiqueteDescuento tiqueteDescuento = new TiqueteDescuento();
@@ -53,15 +53,24 @@ namespace E_Food.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var usuarioNombre = User.Identity.Name;
+
                 if (tiqueteDescuento.Id == 0)
                 {
                     await _unidadTrabajo.TiqueteDescuento.Agregar(tiqueteDescuento);
+                    await _unidadTrabajo.Guardar();
                     TempData[DS.Exitosa] = "Tiquete de Descuento creado exitosamente";
+
+                    var idRegistro = tiqueteDescuento.Id;
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó el tiquete de descuento '{tiqueteDescuento.Descripcion}' con ID: {idRegistro}");
                 }
                 else
                 {
                     _unidadTrabajo.TiqueteDescuento.Actualizar(tiqueteDescuento);
                     TempData[DS.Exitosa] = "Tiquete de Descuento actualizado exitosamente";
+
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, tiqueteDescuento.Id.ToString(), $"Se actualizó el tiquete de descuento '{tiqueteDescuento.Descripcion}' con ID: {tiqueteDescuento.Id}");
+
                 }
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
@@ -80,8 +89,9 @@ namespace E_Food.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Eliminar(int id) //Delete video
+        public async Task<IActionResult> Eliminar(int id) 
         {
+            var usuarioNombre = User.Identity.Name;
 
             var TiqueteDescuentoBD = await _unidadTrabajo.TiqueteDescuento.Obtener(id);
             if (TiqueteDescuentoBD == null)
@@ -90,6 +100,9 @@ namespace E_Food.Areas.Admin.Controllers
             }
             _unidadTrabajo.TiqueteDescuento.Remover(TiqueteDescuentoBD);
             await _unidadTrabajo.Guardar();
+
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, TiqueteDescuentoBD.Id.ToString(), $"Se eliminó la tarjeta '{TiqueteDescuentoBD.Descripcion}' con ID: {TiqueteDescuentoBD.Id}");
+
             return Json(new { success = true, message = "Tiquete de Descuento borrado correctamente" });
         }
 

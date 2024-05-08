@@ -1,8 +1,10 @@
-﻿using EFood.AccesoDatos.Repositorio.IRepositorio;
+﻿using EFood.AccesoDatos.Repositorio;
+using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
 using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace E_Food.Areas.Admin.Controllers
 {
@@ -52,15 +54,29 @@ namespace E_Food.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                // Obtiene el nombre del usuario actualmente logueado
+                var usuarioNombre = User.Identity.Name;
+
                 if (lineaComida.Id == 0)
                 {
                     await _unidadTrabajo.LineaComida.Agregar(lineaComida);
+                    await _unidadTrabajo.Guardar();
+
+                    // Ahora que la línea de comida se ha agregado a la base de datos, obtenemos su ID real
+                    var idRegistro = lineaComida.Id;
+
                     TempData[DS.Exitosa] = "Linea de Comida creada exitosamente";
+
+                    // Registra en la bitácora
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó la línea de comida '{lineaComida.Nombre}' con ID: {idRegistro}");
                 }
                 else
                 {
                     _unidadTrabajo.LineaComida.Actualizar(lineaComida);
                     TempData[DS.Exitosa] = "Linea de Comida actualizada exitosamente";
+
+                    // Registra en la bitácora
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, lineaComida.Id.ToString(), $"Se actualizó la línea de comida '{lineaComida.Nombre}' con ID: {lineaComida.Id}");
                 }
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
@@ -79,8 +95,9 @@ namespace E_Food.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Eliminar(int id) //Delete video
+        public async Task<IActionResult> Eliminar(int id)
         {
+            var usuarioNombre = User.Identity.Name;
 
             var LineaComidaDB = await _unidadTrabajo.LineaComida.Obtener(id);
             if (LineaComidaDB == null)
@@ -89,6 +106,9 @@ namespace E_Food.Areas.Admin.Controllers
             }
             _unidadTrabajo.LineaComida.Remover(LineaComidaDB);
             await _unidadTrabajo.Guardar();
+
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, LineaComidaDB.Id.ToString(), $"Se eliminó la línea de comida '{LineaComidaDB.Nombre}' con ID: {LineaComidaDB.Id}");
+
             return Json(new { success = true, message = "Linea de Comida borrado correctamente" });
         }
 
