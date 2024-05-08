@@ -57,7 +57,7 @@ namespace E_Food.Areas.Identity.Pages.Account
             public string Password { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 0)]
             [DataType(DataType.Password)]
             public string OldPassword { get; set; }
 
@@ -78,7 +78,6 @@ namespace E_Food.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
 
-            [Required]
             public string Opcion { get; set; }
 
         }
@@ -94,11 +93,22 @@ namespace E_Food.Areas.Identity.Pages.Account
                 Usuario usuario = _db.Usuarios.FirstOrDefault(u => u.Email == email);
                 if (usuario != null)
                 {
-                    Input = new InputModel
+                    if (opcion == null)
                     {
-                        Email = email,
-                        Opcion = opcion
-                    };
+                        Input = new InputModel
+                        {
+                            Email = email,
+                            Opcion = opcion
+                        };
+                    } else
+                    {
+                        Input = new InputModel
+                        {
+                            Email = email,
+                            Opcion = opcion,
+                            OldPassword = "olvido"
+                        };
+                    }
                     return Page();
                 }
                 else
@@ -116,7 +126,14 @@ namespace E_Food.Areas.Identity.Pages.Account
             }
 
             var user = await _userManager.FindByEmailAsync(Input.Email);
-            var password = await _userManager.CheckPasswordAsync(user, Input.OldPassword);
+            var password = false;
+            if (Input.OldPassword != "olvido")
+            {
+                password = await _userManager.CheckPasswordAsync(user, Input.OldPassword);
+            } else
+            {
+                password = true;
+            }
 
             if (user == null || !password)
             {
