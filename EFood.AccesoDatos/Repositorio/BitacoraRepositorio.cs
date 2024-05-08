@@ -1,6 +1,7 @@
 ﻿using EFood.AccesoDatos.Data;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,11 @@ namespace EFood.AccesoDatos.Repositorio
             // Agregar la nueva instancia de Bitacora al DbSet y guardar los cambios en la base de datos
             _db.Bitacoras.Add(bitacora);
             _db.SaveChanges();
+        }
+
+        public async Task<IEnumerable<Bitacora>> ObtenerPorFecha(DateTime fecha)
+        {
+            return await _db.Bitacoras.Where(b => b.Fecha.Date == fecha.Date).ToListAsync();
         }
     }
 }

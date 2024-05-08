@@ -11,5 +11,7 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
     {
 
         Task RegistrarBitacora(string usuario, int codigoRegistro, string descripcion);
+
+        Task<IEnumerable<Bitacora>> ObtenerPorFecha(DateTime fecha);
     }
 }
