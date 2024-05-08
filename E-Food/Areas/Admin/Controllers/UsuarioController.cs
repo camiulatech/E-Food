@@ -52,10 +52,17 @@ namespace E_Food.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Usuario usuario)
         {
+            var usuarioNombre = User.Identity.Name;
 
             _unidadTrabajo.Usuario.Actualizar(usuario);
             TempData[DS.Exitosa] = "Usuario actualizado exitosamente";
             await _unidadTrabajo.Guardar();
+
+            // Convierte el ID del usuario de string a int
+            int usuarioId = usuario.Id.GetHashCode();   //*******************
+
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, usuarioId, $"Se actualizó el usuario '{usuario.UserName}' con ID: {usuario.Id}");    //*******************
+
             return RedirectToAction(nameof(Index));
         }
 
