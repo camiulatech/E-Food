@@ -5,6 +5,7 @@ using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using EFood.Modelos.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using EFood.AccesoDatos.Repositorio;
 
 namespace E_Food.Areas.Admin.Controllers
 {
@@ -47,6 +48,12 @@ namespace E_Food.Areas.Admin.Controllers
                 return NotFound();
             }
             return View(productoVM);
+        }
+
+        public async Task<IActionResult> Consultar()
+        {
+            var productos = await _unidadTrabajo.Producto.ObtenerTodos(); // Obtener la lista de productos (puedes ajustar este método según tu implementación)
+            return View(productos);
         }
 
         [HttpPost]
