@@ -1,4 +1,6 @@
-﻿@{
+﻿@model EFood.Modelos.ViewModels.ProductoVM
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,6 +12,15 @@
 
 <br />
 
+<select id="lineaComidaSelect" onchange="filtrarPorLineaComida()">
+    <option value="">Seleccionar línea de comida</option>
+    @foreach (var lineaComida in Model.LineaComidaLista)
+    {
+        <option value="@lineaComida.Value">@lineaComida.Text</option>
+    }
+</select>
+
+
 <div class="p-4 border rounded bg-light">
     <table id="tblDatos" class="table table-responsive table-hover">
         <thead class="table-dark">
@@ -17,8 +28,7 @@
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Linea de Comida</th>
-@*                 aqui vamos a tener que agregar precio *@
-                <th></th>
+                <!-- Aquí agregamos la columna para el precio -->
             </tr>
         </thead>
     </table>
@@ -27,3 +37,4 @@
 @section Scripts {
     <script src="~/js/productoconsulta.js"></script>
 }
+

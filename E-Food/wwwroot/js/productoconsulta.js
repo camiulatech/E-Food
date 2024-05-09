@@ -25,7 +25,7 @@ function loadDataTable() {
             { "data": "id", "width": "20%" },
             { "data": "nombre", "width": "20%" },
             { "data": "lineaComida.nombre", "width": "20%" }
+            // Aquí especificamos que queremos mostrar el precio
         ]
-
     });
 }
