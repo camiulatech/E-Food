@@ -4,6 +4,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script>
+    function filtrarPorLineaComida() {
+        var idLineaComida = document.getElementById("lineaComidaSelect").value;
+        // Envía el formulario al controlador con el ID de la línea de comida seleccionada
+        document.getElementById("frmFiltrar").submit();
+    }
+</script>
+
 <div class="row">
     <div class="col-lg-6">
         <h2 class="text-primary">Lista de Productos</h2>
@@ -12,14 +20,15 @@
 
 <br />
 
-<select id="lineaComidaSelect" onchange="filtrarPorLineaComida()">
-    <option value="">Seleccionar línea de comida</option>
-    @foreach (var lineaComida in Model.LineaComidaLista)
-    {
-        <option value="@lineaComida.Value">@lineaComida.Text</option>
-    }
-</select>
-
+<form id="frmFiltrar" method="get" action="@Url.Action("Consultar", "Producto")">
+    <select id="lineaComidaSelect" name="idLineaComida" onchange="filtrarPorLineaComida()">
+        <option value="">Seleccionar línea de comida</option>
+        @foreach (var lineaComida in Model.LineaComidaLista)
+        {
+            <option value="@lineaComida.Value">@lineaComida.Text</option>
+        }
+    </select>
+</form>
 
 <div class="p-4 border rounded bg-light">
     <table id="tblDatos" class="table table-responsive table-hover">
@@ -31,10 +40,20 @@
                 <!-- Aquí agregamos la columna para el precio -->
             </tr>
         </thead>
+        <tbody>
+            @foreach (var producto in Model.Productos)
+            {
+                <tr>
+                    <td>@producto.Id</td>
+                    <td>@producto.Nombre</td>
+                    <td>@producto.LineaComida.Nombre</td>
+                    <!-- Agrega aquí más columnas si es necesario -->
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
 
 @section Scripts {
     <script src="~/js/productoconsulta.js"></script>
 }
-

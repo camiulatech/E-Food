@@ -50,17 +50,17 @@ namespace E_Food.Areas.Admin.Controllers
             return View(productoVM);
         }
 
-        public async Task<IActionResult> Consultar(int? id)
+        public async Task<IActionResult> Consultar(int? idLineaComida)
         {
             var productoVM = new ProductoVM();
 
             // Obtener la lista de líneas de comida
             productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
 
-            if (id.HasValue)
+            if (idLineaComida.HasValue)
             {
                 // Si se proporciona un ID de línea de comida, filtrar los productos por esa línea
-                productoVM.Productos = await _unidadTrabajo.Producto.FiltrarPorLineaComida(id.Value);
+                productoVM.Productos = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida.Value);
             }
             else
             {
