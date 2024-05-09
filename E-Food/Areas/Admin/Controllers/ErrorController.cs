@@ -1,5 +1,7 @@
 ﻿using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
+using EFood.Utilidades;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -7,6 +9,7 @@ using System.Threading.Tasks;
 namespace E_Food.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = DS.Rol_Admin)]
     public class ErrorController : Controller
     {
         private readonly IUnidadTrabajo _unidadTrabajo;
