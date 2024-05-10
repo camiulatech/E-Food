@@ -30,6 +30,13 @@ function loadDataTable() {
     });
 }
 
+
+function filtrarPorLineaComida() {
+    var idLineaComida = document.getElementById("lineaComidaSelect").value;
+    // Envía el formulario al controlador con el ID de la línea de comida seleccionada
+    document.getElementById("frmFiltrar").submit();
+}
+
 function limpiarFiltro() {
 
         // Limpiar el valor seleccionado en el select de línea de comida

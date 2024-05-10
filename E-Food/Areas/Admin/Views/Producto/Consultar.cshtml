@@ -4,13 +4,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script>
+@* <script>
     function filtrarPorLineaComida() {
         var idLineaComida = document.getElementById("lineaComidaSelect").value;
         // Envía el formulario al controlador con el ID de la línea de comida seleccionada
         document.getElementById("frmFiltrar").submit();
     }
-</script>
+</script> *@
 
 
 
@@ -30,7 +30,7 @@
             <option value="@lineaComida.Value">@lineaComida.Text</option>
         }
     </select>
-    <button type="button" onclick="limpiarFiltro()">Limpiar Filtro</button> <!-- Botón para limpiar el filtro -->
+    <button type="button" class="btn btn-secondary m-2" onclick="limpiarFiltro()">Limpiar Filtro</button>
 </form>
 
 
