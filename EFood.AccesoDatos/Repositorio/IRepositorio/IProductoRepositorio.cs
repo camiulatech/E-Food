@@ -13,5 +13,11 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
         void Actualizar(Producto producto);
 
         IEnumerable<SelectListItem> ObtenerLineasComidasListaDesplegable(string objeto);
+
+        IEnumerable<SelectListItem> ObtenerTipoPreciosListaDesplegable(string objeto);
+
+        void AgregarPrecio(Producto producto, TipoPrecio tipoPrecio);
+
+        void RemoverPrecio(Producto producto, TipoPrecio tipoPrecio);
     }
 }

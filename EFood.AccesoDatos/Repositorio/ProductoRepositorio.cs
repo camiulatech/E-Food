@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace EFood.AccesoDatos.Repositorio
 {
@@ -33,6 +34,7 @@ namespace EFood.AccesoDatos.Repositorio
                 productoBD.IdLineaComida = producto.IdLineaComida;
                 productoBD.Contenido = producto.Contenido;
                 productoBD.UbicacionImagen = producto.UbicacionImagen;
+                productoBD.Monto = producto.Monto;
                 _db.SaveChanges();
             }
         }
@@ -51,5 +53,37 @@ namespace EFood.AccesoDatos.Repositorio
                 return null;
             }
         }
+
+        public IEnumerable<SelectListItem> ObtenerTipoPreciosListaDesplegable(string objeto)
+        {
+            if (objeto == "TipoPrecio")
+            {
+                return _db.TipoPrecios.Select(c => new SelectListItem()
+                {
+                    Text = c.Descripcion,
+                    Value = c.Id.ToString()
+                });
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void AgregarPrecio (Producto producto, TipoPrecio tipoPrecio)
+        {
+            var productoBD = _db.Productos.FirstOrDefault(c => c.Id == producto.Id);
+            productoBD.TipoPrecios.Add(tipoPrecio);
+            _db.SaveChanges();
+        }
+
+        public void RemoverPrecio(Producto producto, TipoPrecio tipoPrecio)
+        {
+            var productoBD = _db.Productos.Include(x => x.TipoPrecios).FirstOrDefault(c => c.Id == producto.Id);
+            var viejoTipoPrecioBD = productoBD.TipoPrecios.FirstOrDefault(c => c.Id == tipoPrecio.Id);
+            productoBD.TipoPrecios.Remove(viejoTipoPrecioBD);
+            _db.SaveChanges();
+
+        } 
     }
 }
