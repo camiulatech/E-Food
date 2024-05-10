@@ -17,12 +17,10 @@ namespace E_Food.Areas.Admin.Controllers
     {
 
         private readonly IUnidadTrabajo _unidadTrabajo;
-        private readonly ApplicationDbContext _db;
 
-        public ProductoPrecioController(IUnidadTrabajo unidadTrabajo, ApplicationDbContext db)
+        public ProductoPrecioController(IUnidadTrabajo unidadTrabajo)
         {
             _unidadTrabajo = unidadTrabajo;
-            _db = db;
         }
 
 
