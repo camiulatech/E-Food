@@ -56,6 +56,7 @@ namespace EFood.AccesoDatos.Repositorio
         public async Task<IEnumerable<Producto>> FiltrarPorLineaComida(int idLineaComida)
         {
             return await _db.Productos
+                .Include(p => p.LineaComida)
                 .Where(p => p.IdLineaComida == idLineaComida)
                 .ToListAsync();
         }

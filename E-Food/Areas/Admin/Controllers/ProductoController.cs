@@ -50,27 +50,6 @@ namespace E_Food.Areas.Admin.Controllers
             return View(productoVM);
         }
 
-        public async Task<IActionResult> Consultar(int? idLineaComida)
-        {
-            var productoVM = new ProductoVM();
-
-            // Obtener la lista de líneas de comida
-            productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
-
-            if (idLineaComida.HasValue)
-            {
-                // Si se proporciona un ID de línea de comida, filtrar los productos por esa línea
-                productoVM.Productos = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida.Value);
-            }
-            else
-            {
-                // Si no se proporciona un ID de línea de comida, cargar todos los productos
-                productoVM.Productos = await _unidadTrabajo.Producto.ObtenerTodos();
-            }
-
-            return View(productoVM);
-        }
-
 
 
         [HttpPost]
@@ -149,6 +128,28 @@ namespace E_Food.Areas.Admin.Controllers
         {
             var todos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
             return Json(new { data = todos });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Consultar(int? idLineaComida)
+        {
+            var productoVM = new ProductoVM();
+
+            // Obtener la lista de líneas de comida
+            productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
+
+            if (idLineaComida.HasValue)
+            {
+                // Si se proporciona un ID de línea de comida, filtrar los productos por esa línea
+                productoVM.Productos = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida.Value);
+            }
+            else
+            {
+                // Si no se proporciona un ID de línea de comida, cargar todos los productos
+                productoVM.Productos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
+            }
+            productoVM.LineaComidaSeleccionadaId = idLineaComida;
+            return View(productoVM);
         }
 
         [HttpPost]

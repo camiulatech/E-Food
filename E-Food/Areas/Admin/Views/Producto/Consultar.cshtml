@@ -4,16 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script>
-    function filtrarPorLineaComida() {
-        var idLineaComida = document.getElementById("lineaComidaSelect").value;
-        // Envía el formulario al controlador con el ID de la línea de comida seleccionada
-        document.getElementById("frmFiltrar").submit();
-    }
-</script>
-
-
-
 <div class="row">
     <div class="col-lg-6">
         <h2 class="text-primary">Lista de Productos</h2>
@@ -23,13 +13,10 @@
 <br />
 
 <form id="frmFiltrar" method="get" action="@Url.Action("Consultar", "Producto")">
-    <select id="lineaComidaSelect" name="idLineaComida" onchange="filtrarPorLineaComida()">
-        <option value="">Seleccionar línea de comida</option>
-        @foreach (var lineaComida in Model.LineaComidaLista)
-        {
-            <option value="@lineaComida.Value">@lineaComida.Text</option>
-        }
-    </select>
+        <select asp-for="LineaComidaSeleccionadaId" id="lineaComidaSelect" name="idLineaComida" onchange="filtrarPorLineaComida()" asp-items="@Model.LineaComidaLista" class="form-select">
+            <option disabled selected>-- Filtrar Por Linea de Comida --</option>
+        </select>
+        <span asp-validation-for="LineaComidaSeleccionadaId" class="text-danger"></span>
     <button type="button" class="btn btn-secondary m-2" onclick="limpiarFiltro()">Limpiar Filtro</button>
 </form>
 
@@ -40,6 +27,7 @@
             <tr>
                 <th>Codigo</th>
                 <th>Nombre Producto</th>
+                <th>Linea de Comida</th>
                 <!-- Aquí agregamos la columna para el precio -->
             </tr>
         </thead>
@@ -49,6 +37,7 @@
                 <tr>
                     <td>@producto.Id</td>
                     <td>@producto.Nombre</td>
+                    <td>@producto.LineaComida.Nombre</td>
                     <!-- Agrega aquí más columnas si es necesario -->
                 </tr>
             }
