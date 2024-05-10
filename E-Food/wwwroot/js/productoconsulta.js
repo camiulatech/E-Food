@@ -29,3 +29,28 @@ function loadDataTable() {
         ]
     });
 }
+
+function limpiarFiltro() {
+
+        // Limpiar el valor seleccionado en el select de línea de comida
+    document.getElementById("lineaComidaSelect").value = "";
+
+        // Enviar el formulario vacío para obtener todos los productos nuevamente
+    document.getElementById("frmFiltrar").submit();
+ 
+
+    // Realizar una solicitud AJAX para obtener todos los registros nuevamente
+    $.ajax({
+        type: "GET",
+        url: "/Admin/Producto/ObtenerTodos",
+        success: function (response) {
+            var data = response.data; // Extrae los datos del objeto de respuesta
+
+            // Reemplaza los datos actuales en el DataTable con los nuevos datos
+            datatable.clear().rows.add(data).draw();
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}

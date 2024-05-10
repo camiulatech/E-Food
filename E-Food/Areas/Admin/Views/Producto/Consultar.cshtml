@@ -12,6 +12,8 @@
     }
 </script>
 
+
+
 <div class="row">
     <div class="col-lg-6">
         <h2 class="text-primary">Lista de Productos</h2>
@@ -28,7 +30,9 @@
             <option value="@lineaComida.Value">@lineaComida.Text</option>
         }
     </select>
+    <button type="button" onclick="limpiarFiltro()">Limpiar Filtro</button> <!-- Botón para limpiar el filtro -->
 </form>
+
 
 <div class="p-4 border rounded bg-light">
     <table id="tblDatos" class="table table-responsive table-hover">
