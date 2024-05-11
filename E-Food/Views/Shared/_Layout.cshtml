@@ -80,9 +80,17 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - EFood - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+        @if (User == null)
+        {
+            <div class="container">
+                &copy; 2024 - EFood - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        } else
+        {
+            <div class="container">
+                &copy; 2024 - EFood - <a asp-area="Identity" asp-page="/Account/NewPassword">Cambiar contraseña</a>
+            </div>
+        }
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

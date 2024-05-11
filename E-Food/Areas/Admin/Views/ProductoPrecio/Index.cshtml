@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <h2 class="text-primary">Lista de Precios</h2>
+    </div>
+    <div class="col-lg-6">
+        <a class="btn btn-outline-primary" id="agregarPrecioBtn" onclick="agregarPrecio()"><i class="bi bi-plus-square-fill"></i> Agregar Precio</a>
+    </div>
+</div>
+
+<br />
+
+<div class="p-4 border rounded bg-light">
+    <table id="tblDatos" class="table table-responsive table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>ProductoID</th>
+                <th>Descripcion</th>
+                <th>Monto</th> 
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<br />
+
+<div class="d-grid gap-2 d-md-block">
+    <a onclick="Retroceder()" class="btn btn-primary"><i class="bi bi-arrow-return-left"></i> Regresar </a>
+</div>
+
+@section Scripts {
+    <script src="~/js/productoprecio.js"></script>
+    <script>
+        function agregarPrecio() {
+            var url = window.location.href; // Obtiene la URL actual
+            var id = url.substring(url.lastIndexOf('/') + 1); // Extrae el ID de la URL
+            window.location.href = '@Url.Action("Upsert","ProductoPrecio", new { id = "__id__" })'.replace('__id__', id);
+        }
+    </script>
+
+    <script>
+        function Retroceder() {
+            var url = window.location.href; // Obtiene la URL actual
+            window.location.href = '@Url.Action("Index", "Producto", new { area = "Admin" })';
+        }
+    </script>
+}

@@ -6,6 +6,10 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
+using EFood.AccesoDatos.Data;
+using EFood.AccesoDatos.Repositorio.IRepositorio;
+using EFood.Modelos;
+using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +21,12 @@ namespace E_Food.Areas.Identity.Pages.Account
     public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _db;
 
-        public ResetPasswordModel(UserManager<IdentityUser> userManager)
+        public ResetPasswordModel(UserManager<IdentityUser> userManager, ApplicationDbContext db)
         {
             _userManager = userManager;
+            _db = db;
         }
 
         /// <summary>
@@ -40,9 +46,6 @@ namespace E_Food.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -52,6 +55,11 @@ namespace E_Food.Areas.Identity.Pages.Account
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 0)]
+            [DataType(DataType.Password)]
+            public string OldPassword { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -67,23 +75,46 @@ namespace E_Food.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            public string Code { get; set; }
+            [EmailAddress]
+            public string Email { get; set; }
+
+            public string Opcion { get; set; }
 
         }
 
-        public IActionResult OnGet(string code = null)
+        public IActionResult OnGet(string email = null, string opcion = null)
         {
-            if (code == null)
+            if (email == null)
             {
-                return BadRequest("A code must be supplied for password reset.");
+                return BadRequest("Se debe ingresar un email para cambiar contraseña.");
             }
             else
             {
-                Input = new InputModel
+                Usuario usuario = _db.Usuarios.FirstOrDefault(u => u.Email == email);
+                if (usuario != null)
                 {
-                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
-                };
-                return Page();
+                    if (opcion == null)
+                    {
+                        Input = new InputModel
+                        {
+                            Email = email,
+                            Opcion = opcion
+                        };
+                    } else
+                    {
+                        Input = new InputModel
+                        {
+                            Email = email,
+                            Opcion = opcion,
+                            OldPassword = "olvido"
+                        };
+                    }
+                    return Page();
+                }
+                else
+                {
+                    return BadRequest("Email no encontrado.");
+                }
             }
         }
 
@@ -95,15 +126,25 @@ namespace E_Food.Areas.Identity.Pages.Account
             }
 
             var user = await _userManager.FindByEmailAsync(Input.Email);
-            if (user == null)
+            var password = false;
+            if (Input.OldPassword != "olvido")
             {
-                // Don't reveal that the user does not exist
-                return RedirectToPage("./ResetPasswordConfirmation");
+                password = await _userManager.CheckPasswordAsync(user, Input.OldPassword);
+            } else
+            {
+                password = true;
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
+            if (user == null || !password)
+            {
+                // Don't reveal that the user does not exist
+                TempData[DS.Error] = "No se pudo cambiar la contraseña, verifique que la contraseña actual sea correcta.";
+                return Page();
+            }
+            var result = await _userManager.ResetPasswordAsync(user, await _userManager.GeneratePasswordResetTokenAsync(user), Input.Password);
             if (result.Succeeded)
             {
+                TempData[DS.Exitosa] = "Contraseña cambiada exitosamente.";
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 

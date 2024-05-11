@@ -33,6 +33,9 @@ function loadDataTable() {
                 "render": function (data) {
                     return `
                         <div class="text-center">
+                           <a href="/Admin/ProductoPrecio/Index/${data}" class="btn btn-primary text-white" style="cursor:pointer">
+                              <i class="bi bi-cash-coin"></i>
+                           </a>
                            <a href="/Admin/Producto/Upsert/${data}" class="btn btn-success text-white" style="cursor:pointer">
                               <i class="bi bi-pencil-square"></i>  
                            </a>

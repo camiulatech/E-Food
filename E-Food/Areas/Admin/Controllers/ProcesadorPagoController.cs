@@ -50,15 +50,25 @@ namespace E_Food.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var usuarioNombre = User.Identity.Name;
+
                 if (procesadorPago.Id == 0)
                 {
+
                     await _unidadTrabajo.ProcesadorPago.Agregar(procesadorPago);
+                    await _unidadTrabajo.Guardar();
                     TempData[DS.Exitosa] = "Procesador de pago creado exitosamente";
+
+                    var idRegistro = procesadorPago.Id;
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó el procesador de pago '{procesadorPago.Procesador}' con ID: {idRegistro}");
                 }
                 else
                 {
                     _unidadTrabajo.ProcesadorPago.Actualizar(procesadorPago);
                     TempData[DS.Exitosa] = "Procesador de pago actualizado exitosamente";
+
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, procesadorPago.Id.ToString(), $"Se actualizó el procesador de pago '{procesadorPago.Procesador}' con ID: {procesadorPago.Id}");
+
                 }
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
@@ -81,6 +91,7 @@ namespace E_Food.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Eliminar(int id)
         {
+            var usuarioNombre = User.Identity.Name;
 
             var procesadorPagoDB = await _unidadTrabajo.ProcesadorPago.Obtener(id);
             var mensajeError = "Error al borrar el procesador de pago";
@@ -91,6 +102,9 @@ namespace E_Food.Areas.Admin.Controllers
             }
             _unidadTrabajo.ProcesadorPago.Remover(procesadorPagoDB);
             await _unidadTrabajo.Guardar();
+
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, procesadorPagoDB.Id.ToString(), $"Se eliminó el procesador de pago '{procesadorPagoDB.Procesador}' con ID: {procesadorPagoDB.Id}");
+
             return Json(new { success = true, message = "Procesador de pago borrado correctamente" });
         }
 

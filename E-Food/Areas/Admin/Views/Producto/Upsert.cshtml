@@ -33,6 +33,13 @@
 
                     <div class="row">
                         <div class="col-md-6">
+                            <label>Precio normal</label>
+                            <input type="number" asp-for="Producto.Monto" class="form-control" placeholder="Precio del producto" id="monto" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
                             <label>Contenido</label>
                             <input asp-for="Producto.Contenido" class="form-control" />
                             <span asp-validation-for="Producto.Contenido" class="text-danger"></span>

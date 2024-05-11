@@ -57,7 +57,9 @@ namespace E_Food.Areas.Identity.Pages.Account
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
-                    return RedirectToPage("./ForgotPasswordConfirmation");
+                    string resetUrl = Url.Page("./ForgotPasswordQuestion", pageHandler: null, values: new { Input.Email }, protocol: Request.Scheme);
+                    return Redirect(resetUrl);
+                    //return RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
                 // For more information on how to enable account confirmation and password reset please
@@ -75,7 +77,9 @@ namespace E_Food.Areas.Identity.Pages.Account
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                return RedirectToPage("./ForgotPasswordConfirmation");
+                //string resetUrl = Url.Page("./ResetPassword", pageHandler: null, values: new { code }, protocol: Request.Scheme);
+                //Redirect(resetUrl);
+                //return RedirectToPage("./ResetPassword");
             }
 
             return Page();
