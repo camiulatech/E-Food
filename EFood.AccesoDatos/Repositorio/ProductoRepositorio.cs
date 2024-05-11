@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace EFood.AccesoDatos.Repositorio
 {
@@ -50,6 +51,14 @@ namespace EFood.AccesoDatos.Repositorio
             {
                 return null;
             }
+        }
+
+        public async Task<IEnumerable<Producto>> FiltrarPorLineaComida(int idLineaComida)
+        {
+            return await _db.Productos
+                .Include(p => p.LineaComida)
+                .Where(p => p.IdLineaComida == idLineaComida)
+                .ToListAsync();
         }
     }
 }
