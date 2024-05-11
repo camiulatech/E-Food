@@ -117,7 +117,11 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Guardar();
                 return View("Index");
             } // If not Valid
+            var mensajeError = "Error al procesar la transacción: ";
+            TempData[DS.Error] = mensajeError;
+            await _unidadTrabajo.Error.RegistrarError(mensajeError, 409);
             productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
+            
             return View(productoVM);
         }
 
@@ -158,9 +162,11 @@ namespace E_Food.Areas.Admin.Controllers
             var usuarioNombre = User.Identity.Name;
 
             var ProductoBD = await _unidadTrabajo.Producto.Obtener(id);
+            var mensajeError = "Error al borrar producto";
             if (ProductoBD == null)
             {
-                return Json(new { success = false, message = "Error al borrar el Producto" });
+                await _unidadTrabajo.Error.RegistrarError(mensajeError, 420);
+                return Json(new { success = false, mensajeError });
             }
             // Remover imagen
             string upload = _webHostEnvironment.WebRootPath + DS.ImagenRuta;

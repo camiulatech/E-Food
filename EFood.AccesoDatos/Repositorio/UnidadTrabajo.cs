@@ -19,10 +19,11 @@ namespace EFood.AccesoDatos.Repositorio
         public ITiquetesDescuentoRepositorio TiqueteDescuento { get; private set; }
         public IProcesadorPagoRepositorio ProcesadorPago { get; private set; }
         public IUsuarioRepositorio Usuario { get; private set; }
+        public IErrorRepositorio Error {  get; private set; }
         public IBitacoraRepositorio Bitacora { get; private set; }
-
         public ITipoPrecioRepositorio TipoPrecio { get; private set; }
-
+        
+        
         public UnidadTrabajo(ApplicationDbContext db) {
             _db = db;
             LineaComida = new LineaComidaRepositorio(_db);
@@ -33,9 +34,11 @@ namespace EFood.AccesoDatos.Repositorio
 
             Producto = new ProductoRepositorio(_db);
 
-            ProcesadorPago = new ProcesadorPagoRepositorio(db);
+            ProcesadorPago = new ProcesadorPagoRepositorio(_db);
 
-            Usuario = new UsuarioRepositorio(db);
+            Usuario = new UsuarioRepositorio(_db);
+
+            Error = new ErrorRepositorio(_db);
 
             Bitacora = new BitacoraRepositorio(_db);
 

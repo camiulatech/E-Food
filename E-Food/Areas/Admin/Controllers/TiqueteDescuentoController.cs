@@ -75,7 +75,8 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
             }
-            TempData[DS.Error] = "Error al guardar el Tiquete de Descuento";
+            var mensajeError = TempData[DS.Error] = "Error al guardar el Tiquete de Descuento";
+            await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 409);
             return View(tiqueteDescuento);
         }
 
@@ -94,9 +95,11 @@ namespace E_Food.Areas.Admin.Controllers
             var usuarioNombre = User.Identity.Name;
 
             var TiqueteDescuentoBD = await _unidadTrabajo.TiqueteDescuento.Obtener(id);
+            var mensajeError = "Error al borrar Tiquete de Descuento";
             if (TiqueteDescuentoBD == null)
             {
-                return Json(new { success = false, message = "Error al borrar el Tiquete de Descuento" });
+                await _unidadTrabajo.Error.RegistrarError(mensajeError, 420);
+                return Json(new { success = false, mensajeError});
             }
             _unidadTrabajo.TiqueteDescuento.Remover(TiqueteDescuentoBD);
             await _unidadTrabajo.Guardar();

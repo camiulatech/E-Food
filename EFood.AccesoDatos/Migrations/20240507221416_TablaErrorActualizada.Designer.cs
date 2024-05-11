@@ -4,6 +4,7 @@ using EFood.AccesoDatos.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFood.AccesoDatos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240507221416_TablaErrorActualizada")]
+    partial class TablaErrorActualizada
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,44 +46,11 @@ namespace EFood.AccesoDatos.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int>("NumeroError")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Errors");
                 });
-                
-                
-            modelBuilder.Entity("EFood.Modelos.Bitacora", b =>
-            {
-                b.Property<int>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("int");
 
-                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                b.Property<string>("CodigoRegistro")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("Descripcion")
-                    .IsRequired()
-                    .HasMaxLength(250)
-                    .HasColumnType("nvarchar(250)");
-
-                b.Property<DateTime>("Fecha")
-                    .HasColumnType("datetime2");
-
-                b.Property<string>("Usuario")
-                    .HasColumnType("nvarchar(max)");
-
-                b.HasKey("Id");
-
-                b.ToTable("Bitacoras");
-            });
-                
-                
             modelBuilder.Entity("EFood.Modelos.LineaComida", b =>
                 {
                     b.Property<int>("Id")
@@ -182,9 +152,6 @@ namespace EFood.AccesoDatos.Migrations
                     b.Property<int>("IdLineaComida")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Monto")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(60)
@@ -226,13 +193,13 @@ namespace EFood.AccesoDatos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Cambio")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 

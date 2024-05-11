@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <h2 class="text-primary">Lista de Errores</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label for="fecha">Filtrar por Fecha:</label>
+            <input type="date" class="form-control" id="fecha">
+        </div>
+        <button type="button" class="btn btn-primary m-2" onclick="filtrarPorFecha()">Filtrar</button>
+        <button type="button" class="btn btn-secondary m-2" onclick="limpiarFiltro()">Limpiar Filtro</button>
+    </div>
+</div>
+
+<br />
+
+<div class="p-4 border rounded bg-light">
+    <table id="tblDatos" class="table table-responsive table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Numero Error</th>
+                <th>Mensaje</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/error.js"></script>
+}

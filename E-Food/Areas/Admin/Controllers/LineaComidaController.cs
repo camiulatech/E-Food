@@ -81,7 +81,8 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
             }
-            TempData[DS.Error] = "Error al guardar la Linea de Comida";
+            var mensajeError = TempData[DS.Error] = "Error al guardar la Linea de Comida";
+            await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 409);
             return View(lineaComida);
         }
 
@@ -100,8 +101,10 @@ namespace E_Food.Areas.Admin.Controllers
             var usuarioNombre = User.Identity.Name;
 
             var LineaComidaDB = await _unidadTrabajo.LineaComida.Obtener(id);
+            var mensajeError = "Error al borrar linea de comida";
             if (LineaComidaDB == null)
             {
+                await _unidadTrabajo.Error.RegistrarError(mensajeError, 420);
                 return Json(new { success = false, message = "Error al borrar el Linea de Comida" });
             }
             _unidadTrabajo.LineaComida.Remover(LineaComidaDB);

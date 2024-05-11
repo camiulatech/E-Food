@@ -75,7 +75,8 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
             }
-            TempData[DS.Error] = "Error al guardar Tarjeta";
+            var mensajeError = TempData[DS.Error] = "Error al guardar Tarjeta";
+            await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 409);
             return View(tarjeta);
         }
 
@@ -96,9 +97,11 @@ namespace E_Food.Areas.Admin.Controllers
             var usuarioNombre = User.Identity.Name;
 
             var tarjetaBD = await _unidadTrabajo.Tarjeta.Obtener(id);
+            var mensajeError = "Error al borrar tarjeta";
             if (tarjetaBD == null)
             {
-                return Json(new { success = false, message = "Error al borrar la tarjeta" });
+                await _unidadTrabajo.Error.RegistrarError(mensajeError, 420);
+                return Json(new { success = false, mensajeError });
             }
             _unidadTrabajo.Tarjeta.Remover(tarjetaBD);
             await _unidadTrabajo.Guardar();

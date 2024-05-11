@@ -20,8 +20,8 @@ namespace EFood.AccesoDatos.Data
         public DbSet<TipoPrecio> TipoPrecios { get; set; }
         public DbSet<TiqueteDescuento> TiqueteDescuentos { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Error> Errors { get; set; }
         public DbSet<Bitacora> Bitacoras { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

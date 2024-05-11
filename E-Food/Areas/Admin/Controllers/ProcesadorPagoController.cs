@@ -73,7 +73,8 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
             }
-            TempData[DS.Error] = "Error al guardar Procesador de pago";
+            var mensajeError=TempData[DS.Error] = "Error al guardar Procesador de pago";
+            await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 409);
             return View(procesadorPago);
         }
 
@@ -93,8 +94,10 @@ namespace E_Food.Areas.Admin.Controllers
             var usuarioNombre = User.Identity.Name;
 
             var procesadorPagoDB = await _unidadTrabajo.ProcesadorPago.Obtener(id);
+            var mensajeError = "Error al borrar el procesador de pago";
             if (procesadorPagoDB == null)
             {
+                await _unidadTrabajo.Error.RegistrarError(mensajeError, 420);
                 return Json(new { success = false, message = "Error al borrar el Procesador de pago" });
             }
             _unidadTrabajo.ProcesadorPago.Remover(procesadorPagoDB);

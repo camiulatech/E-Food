@@ -19,6 +19,7 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
         IProcesadorPagoRepositorio ProcesadorPago { get; }
 
         IUsuarioRepositorio Usuario { get; }
+        IErrorRepositorio Error { get; }
 
         IBitacoraRepositorio Bitacora { get; }
 
