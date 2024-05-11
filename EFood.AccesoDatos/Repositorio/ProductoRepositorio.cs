@@ -54,6 +54,7 @@ namespace EFood.AccesoDatos.Repositorio
             }
         }
 
+
         public IEnumerable<SelectListItem> ObtenerTipoPreciosListaDesplegable(string objeto)
         {
             if (objeto == "TipoPrecio")
@@ -85,5 +86,14 @@ namespace EFood.AccesoDatos.Repositorio
             _db.SaveChanges();
 
         } 
+
+        public async Task<IEnumerable<Producto>> FiltrarPorLineaComida(int idLineaComida)
+        {
+            return await _db.Productos
+                .Include(p => p.LineaComida)
+                .Where(p => p.IdLineaComida == idLineaComida)
+                .ToListAsync();
+        }
+
     }
 }
