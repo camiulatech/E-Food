@@ -46,11 +46,8 @@ namespace E_Food.Areas.Admin.Controllers
 
             if (id == null)
             {
-                //Crear nueva Linea de Comida
-
                 return View(productoPrecioVM);
             }
-            //Actualizar Linea de Comida
             Producto productoExiste = await _unidadTrabajo.Producto.Obtener(id.GetValueOrDefault());
             if (productoExiste == null)
             {
