@@ -1,5 +1,6 @@
 ﻿using EFood.AccesoDatos.Data;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
+using EFood.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace EFood.AccesoDatos.Repositorio
         public IUsuarioRepositorio Usuario { get; private set; }
         public IBitacoraRepositorio Bitacora { get; private set; }
 
+        public ITipoPrecioRepositorio TipoPrecio { get; private set; }
+
         public UnidadTrabajo(ApplicationDbContext db) {
             _db = db;
             LineaComida = new LineaComidaRepositorio(_db);
@@ -35,6 +38,8 @@ namespace EFood.AccesoDatos.Repositorio
             Usuario = new UsuarioRepositorio(db);
 
             Bitacora = new BitacoraRepositorio(_db);
+
+            TipoPrecio = new TipoPrecioRepositorio(_db);
         }
 
         public void Dispose()

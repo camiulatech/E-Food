@@ -1,17 +1,19 @@
 ﻿let datatable;
 
 $(document).ready(function () {
-    loadDataTable();
+    const id = obtenerUltimoID(); // Obtener el último ID de la URL
+
+    loadDataTable(id);
 });
 
-function loadDataTable() {
+function loadDataTable(id) {
     datatable = $('#tblDatos').DataTable({
         "language": {
-            "lengthMenu": "Mostrar MENU Registros Por Pagina",
+            "lengthMenu": "Mostrar _MENU_ Registros Por Pagina",
             "zeroRecords": "Ningun Registro",
-            "info": "Mostrar page PAGE de PAGES",
+            "info": "Mostrar page _PAGE_ de _PAGES_",
             "infoEmpty": "no hay registros",
-            "infoFiltered": "(filtered from MAX total registros)",
+            "infoFiltered": "(filtered from _MAX_ total registros)",
             "search": "Buscar",
             "paginate": {
                 "first": "Primero",
@@ -21,25 +23,19 @@ function loadDataTable() {
             }
         },
         "ajax": {
-            "url": "/Admin/Producto/ObtenerTodos"
+            "url": `/Admin/ProductoPrecio/ObtenerTodos/${id}`
         },
         "columns": [
             { "data": "id", "width": "20%" },
-            { "data": "nombre", "width": "20%" },
-            { "data": "lineaComida.nombre", "width": "20%" },
-            { "data": "contenido", "width": "20%" },
+            { "data": "productoId", "width": "20%"},
+            { "data": "descripcion", "width": "20%" },
+            { "data": "monto", "width": "20%" },
             {
                 "data": "id",
                 "render": function (data) {
                     return `
-                        <div class="text-center">
-                           <a href="/Admin/ProductoPrecio/Index/${data}" class="btn btn-primary text-white" style="cursor:pointer">
-                              <i class="bi bi-cash-coin"></i>
-                           </a>
-                           <a href="/Admin/Producto/Upsert/${data}" class="btn btn-success text-white" style="cursor:pointer">
-                              <i class="bi bi-pencil-square"></i>  
-                           </a>
-                           <a onclick=Eliminar("/Admin/Producto/Eliminar/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                    <div class="text-center">
+                           <a onclick=Eliminar(${data}) class="btn btn-danger text-white" style="cursor:pointer">
                                 <i class="bi bi-trash3-fill"></i>
                            </a> 
                         </div>
@@ -51,9 +47,18 @@ function loadDataTable() {
     });
 }
 
-function Eliminar(url) {
+function obtenerUltimoID() {
+    const url = window.location.href; // Obtener la URL completa
+    const partesURL = url.split('/'); // Dividir la URL en partes usando '/' como delimitador
+    return partesURL[partesURL.length - 1]; // El último elemento en el arreglo partesURL es el ID
+}
+
+function Eliminar(id1) {
+    const id = obtenerUltimoID(); // Obtener el último ID de la URL
+    const val = `${id}, ${id1}`
+    const url = `/Admin/ProductoPrecio/Eliminar/${val}`
     swal({
-        title: "Esta seguro de Eliminar el Producto?",
+        title: "Esta seguro de Eliminar el Precio?",
         text: "Este proceso es irreversible!",
         icon: "warning",
         buttons: true,
