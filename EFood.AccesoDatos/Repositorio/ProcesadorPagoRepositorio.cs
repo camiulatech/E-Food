@@ -1,6 +1,8 @@
 ﻿using EFood.AccesoDatos.Data;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,5 +35,20 @@ namespace EFood.AccesoDatos.Repositorio
             }
         }
 
+        public void AgregarTarjeta(ProcesadorPago procesadorPago, Tarjeta tarjeta)
+        {
+            var procesadorBD = _db.ProcesadorPagos.FirstOrDefault(c => c.Id == procesadorPago.Id);
+            procesadorBD.Tarjetas.Add(tarjeta);
+            _db.SaveChanges();
+        }
+
+        public void RemoverTarjeta(ProcesadorPago procesadorPago, Tarjeta tarjeta)
+        {
+            var procesadorBD = _db.ProcesadorPagos.Include(p => p.Tarjetas).FirstOrDefault(c => c.Id == procesadorPago.Id);
+            var viejoTipoPrecioBD = procesadorBD.Tarjetas.FirstOrDefault(c => c.Id == tarjeta.Id);
+            procesadorBD.Tarjetas.Remove(viejoTipoPrecioBD);
+            _db.SaveChanges();
+
+        }
     }
 }
