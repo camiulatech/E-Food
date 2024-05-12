@@ -24,11 +24,17 @@ namespace E_Food.Areas.Admin.Controllers
         }
 
 
-        public IActionResult Index(int? id)
+        public async Task<IActionResult> Index(int? id)
         {
+            var procesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(x => x.Id == id && x.Tipo == TipoProcesadorPago.TarjetaDebitoCredito);
             if (id != null)
             {
                 ViewData["ProductoId"] = id;
+            }
+            if (procesadorPago == null)
+            {
+                TempData[DS.Error] = "Para asignar tarjetas el procesador debe ser del tipo 2!";
+                return Redirect("/Admin/ProcesadorPago/Index");
             }
             return View();
         }
@@ -38,7 +44,7 @@ namespace E_Food.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> ObtenerTodos(int? id)
         {
-            var procesador = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(x => x.Id == id, incluirPropiedades: "Tarjetas");
+            var procesador = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(x => x.Id == id && x.Tipo == TipoProcesadorPago.TarjetaDebitoCredito, incluirPropiedades: "Tarjetas");
             if (procesador != null && procesador.Tarjetas != null)
             {
                 var todos = procesador.Tarjetas;
@@ -48,7 +54,7 @@ namespace E_Food.Areas.Admin.Controllers
                 }
 
                 return Json(new { data = todos });
-            } 
+            }
             else
             {
                 return Json(new {} );
@@ -58,9 +64,9 @@ namespace E_Food.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> ObtenerNoAsociados(int? id)
         {
-            var procesador = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(x => x.Id == id, incluirPropiedades: "Tarjetas");
+            var procesador = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(x => x.Id == id && x.Tipo == TipoProcesadorPago.TarjetaDebitoCredito, incluirPropiedades: "Tarjetas");
             var tarjetasNoAsociadas = await _unidadTrabajo.Tarjeta.ObtenerTodos(t => !t.ProcesadorPagos.Contains(procesador), incluirPropiedades: "ProcesadorPagos");
-            if (tarjetasNoAsociadas != null)
+            if (tarjetasNoAsociadas != null && procesador != null)
             {
                 var todos = tarjetasNoAsociadas.ToList();
                 for (int i = 0; i < todos.Count; i++)
