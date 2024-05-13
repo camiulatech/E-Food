@@ -27,7 +27,21 @@ function loadDataTable() {
         "columns": [
             { "data": "id" },
             { "data": "procesador" },
-            { "data": "tipo" },
+            {
+                "data": "tipo",
+                "render": function (data) {
+                    switch (data) {
+                        case 0:
+                            return 'Efectivo';
+                        case 1:
+                            return 'Cheque Electrónico';
+                        case 2:
+                            return 'Tarjeta Débito/Crédito';
+                        default:
+                            return '';
+                    }
+                }
+            },
             {
                 "data": "estado",
                 "render": function (data, type, row) {

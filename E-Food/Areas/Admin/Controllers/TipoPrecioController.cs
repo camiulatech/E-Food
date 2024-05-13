@@ -52,7 +52,7 @@ namespace E_Food.Areas.Admin.Controllers
         public async Task<IActionResult> Upsert(TipoPrecio tipoPrecio)
         {
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && -100 <= tipoPrecio.Cambio && tipoPrecio.Cambio <= 100)
             {
                 // Obtiene el nombre del usuario actualmente logueado
                 var usuarioNombre = User.Identity.Name;
@@ -80,6 +80,11 @@ namespace E_Food.Areas.Admin.Controllers
                 }
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
+            }
+            if (tipoPrecio.Cambio < -100 || tipoPrecio.Cambio > 100)
+            {
+                TempData[DS.Error] = "El cambio porcentual debe estar entre -100% y 100%";
+                return View(tipoPrecio);
             }
             TempData[DS.Error] = "Error al guardar el Tipo Precio";
             return View(tipoPrecio);

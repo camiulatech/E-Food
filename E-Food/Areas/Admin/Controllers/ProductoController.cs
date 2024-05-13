@@ -57,7 +57,7 @@ namespace E_Food.Areas.Admin.Controllers
         public async Task<IActionResult> Upsert(ProductoVM productoVM)
         {
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && productoVM.Producto.Monto > 0)
             {
                 var usuarioNombre = User.Identity.Name;
 
@@ -117,7 +117,14 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Guardar();
                 return View("Index");
             } // If not Valid
-            var mensajeError = "Error al procesar la transacción: ";
+            if (productoVM.Producto.Monto <= 0)
+            {
+                TempData[DS.Error] = "Verifica que el precio inicial sea un valor positivo";
+                productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
+
+                return View(productoVM);
+            }
+            var mensajeError = "Error al crear el producto";
             TempData[DS.Error] = mensajeError;
             await _unidadTrabajo.Error.RegistrarError(mensajeError, 409);
             productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
