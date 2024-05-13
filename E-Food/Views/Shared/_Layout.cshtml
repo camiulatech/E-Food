@@ -1,6 +1,6 @@
 ﻿@using EFood.Utilidades
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,49 +22,90 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EFood</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EFood-BackEnd</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Admin
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @if (User.IsInRole(DS.Rol_Admin))
                                 {
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="LineaComida" asp-action="Index">Linea Comida</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="ProcesadorPago" asp-action="Index">Procesador Pago</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Producto" asp-action="Index">Producto</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Tarjeta" asp-action="Index">Tarjeta</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="TiqueteDescuento" asp-action="Index">Tiquete Descuento</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Usuario" asp-action="Index">Usuario</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Error" asp-action="Index">Error</a>
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Admin
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="LineaComida" asp-action="Index">Linea Comida</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="ProcesadorPago" asp-action="Index">Procesador Pago</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Producto" asp-action="Index">Producto</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Tarjeta" asp-action="Index">Tarjeta</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="TiqueteDescuento" asp-action="Index">Tiquete Descuento</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Usuario" asp-action="Index">Usuario</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Error" asp-action="Index">Error</a>
+                                    </div>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Mantenimiento
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="LineaComida" asp-action="Index">Linea Comida</a>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Producto" asp-action="Index">Producto</a>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="TiqueteDescuento" asp-action="Index">Tiquete Descuento</a>
+                                        </div>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Consulta
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="LineaComida" asp-action="Index">Linea Comida</a>
+                                        </div>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Seguridad
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Usuario" asp-action="Index">Usuario</a>
+                                        </div>
+                                    </li>
                                 }
                                 else if (User.IsInRole(DS.Rol_Mantemiento))
                                 {
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="LineaComida" asp-action="Index">Linea Comida</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Producto" asp-action="Index">Producto</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="TiqueteDescuento" asp-action="Index">Tiquete Descuento</a>
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Mantenimiento
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="LineaComida" asp-action="Index">Linea Comida</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Producto" asp-action="Index">Producto</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="TiqueteDescuento" asp-action="Index">Tiquete Descuento</a>
+                                    </div>
                                 }
                                 else if (User.IsInRole(DS.Rol_Consulta))
                                 {
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="LineaComida" asp-action="Index">Linea Comida</a>
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Consulta
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="LineaComida" asp-action="Index">Linea Comida</a>
+                                    </div>
                                 }
                                 else if (User.IsInRole(DS.Rol_Seguridad))
                                 {
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Usuario" asp-action="Index">Usuario</a>
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Seguridad
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Usuario" asp-action="Index">Usuario</a>
+                                    </div>
                                 }
-                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Sobre Nosotros</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
