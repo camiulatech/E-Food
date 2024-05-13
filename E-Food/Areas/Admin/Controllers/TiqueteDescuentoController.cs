@@ -51,7 +51,7 @@ namespace E_Food.Areas.Admin.Controllers
         public async Task<IActionResult> Upsert(TiqueteDescuento tiqueteDescuento)
         {
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && tiqueteDescuento.Disponibles > 0 && tiqueteDescuento.Descuento >= 0 && tiqueteDescuento.Descuento <= 100)
             {
                 var usuarioNombre = User.Identity.Name;
 
@@ -74,6 +74,16 @@ namespace E_Food.Areas.Admin.Controllers
                 }
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
+            }
+            if (tiqueteDescuento.Disponibles <= 0)
+            {
+                TempData[DS.Error] = ("La cantidad de tiquetes disponibles debe ser mayor a 0");
+                return View(tiqueteDescuento);
+            }
+            if (tiqueteDescuento.Descuento < 0 || tiqueteDescuento.Descuento > 100)
+            {
+                TempData[DS.Error] = ("El porcentaje de descuento debe ser mayor o igual a 0 y menor o igual a 100");
+                return View(tiqueteDescuento);
             }
             var mensajeError = TempData[DS.Error] = "Error al guardar el Tiquete de Descuento";
             await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 409);
