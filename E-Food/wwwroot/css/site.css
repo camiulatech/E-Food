@@ -1,22 +1,76 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
+
+
+/* Estilo para los botones de clase primaria con contorno */
+.btn-outline-primary {
+    color: orange; /* Cambia el color del texto del botón a azul */
+    border: 2px solid orange; /* Agrega un borde sólido azul */
+    border-radius: 5px; /* Agrega bordes redondeados al botón */
+    padding: 8px 16px; /* Ajusta el padding según sea necesario */
+    cursor: pointer; /* Cambia el cursor al pasar por encima del botón */
+}
+
+    /* Estilo para cuando el cursor pasa sobre el botón */
+    .btn-outline-primary:hover,
+    .btn-outline-primary:focus {
+        background-color: orange; /* Cambia el color de fondo al pasar el cursor o enfocar el botón */
+        color: white; /* Cambia el color del texto a blanco */
+        outline-color: orange; /* Elimina el contorno al enfocar el botón */
+    }
+
+
+/* Estilo para los títulos */
+h1, h2, h3, h4, h5, h6 {
+    text-decoration-color: orange; /* Cambia el color de los títulos */
+    font-weight: bold; /* Establece la negrita en los títulos */
+}
+
+
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+table {
+    border-collapse: collapse;
+    border-radius: 10px; /* Ajusta este valor según tu preferencia */
+    overflow: hidden; /* Para que los bordes redondeados se vean correctamente */
+    width: 100%; /* Para que la tabla ocupe todo el ancho disponible */
+}
+
+/* Estilo para las celdas */
+td, th {
+    border-color: lightgrey ;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Estilo para las filas impares */
+tr:nth-child(odd) {
+    background-color: #2A2C41;
+}
+
+/* Estilo para el encabezado */
+thead {
+    background-color: #F4F4F8;
+    border-radius: 10px 10px 0 0; /* Redondea solo las esquinas superiores */
+    font-weight: bold;
+    color: white; /* Cambia el color del texto a negro */
 }
