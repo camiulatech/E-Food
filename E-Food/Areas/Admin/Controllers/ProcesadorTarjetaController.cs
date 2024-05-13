@@ -33,7 +33,7 @@ namespace E_Food.Areas.Admin.Controllers
             }
             if (procesadorPago == null)
             {
-                TempData[DS.Error] = "Para asignar tarjetas el procesador debe ser del tipo 2!";
+                TempData[DS.Error] = "Para asignar tarjetas el procesador debe ser de tipo Tarjeta Crédito/Débito!";
                 return Redirect("/Admin/ProcesadorPago/Index");
             }
             return View();
