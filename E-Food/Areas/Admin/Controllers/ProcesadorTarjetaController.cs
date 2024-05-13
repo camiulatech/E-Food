@@ -115,7 +115,9 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Guardar();
                 return Json(new { success = true, message = "Tarjeta agregada exitosamente" });
             }
-            return Json(new { success = false, message = "Error al cargar el procesador de pago" });
+            var mensajeError = "Error al cargar el procesador de pago";
+            await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 409);
+            return Json(new { success = false,  mensajeError});
         }
 
         [HttpPost]
@@ -129,8 +131,10 @@ namespace E_Food.Areas.Admin.Controllers
 
             var ProcesadorBD = await _unidadTrabajo.ProcesadorPago.Obtener(idProcesador);
             var TarjetaBD = await _unidadTrabajo.Tarjeta.Obtener(idTarjeta);
+            var mensajeError = "Error al quitar la Tarjeta";
             if (ProcesadorBD == null || TarjetaBD == null)
             {
+                await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 420);
                 return Json(new { success = false, message = "Error al quitar la Tarjeta" });
             }
             _unidadTrabajo.ProcesadorPago.RemoverTarjeta(ProcesadorBD, TarjetaBD);
