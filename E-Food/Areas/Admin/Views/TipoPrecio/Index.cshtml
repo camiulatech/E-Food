@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
-            <h2 class="text-primary">Lista de Tipos de Precio</h2>
+            <h2 class="text-prim">Lista de Tipos de Precio</h2>
         </div>
         <div class="col-lg-6">
             <a class="btn btn-outline-primary" asp-action="Upsert"><i class="bi bi-plus-square-fill"></i> Crear Nuevo Tipo de Precio</a>
@@ -17,7 +17,7 @@
 
     <div class="p-4 border rounded bg-light">
         <table id="tblDatos" class="table table-responsive table-hover">
-            <thead class="table-dark">
+            <thead>
                 <tr>
                     <th>ID</th>
                     <th>Descripcion</th>
@@ -29,6 +29,9 @@
     </div>
 
 </div>
+
+<br />
+
 @section Scripts {
     <script src="~/js/tipoprecio.js"></script>
 }

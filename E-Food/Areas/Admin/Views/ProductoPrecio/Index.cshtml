@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
-            <h2 class="text-primary">Lista de Precios</h2>
+            <h2 class="text-prim">Lista de Precios</h2>
         </div>
         <div class="col-lg-6">
             <a class="btn btn-outline-primary" id="agregarPrecioBtn" onclick="agregarPrecio()"><i class="bi bi-plus-square-fill"></i> Agregar Precio</a>
@@ -17,7 +17,7 @@
 
     <div class="p-4 border rounded bg-light">
         <table id="tblDatos" class="table table-responsive table-hover">
-            <thead class="table-dark">
+            <thead>
                 <tr>
                     <th>ID</th>
                     <th>ProductoID</th>
@@ -36,6 +36,9 @@
     </div>
 
 </div>
+
+<br />
+
 @section Scripts {
     <script src="~/js/productoprecio.js"></script>
     <script>

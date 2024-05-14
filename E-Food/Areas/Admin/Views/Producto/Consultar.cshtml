@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
-            <h2 class="text-primary">Lista de Productos</h2>
+            <h2 class="text-prim">Lista de Productos</h2>
         </div>
     </div>
 
@@ -24,13 +24,12 @@
 
     <div class="p-4 border rounded bg-light">
         <table id="tblDatos" class="table table-responsive table-hover">
-            <thead class="table-dark">
+            <thead>
                 <tr>
-                    <th>Codigo</th>
+                    <th>ID</th>
                     <th>Nombre Producto</th>
                     <th>Linea de Comida</th>
                     <th>Precio Inicial</th>
-                    <!-- Aquí agregamos la columna para el precio -->
                 </tr>
             </thead>
             <tbody>
@@ -41,13 +40,14 @@
                         <td>@producto.Nombre</td>
                         <td>@producto.LineaComida.Nombre</td>
                         <td>@producto.Monto</td>
-                        <!-- Agrega aquí más columnas si es necesario -->
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
+
+<br />
 
 @section Scripts {
     <script src="~/js/productoconsulta.js"></script>

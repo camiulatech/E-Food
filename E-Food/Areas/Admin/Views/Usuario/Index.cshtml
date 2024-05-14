@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
-            <h2 class="text-primary">Lista de Usuarios</h2>
+            <h2 class="text-prim">Lista de Usuarios</h2>
         </div>
         <div class="col-lg-6">
             <a class="btn btn-outline-primary" asp-area="Identity" asp-page="/Account/Register">
@@ -19,7 +19,7 @@
 
     <div class="p-4 border rounded bg-light">
         <table id="tblDatos" class="table table-responsive table-hover">
-            <thead class="table-dark">
+            <thead>
                 <tr>
                     <th>Email</th>
                     <th>Usuario</th>
@@ -30,6 +30,8 @@
         </table>
     </div>
 </div>
+
+<br />
 
 @section Scripts {
     <script src="~/js/usuarios.js"></script>
