@@ -26,8 +26,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-2">
             <div class="container-fluid">
                 <div id="mySidebar" class="sidebar">
-                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Sobre Nosotros</a>
-                    <a href="#">Ayuda</a>
+                    <a asp-area="" asp-controller="Home" asp-action="Ayuda">Centro de Ayuda</a>
                     @if (User.IsInRole(DS.Rol_Admin))
                     {
                         <a class="dropdown-btn" href="#">

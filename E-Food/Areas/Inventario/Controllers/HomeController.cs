@@ -20,7 +20,7 @@ namespace EFood.Areas.Inventario.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Ayuda()
         {
             return View();
         }
