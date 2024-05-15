@@ -12,30 +12,28 @@ html {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-
-
 /* Estilo para los botones de clase primaria con contorno */
 .btn-outline-primary {
-    color: orange; /* Cambia el color del texto del botón a azul */
-    border: 2px solid orange; /* Agrega un borde sólido azul */
-    border-radius: 5px; /* Agrega bordes redondeados al botón */
-    padding: 8px 16px; /* Ajusta el padding según sea necesario */
-    cursor: pointer; /* Cambia el cursor al pasar por encima del botón */
+    color: orange;
+    border: 2px solid orange;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
 }
 
-    /* Estilo para cuando el cursor pasa sobre el botón */
-    .btn-outline-primary:hover,
-    .btn-outline-primary:focus {
-        background-color: orange; /* Cambia el color de fondo al pasar el cursor o enfocar el botón */
-        color: white; /* Cambia el color del texto a blanco */
-        outline-color: orange; /* Elimina el contorno al enfocar el botón */
-    }
+/* Estilo para cuando el cursor pasa sobre el botón */
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: orange;
+    color: white; 
+    outline-color: orange; 
+}
 
 
 /* Estilo para los títulos */
 h1, h2, h3, h4, h5, h6 {
-    text-decoration-color: orange; /* Cambia el color de los títulos */
-    font-weight: bold; /* Establece la negrita en los títulos */
+    text-decoration-color: orange;
+    font-weight: bold;
 }
 
 .btn-primary:hover,
@@ -61,8 +59,9 @@ h1, h2, h3, h4, h5, h6 {
     background-color: orange;
 }
 
+/* Color del texto de los titulos */
 .text-prim {
-    color: orange; /* Cambia el color del texto a azul */
+    color: orange;
 }
 
 .dropdown-menu {
@@ -82,30 +81,28 @@ html {
     min-height: 100%;
 }
 
+/* Estilos para las tablas */
 table {
     border-collapse: collapse;
     overflow: auto;
-    width: 100%; /* Para que la tabla ocupe todo el ancho disponible */
+    width: 100%;
 }
 
-/* Estilo para las celdas */
 td, th {
     border-color: lightgrey ;
     padding: 8px;
     text-align: left;
 }
 
-/* Estilo para las filas impares */
 tr:only-child {
     background-color: #2A2C41;
 }
 
-/* Estilo para el encabezado */
 thead {
     background-color: #F4F4F8;
-    border-radius: 10px 10px 0 0; /* Redondea solo las esquinas superiores */
+    border-radius: 10px 10px 0 0;
     font-weight: bold;
-    color: white; /* Cambia el color del texto a negro */
+    color: white;
 }
 
 body {
@@ -117,6 +114,7 @@ body {
     background-size: cover;
 }
 
+/* Botón SideBar */
 .container1 {
     display: inline-block;
     cursor: pointer;
@@ -130,24 +128,16 @@ body {
     transition: 0.4s;
 }
 
-/* Rotate first bar */
 .change .bar1 {
     transform: translate(0, 11px) rotate(-45deg);
 }
 
-/* Fade out the second bar */
 .change .bar2 {
     opacity: 0;
 }
 
-/* Rotate last bar */
 .change .bar3 {
     transform: translate(0, -11px) rotate(45deg);
-}
-
-.fa-caret-down {
-    float: right;
-    padding-right: 8px;
 }
 
 /* Sidebar */
@@ -175,9 +165,12 @@ body {
 }
 
 .dropdown-container {
-    display: none;
+    display: block;
     background-color: #2A2C41;
+    overflow: hidden;
+    max-height: 0;
     padding-left: 8px;
+    transition: max-height 0.5s ease-out;
 }
 
 .sidebar a:hover {
@@ -189,6 +182,23 @@ body {
   transition: margin-left .5s;
   padding: 20px;
 }
+
+/* Header en toda la página */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%
+}
+
+.sticky + #main2 {
+  padding-top: 102px;
+}
+
+.main-sticky {
+    margin-top: 100px;
+}
+
+/* MOBILE VERSION*/
 
 @media (max-width: 576px) {
     .table th, .table td {
