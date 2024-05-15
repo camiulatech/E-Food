@@ -113,7 +113,7 @@ body {
     font-family: "Playfair Display", sans-serif;
     font-style: normal;
     background: no-repeat;
-    background-image: url(https://media.discordapp.net/attachments/708903554173108296/1239761083049316352/1715652462078.jpg?ex=664418fb&is=6642c77b&hm=4962dca0dc9d8c9ac3e18262754d358ba6eaf13733072257adc9a67b9145efdd&=&format=webp&width=1246&height=701);
+    background-image: url(../imagenes/1715652462078.jpg);
     background-size: cover;
 }
 
@@ -164,12 +164,12 @@ body {
   transition: 0.5s;
 }
 
-.sidebar a, .dropdown-btn {
+.sidebar a, .sidebar .dropdown-btn {
   padding: 8px 8px 8px 32px;
   background-color: #2A2C41;
   text-decoration: none;
   font-size: 25px;
-  color: #818181;
+  color: gray;
   display: block;
   transition: 0.3s;
 }
@@ -184,24 +184,44 @@ body {
   color: #f1f1f1;
 }
 
-.sidebar .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
 /* Mueve el contenido al abrir la sidebar */
 #main1 {
   transition: margin-left .5s;
   padding: 20px;
 }
 
+@media (max-width: 576px) {
+    .table th, .table td {
+        width: 100%;
+    }
+
+    .table thead {
+        display: inline-block; /* Ocultar el encabezado de la tabla en dispositivos muy pequeños */
+        width: 100%;
+        font-size: 0.8rem;
+    }
+
+    .table tbody tr {
+        display: list-item; /* Mostrar cada fila como un bloque */
+        width: 100%;
+    }
+    
+    .table tbody tr td {
+        width: 100%;
+        display: inline-block; /* Ocultar el encabezado de la tabla en dispositivos muy pequeños */
+        font-size: 0.9rem;
+    }
+    
+    .table tbody tr td::before {
+        width: 100%;
+        display: inline-block; /* Ocultar el encabezado de la tabla en dispositivos muy pequeños */
+    }
+}
+
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidebar {padding-top: 15px;}
-  .sidebar a {font-size: 18px;}
+@media screen and (max-width: 450px) {
+  .sidebar {padding-top: 40px;}
+  .sidebar a, .sidebar .dropdown-btn {font-size: 20px;}
 }
 
 .navbar, .container-fluid {
@@ -214,6 +234,12 @@ footer {
     bottom: 0;
     width: 100%;
     background-color: #F4F4F8;
+}
+
+@media (max-width: 576px) {
+    footer {
+        padding: 0px;
+    }
 }
 
 .header {

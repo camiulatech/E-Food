@@ -26,8 +26,8 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-2">
             <div class="container-fluid">
                 <div id="mySidebar" class="sidebar">
-                    <a href="#">About</a>
-                    <a href="#">Services</a>
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Sobre Nosotros</a>
+                    <a href="#">Ayuda</a>
                     @if (User.IsInRole(DS.Rol_Admin))
                     {
                         <a class="dropdown-btn" href="#">
@@ -112,9 +112,6 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                                
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Sobre Nosotros</a>
-                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -161,16 +158,8 @@
             document.getElementById("main1").style.marginLeft = "250px";
             x.classList.toggle("change");
         }
-
-        // /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
-        // function closeNav() {
-        //     document.getElementById("mySidebar").style.width = "0";
-        //     document.getElementById("main1").style.marginLeft = "0";
-        // }
-
     </script>
     <script>
-        //* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
         var dropdown = document.getElementsByClassName("dropdown-btn");
         var i;
 
