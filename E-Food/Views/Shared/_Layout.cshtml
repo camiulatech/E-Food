@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body onload="loading()">
     <header class="main-header" id="main-header">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-2">
             <div class="container-fluid">
@@ -99,7 +99,7 @@
                     }
                 </div>
 
-                <div id="main1" class="container1" onclick="openNav(this)">
+                <div id="main1" class="container1" onclick="sidebar(this)">
                     <div class="bar1"></div>
                     <div class="bar2"></div>
                     <div class="bar3"></div>
@@ -117,7 +117,8 @@
             </div>
         </nav>
     </header>
-    <div>
+    <div id="loader"></div>
+    <div style="display:block;" id="myDiv" class="animate-bottom hidden">
         <main role="main" class="pb-3" id="main2">
             <partial name="_Notificaciones" />
             @RenderBody()
@@ -146,7 +147,7 @@
     <script src="~/lib/select2/js/select2.min.js"></script>
     <script>
         /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
-        function openNav(x) {
+        function sidebar(x) {
             if (document.getElementById("mySidebar").style.width == "250px") {
                 document.getElementById("mySidebar").style.width = "0";
                 document.getElementById("main1").style.marginLeft = "0";
@@ -180,17 +181,13 @@
     </script>
     <script>
         // When the user scrolls the page, execute myFunction
-        window.onscroll = function () { myFunction() };
+        window.onscroll = function () { anclar() };
 
-        // Get the header
         var header = document.getElementById("main-header");
         var main = document.getElementById("main2");
-
-        // Get the offset position of the navbar
         var sticky = header.offsetTop;
 
-        // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
-        function myFunction() {
+        function anclar() {
             if (window.pageYOffset > sticky) {
                 header.classList.add("sticky");
                 main.classList.add("main-sticky");
@@ -198,6 +195,23 @@
                 header.classList.remove("sticky");
                 main.classList.remove("main-sticky");
             }
+        }
+    </script>
+
+    <script>
+        var myVar;
+
+        function loading() {
+            myVar = setTimeout(showPage, 500);
+        }
+
+        function showPage() {
+            document.getElementById("loader").style.display = "none";
+            // document.getElementById("myDiv").style.visibility = "visible";
+            // document.getElementById("myDiv").style.opacity = "1";
+            document.getElementById("myDiv").classList.remove('hidden');
+            document.getElementById("myDiv").classList.add('visible');
+
         }
     </script>
     @await RenderSectionAsync("Scripts", required: false)

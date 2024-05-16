@@ -32,13 +32,15 @@
 	}
 	else if (User.IsInRole(DS.Rol_Mantemiento))
 	{
-		<button type="button" class="collapsible">Open Collapsible</button>
+		<h3>Mantenimiento</h3>
+		<button type="button" class="collapsible">Problemas al Agregar Objeto</button>
 		<div class="content">
-			<p>Lorem ipsum...</p>
+			<p>Si tienes un error al agregar un objeto, revisa que los datos que ingresaste sean correctos y que la página no tire algun error de que sea requerido algun espacio o formato, si el error continua contacta con el administrador.</p>
 		</div>
 	}
 	else if (User.IsInRole(DS.Rol_Consulta))
 	{
+		<h3>Consultas</h3>
 		<button type="button" class="collapsible">Open Collapsible</button>
 		<div class="content">
 			<p>Lorem ipsum...</p>
@@ -46,6 +48,7 @@
 	}
 	else if (User.IsInRole(DS.Rol_Seguridad))
 	{
+		<h3>Seguridad</h3>
 		<button type="button" class="collapsible">Open Collapsible</button>
 		<div class="content">
 			<p>Lorem ipsum...</p>
