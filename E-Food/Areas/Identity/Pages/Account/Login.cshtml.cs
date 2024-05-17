@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using EFood.AccesoDatos.Repositorio.IRepositorio;
 
 namespace E_Food.Areas.Identity.Pages.Account
 {
@@ -21,12 +22,14 @@ namespace E_Food.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IUnidadTrabajo _unidadTrabajo;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IUnidadTrabajo unidadTrabajo)
         {
             _signInManager = signInManager;
             _logger = logger;
-        }
+			_unidadTrabajo = unidadTrabajo;
+		}
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -105,13 +108,14 @@ namespace E_Food.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var usuario = await _unidadTrabajo.Usuario.ObtenerPrimero(u => u.UserName == Input.UserName);
 
-            if (ModelState.IsValid)
+			if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                if (result.Succeeded && usuario.Estado == true)
                 {
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);

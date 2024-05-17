@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - EFood</title>
+    <link rel="shortcut icon" href="~/imagenes//icono.ico" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EFood.styles.css" asp-append-version="true" />
@@ -26,6 +27,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-2">
             <div class="container-fluid">
                 <div id="mySidebar" class="sidebar">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                     <a asp-area="" asp-controller="Home" asp-action="Ayuda">Centro de Ayuda</a>
                     @if (User.IsInRole(DS.Rol_Admin))
                     {
@@ -104,6 +106,7 @@
                     <div class="bar2"></div>
                     <div class="bar3"></div>
                 </div>
+                <img src="@Url.Content("~/imagenes/logo2.png")" style="width:85px;height:70px;">
                 <a class="navbar-brand justify-content-lg-start" asp-area="" asp-controller="Home" asp-action="Index">EFood-BackEnd</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -126,10 +129,10 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        @if (User == null)
+        @if (!User.Identity.IsAuthenticated)
         {
             <div class="container">
-                &copy; 2024 - EFood - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                &copy; 2024 - EFood - <a asp-area="" asp-controller="Home" asp-action="Ayuda">Centro de Ayuda</a>
             </div>
         } else
         {
