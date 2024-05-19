@@ -19,6 +19,8 @@ html {
     border-radius: 5px;
     padding: 8px 16px;
     cursor: pointer;
+    transform: scale(1.0);
+    transition: all 0.2s ease; /* Transición suave de la transformación */
 }
 
 /* Estilo para cuando el cursor pasa sobre el botón */
@@ -27,6 +29,8 @@ html {
     background-color: orange;
     color: white; 
     border-color: coral; 
+    transform: scale(1.1);
+    transition: transform 0.2s ease; /* Transición suave de la transformación */
 }
 
 
@@ -39,6 +43,94 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary {
     background-color: orange;
     border-color: coral;
+    transition: all 0.2s ease;
+}
+
+.btn-danger {
+    transition: all 0.2s ease;
+}
+
+.btn-success {
+    transition: all 0.2s ease;
+}
+
+.btn-secondary {
+    transition: all 0.2s ease;
+}
+
+/* Botón Crear */
+.newbtn {
+  color: orange;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+  font-size: 14px;
+  line-height: 45px;
+  max-width: 300px;
+  margin: 0 auto 2em;
+  position: relative;
+  text-transform: uppercase;
+  vertical-align: middle;
+  width: 100%;
+  border-radius: 10px;
+  -webkit-transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+          transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+@media (min-width: 400px) {
+  .newbtn {
+    display: inline-block;
+    margin-right: 2.5em;
+  }
+  .newbtn:nth-of-type(even) {
+    margin-right: 0;
+  }
+}
+@media (min-width: 600px) {
+  .newbtn:nth-of-type(even) {
+    margin-right: 2.5em;
+  }
+  .newbtn:nth-of-type(5) {
+    margin-right: 0;
+  }
+}
+
+.newbtna {
+  border: 1px solid;
+  overflow: hidden;
+  position: relative;
+}
+.newbtna span {
+  z-index: 20;
+}
+
+.newbtn:hover {
+    -webkit-transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+          transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+    background-color:orange;
+    color: white;
+}
+
+.newbtna:after {
+  background: purple;
+  content: "";
+  height: 155px;
+  left: -75px;
+  opacity: .2;
+  position: absolute;
+  top: -50px;
+  width: 50px;
+  -webkit-transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+          transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+  -webkit-transform: rotate(35deg);
+      -ms-transform: rotate(35deg);
+          transform: rotate(35deg);
+  z-index: -10;
+}
+
+.newbtna:hover:after {
+  left: 120%;
+  -webkit-transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+          transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .btn-primary:hover,
@@ -54,9 +146,11 @@ h1, h2, h3, h4, h5, h6 {
 .btn-danger:hover,
 .btn-danger:focus,
 .btn-success:hover,
-.btn-success.focus {
+.btn-success:focus,
+.btn-secondary:hover,
+.btn-secondary:focus {
     transform: scale(1.1);
-    transition: transform 0.2s ease; /* Transición suave de la transformación */
+    transition: all 0.3s ease; /* Transición suave de la transformación */
 }
 
 /* Nav Links (Login/Logout) */
