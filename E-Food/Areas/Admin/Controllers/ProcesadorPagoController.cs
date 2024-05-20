@@ -52,10 +52,10 @@ namespace E_Food.Areas.Admin.Controllers
             {
                 var usuarioNombre = User.Identity.Name;
 
-                if (procesadorPago.Tipo == 0 )
+                if (procesadorPago.Tipo == 0)
                 {
                     var procesadoresPagoDB = await _unidadTrabajo.ProcesadorPago.ObtenerTodos(p => p.Tipo == TipoProcesadorPago.Efectivo);
-                    if (procesadoresPagoDB.Count() > 0)
+                    if (procesadoresPagoDB.Count() > 0 && procesadorPago.Id == 0)
                     {
                         TempData[DS.Error] = "Ya existe un procesador de pago de tipo Efectivo";
                         return View(procesadorPago);
