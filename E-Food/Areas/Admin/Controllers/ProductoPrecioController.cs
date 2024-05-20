@@ -90,7 +90,8 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Guardar();
                 return Redirect("/Admin/ProductoPrecio/Index/"+productoPrecioVM.Producto.Id);
             }
-            TempData[DS.Error] = "Error al guardar el tipo de precio para este producto";
+            var mensajeError = TempData[DS.Error] = "Error al guardar el tipo de precio para este producto";
+            await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 409);
             return View();
         }
 
@@ -128,9 +129,11 @@ namespace E_Food.Areas.Admin.Controllers
 
             var ProductoDB = await _unidadTrabajo.Producto.Obtener(idProducto);
             var TipoPrecioDB = await _unidadTrabajo.TipoPrecio.Obtener(idPrecio);
+            var mensajeError = "Error al borrar el Tipo de Precio";
             if (ProductoDB == null || TipoPrecioDB == null)
             {
-                return Json(new { success = false, message = "Error al borrar el Tipo de Precio" });
+                await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 420);
+                return Json(new { success = false, mensajeError });
             }
             _unidadTrabajo.Producto.RemoverPrecio(ProductoDB, TipoPrecioDB);
             await _unidadTrabajo.Guardar();

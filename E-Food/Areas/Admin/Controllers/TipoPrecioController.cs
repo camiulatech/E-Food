@@ -41,6 +41,7 @@ namespace E_Food.Areas.Admin.Controllers
             tipoPrecio = await _unidadTrabajo.TipoPrecio.Obtener(id.GetValueOrDefault());
             if (tipoPrecio == null)
             {
+
                 return NotFound();
             }
             return View(tipoPrecio);
@@ -86,7 +87,8 @@ namespace E_Food.Areas.Admin.Controllers
                 TempData[DS.Error] = "El cambio porcentual debe estar entre -100% y 100%";
                 return View(tipoPrecio);
             }
-            TempData[DS.Error] = "Error al guardar el Tipo Precio";
+            var mensajeError=TempData[DS.Error] = "Error al guardar el Tipo Precio";
+            await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 409);
             return View(tipoPrecio);
         }
 
@@ -105,9 +107,11 @@ namespace E_Food.Areas.Admin.Controllers
             var usuarioNombre = User.Identity.Name;
 
             var TipoPrecioBD = await _unidadTrabajo.TipoPrecio.Obtener(id);
+            var mensajeError = "Error al borrar el Tipo Precio";
             if (TipoPrecioBD == null)
             {
-                return Json(new { success = false, message = "Error al borrar el Tipo Precio" });
+                await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 420);
+                return Json(new { success = false, mensajeError });
             }
             _unidadTrabajo.TipoPrecio.Remover(TipoPrecioBD);
             await _unidadTrabajo.Guardar();

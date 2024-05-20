@@ -3,27 +3,36 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row">
-    <div class="col-lg-6">
-        <h2 class="text-primary">Lista de Lineas de Comida</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="text-prim">Lista de Lineas de Comida</h2>
+        </div>
     </div>
-    <div class="col-lg-6">
-        <a class="btn btn-outline-primary" asp-action="Upsert"><i class="bi bi-plus-square-fill"></i> Crear Nueva Linea de Comida</a>
+
+    <br />
+
+    <div class="p-4 border rounded bg-light table-responsive">
+        <table id="tblDatos" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
     </div>
-</div>
 
-<br />
+    <br />
 
-<div class="p-4 border rounded bg-light">
-    <table id="tblDatos" class="table table-responsive table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th></th>
-            </tr>
-        </thead>
-    </table>
+    <div class="text-end">
+        <a class="newbtn newbtna" asp-action="Upsert"><i class="bi bi-plus-square-fill"></i> Crear Nueva Linea de Comida</a>
+    </div>
+
+    <br />
+
+    <br />
 </div>
 
 @section Scripts {

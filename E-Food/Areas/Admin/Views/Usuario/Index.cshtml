@@ -3,12 +3,32 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row">
-    <div class="col-lg-6">
-        <h2 class="text-primary">Lista de Usuarios</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="text-prim">Lista de Usuarios</h2>
+        </div>
     </div>
-    <div class="col-lg-6">
-        <a class="btn btn-outline-primary" asp-area="Identity" asp-page="/Account/Register">
+
+    <br />
+
+    <div class="p-4 border rounded bg-light table-responsive">
+        <table id="tblDatos" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Usuario</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <br />
+
+    <div class="text-end">
+        <a class="newbtn newbtna" asp-area="Identity" asp-page="/Account/Register">
             <i class="bi bi-plus-square-fill"></i> Crear Nuevo Usuario
         </a>
     </div>
@@ -16,18 +36,7 @@
 
 <br />
 
-<div class="p-4 border rounded bg-light">
-    <table id="tblDatos" class="table table-responsive table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>Email</th>
-                <th>Usuario</th>
-                <th>Role</th>
-                <th></th>
-            </tr>
-        </thead>
-    </table>
-</div>
+<br />
 
 @section Scripts {
     <script src="~/js/usuarios.js"></script>
