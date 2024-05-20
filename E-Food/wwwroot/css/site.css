@@ -364,7 +364,7 @@ footer {
 
 /* Header */
 .header {
-    height: 20vh;
+    height: 200px;
     background: linear-gradient(to right, orange, #f2cb2e);
     clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
 }
@@ -470,14 +470,14 @@ footer {
 }
 
 /* Header */
-@media only screen and (max-width: 480px) {
+@media screen and (max-width: 480px) {
     .heading-primary {
         font-weight: 400;
         letter-spacing: 0.1rem;
     }
 
     .header {
-        height: 15vh;
+        height: 130px;
         background: linear-gradient(to right, orange, #f2cb2e);
         clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
     }
