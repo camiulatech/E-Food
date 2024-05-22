@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="text-prim">Lista de Registros de Bitacora</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label for="fecha">Filtrar por Fecha:</label>
+                <input type="date" class="form-control" id="fecha">
+            </div>
+            <button type="button" class="btn btn-primary m-2" onclick="filtrarPorFecha()">Filtrar</button>
+            <button type="button" class="btn btn-secondary m-2" onclick="limpiarFiltro()">Limpiar Filtro</button>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="p-4 border rounded bg-light table-responsive">
+        <table id="tblDatos" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Usuario</th>
+                    <th>Fecha</th>
+                    <th>Codigo Registro</th>
+                    <th>Descripcion</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<br />
+<br />
+
+@section Scripts {
+    <script src="~/js/bitacora.js"></script>
+}

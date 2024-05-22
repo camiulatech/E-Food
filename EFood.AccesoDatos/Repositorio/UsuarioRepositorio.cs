@@ -27,7 +27,6 @@ namespace EFood.AccesoDatos.Repositorio
 
             if (usuarioBD != null)
             {
-                //var rolBD = _db.UserRoles.FirstOrDefault(u => u.UserId == usuario.Id);
                 var nuevoRol = _db.Roles.FirstOrDefault(r => r.Name == usuario.Rol);
                 _db.UserRoles.RemoveRange(_db.UserRoles.Where(u => u.UserId == usuario.Id));
                 _db.SaveChanges();

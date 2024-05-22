@@ -25,7 +25,7 @@ namespace E_Food.Areas.Admin.Controllers
             return View();
         }
 
-        //Es un get por defecto
+
         public async Task<IActionResult> Upsert(int? id)
         {
             TiqueteDescuento tiqueteDescuento = new TiqueteDescuento();
@@ -51,22 +51,42 @@ namespace E_Food.Areas.Admin.Controllers
         public async Task<IActionResult> Upsert(TiqueteDescuento tiqueteDescuento)
         {
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && tiqueteDescuento.Disponibles > 0 && tiqueteDescuento.Descuento >= 0 && tiqueteDescuento.Descuento <= 100)
             {
+                var usuarioNombre = User.Identity.Name;
+
                 if (tiqueteDescuento.Id == 0)
                 {
                     await _unidadTrabajo.TiqueteDescuento.Agregar(tiqueteDescuento);
+                    await _unidadTrabajo.Guardar();
                     TempData[DS.Exitosa] = "Tiquete de Descuento creado exitosamente";
+
+                    var idRegistro = tiqueteDescuento.Id;
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó el tiquete de descuento '{tiqueteDescuento.Descripcion}' con ID: {idRegistro}");
                 }
                 else
                 {
                     _unidadTrabajo.TiqueteDescuento.Actualizar(tiqueteDescuento);
                     TempData[DS.Exitosa] = "Tiquete de Descuento actualizado exitosamente";
+
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, tiqueteDescuento.Id.ToString(), $"Se actualizó el tiquete de descuento '{tiqueteDescuento.Descripcion}' con ID: {tiqueteDescuento.Id}");
+
                 }
                 await _unidadTrabajo.Guardar();
                 return RedirectToAction(nameof(Index));
             }
-            TempData[DS.Error] = "Error al guardar el Tiquete de Descuento";
+            if (tiqueteDescuento.Disponibles <= 0)
+            {
+                TempData[DS.Error] = ("La cantidad de tiquetes disponibles debe ser mayor a 0");
+                return View(tiqueteDescuento);
+            }
+            if (tiqueteDescuento.Descuento < 0 || tiqueteDescuento.Descuento > 100)
+            {
+                TempData[DS.Error] = ("El porcentaje de descuento debe ser mayor o igual a 0 y menor o igual a 100");
+                return View(tiqueteDescuento);
+            }
+            var mensajeError = TempData[DS.Error] = "Error al guardar el Tiquete de Descuento";
+            await _unidadTrabajo.Error.RegistrarError(mensajeError.ToString(), 409);
             return View(tiqueteDescuento);
         }
 
@@ -80,16 +100,22 @@ namespace E_Food.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Eliminar(int id) //Delete video
+        public async Task<IActionResult> Eliminar(int id) 
         {
+            var usuarioNombre = User.Identity.Name;
 
             var TiqueteDescuentoBD = await _unidadTrabajo.TiqueteDescuento.Obtener(id);
+            var mensajeError = "Error al borrar Tiquete de Descuento";
             if (TiqueteDescuentoBD == null)
             {
-                return Json(new { success = false, message = "Error al borrar el Tiquete de Descuento" });
+                await _unidadTrabajo.Error.RegistrarError(mensajeError, 420);
+                return Json(new { success = false, mensajeError});
             }
             _unidadTrabajo.TiqueteDescuento.Remover(TiqueteDescuentoBD);
             await _unidadTrabajo.Guardar();
+
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, TiqueteDescuentoBD.Id.ToString(), $"Se eliminó la tarjeta '{TiqueteDescuentoBD.Descripcion}' con ID: {TiqueteDescuentoBD.Id}");
+
             return Json(new { success = true, message = "Tiquete de Descuento borrado correctamente" });
         }
 

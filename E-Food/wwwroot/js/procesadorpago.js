@@ -27,7 +27,21 @@ function loadDataTable() {
         "columns": [
             { "data": "id" },
             { "data": "procesador" },
-            { "data": "tipo" },
+            {
+                "data": "tipo",
+                "render": function (data) {
+                    switch (data) {
+                        case 0:
+                            return 'Efectivo';
+                        case 1:
+                            return 'Cheque Electrónico';
+                        case 2:
+                            return 'Tarjeta Débito/Crédito';
+                        default:
+                            return '';
+                    }
+                }
+            },
             {
                 "data": "estado",
                 "render": function (data, type, row) {
@@ -39,6 +53,9 @@ function loadDataTable() {
                 "render": function (data) {
                     return `
                         <div class="text-center">
+                           <a href="/Admin/ProcesadorTarjeta/Index/${data}" class="btn btn-primary text-white" style="cursor:pointer">
+                              <i class="bi bi-credit-card-fill"></i>
+                           </a>
                            <a href="/Admin/ProcesadorPago/Upsert/${data}" class="btn btn-success text-white" style="cursor:pointer">
                               <i class="bi bi-pencil-square"></i>  
                            </a>

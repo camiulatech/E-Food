@@ -1,0 +1,55 @@
+﻿@model EFood.Modelos.ViewModels.ProductoPrecioVM
+@using EFood.Utilidades
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var titulo = "Crear Precio";
+
+}
+
+<form method="post" enctype="multipart/form-data">
+    
+
+    <input asp-for="Producto.Id" hidden />
+    <div class="border-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <h2 class="text-prim">@titulo</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-8">
+                <div class="container">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Tipo de Precio</label>
+                            <select asp-for="TipoPrecio.Id" asp-items="@Model.ListaTipoPrecios" class="form-select">
+                                <option disabled selected>-- Seleccione Tipo de Precio --</option>
+                            </select>
+                            <span asp-validation-for="TipoPrecio.Id" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="d-grid gap-2 d-md-block">
+                        <button type="submit" class="btn btn-primary" onfocus="false"><i class="bi bi-plus-square-fill"></i> Crear </button>
+                        <a onclick="Retroceder()" class="btn btn-success"><i class="bi bi-arrow-return-left"></i> Regresar </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        function Retroceder() {
+            var url = window.location.href; // Obtiene la URL actual
+            var id = url.substring(url.lastIndexOf('/') + 1); // Extrae el ID de la URL
+            window.location.href = '@Url.Action("Index", "ProductoPrecio", new { id = "__id__" })'.replace('__id__', id);
+        }
+    </script>
+}

@@ -5,6 +5,7 @@ using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using EFood.Modelos.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using EFood.AccesoDatos.Repositorio;
 
 namespace E_Food.Areas.Admin.Controllers
 {
@@ -49,13 +50,17 @@ namespace E_Food.Areas.Admin.Controllers
             return View(productoVM);
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upsert(ProductoVM productoVM)
         {
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && productoVM.Producto.Monto > 0)
             {
+                var usuarioNombre = User.Identity.Name;
+
                 var archivos = HttpContext.Request.Form.Files;
                 string webRootPath = _webHostEnvironment.WebRootPath;
 
@@ -71,6 +76,11 @@ namespace E_Food.Areas.Admin.Controllers
                     }
                     productoVM.Producto.UbicacionImagen = fileName + extension;
                     await _unidadTrabajo.Producto.Agregar(productoVM.Producto);
+                    await _unidadTrabajo.Guardar();
+
+                    var idRegistro = productoVM.Producto.Id;
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó el producto '{productoVM.Producto.Nombre}' con ID: {idRegistro}");
+
                 }
                 else
                 {
@@ -93,18 +103,32 @@ namespace E_Food.Areas.Admin.Controllers
                             archivos[0].CopyTo(fileStream);
                         }
                         productoVM.Producto.UbicacionImagen = fileName + extension;
+
                     } //Caso no se carga imagen
                     else
                     {
                         productoVM.Producto.UbicacionImagen = objProducto.UbicacionImagen;
                     }
                     _unidadTrabajo.Producto.Actualizar(productoVM.Producto);
+                    await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, productoVM.Producto.Id.ToString(), $"Se actualizó el producto '{productoVM.Producto.Nombre}' con ID: {productoVM.Producto.Id}");
+
                 }
                 TempData[DS.Exitosa] = "Transaccion exitosa!";
                 await _unidadTrabajo.Guardar();
                 return View("Index");
             } // If not Valid
+            if (productoVM.Producto.Monto <= 0)
+            {
+                TempData[DS.Error] = "Verifica que el precio inicial sea un valor positivo";
+                productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
+
+                return View(productoVM);
+            }
+            var mensajeError = "Error al crear el producto";
+            TempData[DS.Error] = mensajeError;
+            await _unidadTrabajo.Error.RegistrarError(mensajeError, 409);
             productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
+            
             return View(productoVM);
         }
 
@@ -117,14 +141,39 @@ namespace E_Food.Areas.Admin.Controllers
             return Json(new { data = todos });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Eliminar(int id) //Delete video
+        [HttpGet]
+        public async Task<IActionResult> Consultar(int? idLineaComida)
         {
+            var productoVM = new ProductoVM();
+
+            // Obtener la lista de líneas de comida
+            productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
+
+            if (idLineaComida.HasValue)
+            {
+                // Si se proporciona un ID de línea de comida, filtrar los productos por esa línea
+                productoVM.Productos = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida.Value);
+            }
+            else
+            {
+                // Si no se proporciona un ID de línea de comida, cargar todos los productos
+                productoVM.Productos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
+            }
+            productoVM.LineaComidaSeleccionadaId = idLineaComida;
+            return View(productoVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            var usuarioNombre = User.Identity.Name;
 
             var ProductoBD = await _unidadTrabajo.Producto.Obtener(id);
+            var mensajeError = "Error al borrar producto";
             if (ProductoBD == null)
             {
-                return Json(new { success = false, message = "Error al borrar el Producto" });
+                await _unidadTrabajo.Error.RegistrarError(mensajeError, 420);
+                return Json(new { success = false, mensajeError });
             }
             // Remover imagen
             string upload = _webHostEnvironment.WebRootPath + DS.ImagenRuta;
@@ -136,6 +185,8 @@ namespace E_Food.Areas.Admin.Controllers
 
             _unidadTrabajo.Producto.Remover(ProductoBD);
             await _unidadTrabajo.Guardar();
+
+            await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, ProductoBD.Id.ToString(), $"Se eliminó el producto '{ProductoBD.Nombre}' con ID: {ProductoBD.Id}");
             return Json(new { success = true, message = "Producto borrado exitosamente" });
         }
 

@@ -2,7 +2,24 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<header class="header">
+	<div class="container pt-sm-5" style="display:flex;">
+        <img src="@Url.Content("~/imagenes/logo.png")" style="width:110px;height:115px;margin-right:10px;">
+		<div class="heading-primary">
+			<h1 class="display-4" style="color:#402b27;">E-Food</h1>
+			<p class="lead" style="color:#402b27;">Tu restaurante en línea</p
+		</div>
+	</div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-6">
+            <div class="text-right">
+                <h1 class="display-4">Bienvenido</h1>
+                <p>Este es un e-backend para un restaurante, diseñado para simplificar la gestión de tu negocio gastronómico. Con nuestro sistema, puedes administrar fácilmente los pedidos, actualizar los menús, mantener un registro de los clientes y mucho más. ¡Bienvenido a una forma más eficiente de gestionar tu restaurante!</p>
+                <p>Recuerda loguearte con los datos suministrados por la empresa, una vez logueado puedes cambiar de contraseña si así lo deseas, dando click en tu usuario arriba.</p>
+            </div>
+        </div>
+    </div>
 </div>
