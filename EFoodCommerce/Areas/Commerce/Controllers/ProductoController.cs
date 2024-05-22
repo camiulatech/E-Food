@@ -13,12 +13,10 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
     {
 
         private readonly IUnidadTrabajo _unidadTrabajo;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductoController(IUnidadTrabajo unidadTrabajo, IWebHostEnvironment webHostEnvironment)
+        public ProductoController(IUnidadTrabajo unidadTrabajo)
         {
             _unidadTrabajo = unidadTrabajo;
-            _webHostEnvironment = webHostEnvironment;
         }
 
 
