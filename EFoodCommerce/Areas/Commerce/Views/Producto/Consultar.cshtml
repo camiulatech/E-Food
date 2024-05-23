@@ -14,12 +14,21 @@
     <br />
 
     <form id="frmFiltrar" method="get" action="@Url.Action("Consultar", "Producto")">
-        <select asp-for="LineaComidaSeleccionadaId" id="lineaComidaSelect" name="idLineaComida" onchange="filtrarPorLineaComida()" asp-items="@Model.LineaComidaLista" class="form-select">
-            <option disabled selected>-- Filtrar Por Linea de Comida --</option>
-        </select>
-        <span asp-validation-for="LineaComidaSeleccionadaId" class="text-danger"></span>
+        <div class="form-group">
+            <select id="lineaComidaSelect" name="idLineaComida" class="form-select" onchange="filtrarPorLineaComida()">
+                <option disabled selected>Seleccionar línea de comida</option>
+                @foreach (var lineaComida in Model.LineaComidaLista)
+                {
+                    <option value="@lineaComida.Value" @(lineaComida.Value == Model.LineaComidaSeleccionadaId.ToString() ? "selected" : "")>
+                        @lineaComida.Text
+                    </option>
+                }
+            </select>
+        </div>
         <button type="button" class="btn btn-secondary m-2" onclick="limpiarFiltro()">Limpiar Filtro</button>
     </form>
+
+
 
 
     <div class="p-4 border rounded bg-light table-responsive">
