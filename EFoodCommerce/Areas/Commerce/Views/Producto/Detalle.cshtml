@@ -15,12 +15,19 @@
 
             <div>
                 <h4>Precios:</h4>
-                @foreach (var precio in Model.TipoPrecios)
+                <div>
+                    <input type="radio" name="precio" value="normal" id="precio_normal" checked />
+                    <label for="precio_normal">Normal - @Model.Monto</label>
+                </div>
+                @if (Model.TipoPrecios != null && Model.TipoPrecios.Any())
                 {
-                    <div>
-                        <input type="radio" name="precio" value="@precio.Id" id="precio_@precio.Id" />
-                        <label for="precio_@precio.Id">@precio.Descripcion - @precio.Monto</label>
-                    </div>
+                    @foreach (var precio in Model.TipoPrecios)
+                    {
+                        <div>
+                            <input type="radio" name="precio" value="@precio.Id" id="precio_@precio.Id" />
+                            <label for="precio_@precio.Id">@precio.Descripcion - @precio.Monto</label>
+                        </div>
+                    }
                 }
             </div>
 
@@ -33,8 +40,8 @@
         </div>
     </div>
 </div>
-@* 
-@section Scripts {
+
+@* @section Scripts {
     <script>
         function agregarAlCarrito() {
             const precioSeleccionado = document.querySelector('input[name="precio"]:checked');
