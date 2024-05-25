@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFood.Modelos", "EFood.Mode
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFood.Utilidades", "EFood.Utilidades\EFood.Utilidades.csproj", "{3DC06AA8-3905-4884-82CC-5909F9A07D62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFoodCommerce", "EFoodCommerce\EFoodCommerce.csproj", "{17DA1894-5180-4D2D-994B-106AC3172261}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFoodCommerce", "EFoodCommerce\EFoodCommerce.csproj", "{17DA1894-5180-4D2D-994B-106AC3172261}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Imagenes", "Imagenes", "{5777DA20-2794-4048-A6BF-B55DFDC2B47D}"
+	ProjectSection(SolutionItems) = preProject
+		E-Food\wwwroot\imagenes\background.jpg = E-Food\wwwroot\imagenes\background.jpg
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
