@@ -68,7 +68,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             }
             foreach( var precio in producto.TipoPrecios)
             {
-                precio.Monto = (precio.Cambio/100) * producto.Monto;
+                precio.Monto = Math.Round(producto.Monto + producto.Monto * (precio.Cambio / 100), 2);
             }
             return View(producto);
         }
