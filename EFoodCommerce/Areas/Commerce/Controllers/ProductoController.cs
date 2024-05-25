@@ -58,6 +58,17 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             return View(productoVM);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Detalle(int id)
+        {
+            var producto = await _unidadTrabajo.Producto.ObtenerPrimero(o => o.Id == id, incluirPropiedades: "LineaComida,TipoPrecios");
+            if (producto == null)
+            {
+                return NotFound();
+            }
+            return View(producto);
+        }
+
         #endregion
     }
 }
