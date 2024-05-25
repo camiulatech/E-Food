@@ -6,9 +6,9 @@
 
 <div class="container">
     <div class="row">
-        @* <div class="col-md-6">
-            <img src="@Model.UbicacionImagen" alt="Imagen del producto" class="img-fluid" />
-        </div> *@
+        <div class="col-md-6">
+            @* <img src="@Model.UbicacionImagen" alt="Imagen del producto" class="img-fluid" /> *@
+        </div>
         <div class="col-md-6">
             <h2>Producto: @Model.Nombre</h2>
             <p>Contenido: @Model.Contenido</p>
@@ -18,7 +18,8 @@
                 @foreach (var precio in Model.TipoPrecios)
                 {
                     <div>
-                        <input type="radio" name="precio" value="@precio.Id" /> @precio.Descripcion - @precio.Monto
+                        <input type="radio" name="precio" value="@precio.Id" id="precio_@precio.Id" />
+                        <label for="precio_@precio.Id">@precio.Descripcion - @precio.Monto</label>
                     </div>
                 }
             </div>
@@ -28,7 +29,30 @@
                 <input type="number" id="cantidad" class="form-control" />
             </div>
 
-            <button class="btn btn-primary mt-3">Agregar</button>
+            <button class="btn btn-primary mt-3" onclick="agregarAlCarrito()">Agregar</button>
         </div>
     </div>
 </div>
+@* 
+@section Scripts {
+    <script>
+        function agregarAlCarrito() {
+            const precioSeleccionado = document.querySelector('input[name="precio"]:checked');
+            const cantidad = document.getElementById('cantidad').value;
+
+            if (!precioSeleccionado) {
+                alert("Por favor seleccione un tipo de precio.");
+                return;
+            }
+
+            if (!cantidad || cantidad <= 0) {
+                alert("Por favor ingrese una cantidad válida.");
+                return;
+            }
+
+            const precioId = precioSeleccionado.value;
+            alert(`Producto agregado al carrito con Precio ID: ${precioId} y Cantidad: ${cantidad}`);
+            // Aquí puedes hacer una llamada AJAX o redirigir a otra acción para agregar el producto al carrito
+        }
+    </script>
+} *@
