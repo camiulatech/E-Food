@@ -65,7 +65,7 @@ namespace E_Food.Areas.Admin.Controllers
                     // Ahora que la línea de comida se ha agregado a la base de datos, obtenemos su ID real
                     var idRegistro = lineaComida.Id;
 
-                    TempData[DS.Exitosa] = "Linea de Comida creada exitosamente";
+                    //TempData[DS.Exitosa] = "Linea de Comida creada exitosamente";
 
                     // Registra en la bitácora
                     await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó la línea de comida '{lineaComida.Nombre}' con ID: {idRegistro}");
@@ -73,7 +73,7 @@ namespace E_Food.Areas.Admin.Controllers
                 else
                 {
                     _unidadTrabajo.LineaComida.Actualizar(lineaComida);
-                    TempData[DS.Exitosa] = "Linea de Comida actualizada exitosamente";
+                    //TempData[DS.Exitosa] = "Linea de Comida actualizada exitosamente";
 
                     // Registra en la bitácora
                     await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, lineaComida.Id.ToString(), $"Se actualizó la línea de comida '{lineaComida.Nombre}' con ID: {lineaComida.Id}");
