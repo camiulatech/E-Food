@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace E_Food.Tests
 {
@@ -19,6 +20,7 @@ namespace E_Food.Tests
         private Mock<IUserStore<IdentityUser>> _userStoreMock;
         private LineaComidaController _controller;
         private Mock<IUserClaimsPrincipalFactory<IdentityUser>> _userClaimsPrincipalFactoryMock;
+        private Mock<ITempDataDictionary> _tempDataMock;
 
         [SetUp]
         public void Setup()
@@ -26,6 +28,7 @@ namespace E_Food.Tests
             _unidadTrabajoMock = new Mock<IUnidadTrabajo>();
             _userStoreMock = new Mock<IUserStore<IdentityUser>>();
             _userClaimsPrincipalFactoryMock = new Mock<IUserClaimsPrincipalFactory<IdentityUser>>();
+            _tempDataMock = new Mock<ITempDataDictionary>();
 
             _controller = new LineaComidaController(_unidadTrabajoMock.Object)
             {
@@ -38,7 +41,8 @@ namespace E_Food.Tests
                             new Claim(ClaimTypes.Name, "testuser")
                         }, "mock"))
                     }
-                }
+                },
+                TempData = _tempDataMock.Object
             };
         }
 
@@ -73,6 +77,7 @@ namespace E_Food.Tests
             _unidadTrabajoMock.Verify(u => u.LineaComida.Agregar(It.IsAny<LineaComida>()), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Exactly(2));
             _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", "0", "Se insertó la línea de comida 'Nueva Linea' con ID: 0"), Times.Once);
+            _tempDataMock.VerifySet(t => t[DS.Exitosa] = "Linea de Comida creada exitosamente", Times.Once);
         }
 
         [Test]
@@ -100,6 +105,7 @@ namespace E_Food.Tests
             _unidadTrabajoMock.Verify(u => u.LineaComida.Actualizar(It.IsAny<LineaComida>()), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", "1", "Se actualizó la línea de comida 'Linea Existente' con ID: 1"), Times.Once);
+            _tempDataMock.VerifySet(t => t[DS.Exitosa] = "Linea de Comida actualizada exitosamente", Times.Once);
         }
     }
 }
