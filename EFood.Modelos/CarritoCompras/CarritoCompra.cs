@@ -13,7 +13,7 @@ namespace EFood.Modelos.CarritoCompras
         public void AgregarItem(Producto producto, int cantidad, TipoPrecio tipoPrecio)
         {
             // Verificar si el producto ya está en el carrito
-            var itemExistente = itemCarritoCompras.FirstOrDefault(i => i.Producto.Id == producto.Id);
+            var itemExistente = itemCarritoCompras.First(i => i.Producto.Id == producto.Id);
 
             if (itemExistente != null)
             {
