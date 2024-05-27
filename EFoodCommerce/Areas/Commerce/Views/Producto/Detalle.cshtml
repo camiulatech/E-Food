@@ -37,7 +37,7 @@
             </div>
 
             <form id="carritoForm" method="get" asp-controller="CarritoCompra" asp-action="Agregar">
-                <input type="hidden" id="productoId" name="productoId" value="@Model.Id" />
+                <input type="hidden" id="producto" name="producto" value="@Model" />
                 <input type="hidden" id="cantidadInput" name="cantidad" value="1" />
                 <button type="submit" class="btn btn-primary mt-3">Agregar</button>
             </form>
