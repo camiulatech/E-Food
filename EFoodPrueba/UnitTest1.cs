@@ -72,7 +72,7 @@ namespace E_Food.Tests
             Assert.AreEqual("Index", redirectResult.ActionName);
             _unidadTrabajoMock.Verify(u => u.LineaComida.Agregar(It.IsAny<LineaComida>()), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Exactly(2));
-            _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", "0", "Se insertó la línea de comida 'Nueva Linea' con ID: 0"), Times.Once);
+            _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", "0", "Se insertï¿½ la lï¿½nea de comida 'Nueva Linea' con ID: 0"), Times.Once);
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace E_Food.Tests
             Assert.AreEqual("Index", redirectResult.ActionName);
             _unidadTrabajoMock.Verify(u => u.LineaComida.Actualizar(It.IsAny<LineaComida>()), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Once);
-            _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", "1", "Se actualizó la línea de comida 'Linea Existente' con ID: 1"), Times.Once);
+            _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", "1", "Se actualizï¿½ la lï¿½nea de comida 'Linea Existente' con ID: 1"), Times.Once);
         }
     }
 }
