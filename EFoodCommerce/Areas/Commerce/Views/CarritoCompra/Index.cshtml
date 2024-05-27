@@ -1,0 +1,55 @@
+﻿@model EFood.Modelos.CarritoCompras.CarritoCompra
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="text-prim">Carrito de Compras</h2>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="p-4 border rounded bg-light table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.itemCarritoCompras != null)
+                {
+                    foreach (var item in Model.itemCarritoCompras)
+                    {
+                        <tr>
+                            <td>@item.Producto.Nombre</td>
+                            <td>@item.Cantidad</td>
+                            <td>@item.Producto.Monto.ToString("C")</td>
+                            <td>@(item.Producto.Monto * item.Cantidad).ToString("C")</td>
+                            <td>
+                                <a asp-action="Remover" asp-route-productoId="@item.Producto.Id">Remover</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <h3>Total: @Model.ObtenerPrecio().ToString("C")</h3>
+    </div>
+</div>
+
+<br />
+
+<br />
+
+@section Scripts {
+    <script src="~/js/productoconsulta.js"></script>
+}

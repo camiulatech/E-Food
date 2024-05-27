@@ -36,13 +36,17 @@
                 <input type="number" id="cantidad" class="form-control" />
             </div>
 
-            <button class="btn btn-primary mt-3" onclick="agregarAlCarrito()">Agregar</button>
+            <form id="carritoForm" method="get" asp-controller="CarritoCompra" asp-action="Agregar">
+                <input type="hidden" id="productoId" name="productoId" value="@Model.Id" />
+                <input type="hidden" id="cantidadInput" name="cantidad" value="1" />
+                <button type="submit" class="btn btn-primary mt-3">Agregar</button>
+            </form>
         </div>
     </div>
 </div>
 
-@* @section Scripts {
-    <script>
+@section Scripts {
+    @* <script>
         function agregarAlCarrito() {
             const precioSeleccionado = document.querySelector('input[name="precio"]:checked');
             const cantidad = document.getElementById('cantidad').value;
@@ -61,5 +65,12 @@
             alert(`Producto agregado al carrito con Precio ID: ${precioId} y Cantidad: ${cantidad}`);
             // Aquí puedes hacer una llamada AJAX o redirigir a otra acción para agregar el producto al carrito
         }
+    </script> *@
+
+    <script>
+        document.getElementById("carritoForm").addEventListener("submit", function (event) {
+            var cantidad = document.getElementById("cantidad").value;
+            document.getElementById("cantidadInput").value = cantidad;
+        });
     </script>
-} *@
+}
