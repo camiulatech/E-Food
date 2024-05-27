@@ -7,7 +7,6 @@ using EFood.Utilidades;
 using EFood.Modelos.CarritoCompras;
 using Newtonsoft.Json;
 
-
 namespace EFoodCommerce.Areas.Commerce.Controllers
 {
     [Area("Commerce")]
@@ -15,6 +14,13 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
     {
 
         private const string SessionKeyCarrito = "Carrito";
+        private readonly IUnidadTrabajo _unidadTrabajo;
+
+        public CarritoCompraController(IUnidadTrabajo unidadTrabajo)
+        {
+            _unidadTrabajo = unidadTrabajo;
+        }
+
 
         public IActionResult Index()
         {
@@ -22,11 +28,14 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             return View(carrito);
         }
 
-        public IActionResult Agregar(Producto producto, int cantidad, TipoPrecio tipoPrecio)
+        public async Task<IActionResult> AgregarAsync(Producto producto, int cantidad, int tipoPrecio)
         {
+            var precioSeleccionado = await _unidadTrabajo.TipoPrecio.Obtener(tipoPrecio); // Implementa esta función según tu lógica de negocio
+
             var carrito = ObtenerCarritoDeSesion();
-            carrito.AgregarItem(producto, cantidad, tipoPrecio);
+            carrito.AgregarItem(producto, cantidad, precioSeleccionado);
             GuardarCarritoEnSesion(carrito);
+
             return RedirectToAction("Index");
         }
 
