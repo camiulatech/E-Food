@@ -29,12 +29,21 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             return View();
         }
 
-        public IActionResult Agregar(Producto producto, int cantidad, TipoPrecio tipoPrecio)
+        public async Task<IActionResult> Agregar(int productoId, int cantidad, int tipoPrecioId)
         {
+            var producto = await _unidadTrabajo.Producto.ObtenerPrimero(p => p.Id == productoId);
+            var tipoPrecio = await _unidadTrabajo.TipoPrecio.ObtenerPrimero(t => t.Id == tipoPrecioId);
+
+            if (producto == null || tipoPrecio == null)
+            {
+                TempData[DS.Error] = "Transaccion fallida";
+                return RedirectToAction("Consultar"); ;
+            }
             var carrito = ObtenerCarritoDeSesion();
             carrito.AgregarItem(producto, cantidad, tipoPrecio);
             GuardarCarritoEnSesion(carrito);
 
+            TempData[DS.Exitosa] = "Transaccion exitosa!";
             return RedirectToAction("Consultar");
         }
 

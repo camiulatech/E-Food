@@ -19,6 +19,7 @@
                 <tr>
                     <th>Producto</th>
                     <th>Cantidad</th>
+                    <th>Tipo</th>
                     <th>Precio</th>
                     <th>Total</th>
                     <th></th>
@@ -32,8 +33,9 @@
                         <tr class="bg-light">
                             <td>@item.Producto.Nombre</td>
                             <td>@item.Cantidad</td>
-                            <td>@item.Producto.Monto.ToString("C")</td>
-                            <td>@(item.Producto.Monto * item.Cantidad).ToString("C")</td>
+                            <td>@item.TipoPrecio.Descripcion</td>
+                            <td>@(Math.Round(item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio/100), 2))</td>
+                            <td>@(Math.Round(((item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100))* item.Cantidad), 2))</td>
                             <td>
                                 <a asp-action="Remover" asp-route-productoId="@item.Producto.Id">Remover</a>
                             </td>
@@ -42,7 +44,7 @@
                 }
             </tbody>
         </table>
-        <h3>Total: @Model.ObtenerPrecio().ToString("C")</h3>
+        <h3>Total: @Model.ObtenerPrecio()</h3>
     </div>
 </div>
 

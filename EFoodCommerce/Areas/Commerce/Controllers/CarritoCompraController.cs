@@ -41,12 +41,6 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             HttpContext.Session.SetString(SessionKeyCarrito, carritoJson);
         }
 
-        //private Producto ObtenerProductoPorId(int productoId)
-        //{
-        //    // Implementa este método para obtener el producto de tu base de datos
-        //    return new Producto { Id = productoId, Nombre = "Producto de ejemplo", Precio = 10.0m };
-        //}
-
 
         #region API
 

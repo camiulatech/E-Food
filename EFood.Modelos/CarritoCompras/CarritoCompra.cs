@@ -17,7 +17,7 @@ namespace EFood.Modelos.CarritoCompras
             {
                 itemCarritoCompras = new List<ItemCarritoCompra>();
             }
-            var itemExistente = itemCarritoCompras.FirstOrDefault(i => i.Producto.Id == producto.Id);
+            var itemExistente = itemCarritoCompras.FirstOrDefault(i => i.Producto.Id == producto.Id && i.TipoPrecio.Id == tipoPrecio.Id);
 
             if (itemExistente != null)
             {
@@ -62,7 +62,7 @@ namespace EFood.Modelos.CarritoCompras
             }
             foreach (var item in itemCarritoCompras)
             {
-                precioTotal = precioTotal + ((item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio)) * item.Cantidad);
+                precioTotal = Math.Round(precioTotal + ((item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100)) * item.Cantidad), 2);
             }
             return precioTotal;
         }

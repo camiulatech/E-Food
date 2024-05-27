@@ -15,16 +15,12 @@
 
             <div>
                 <h4>Precios:</h4>
-                <div>
-                    <input type="radio" name="precio" value="normal" id="precio_normal" checked />
-                    <label for="precio_normal">Normal - @Model.Monto</label>
-                </div>
                 @if (Model.TipoPrecios != null && Model.TipoPrecios.Any())
                 {
                     @foreach (var precio in Model.TipoPrecios)
                     {
                         <div>
-                            <input type="radio" name="precio" value="@precio" id="precio_@precio.Id" />
+                            <input type="radio" name="precio" value="@precio.Id" id="precio_@precio.Id" />
                             <label for="precio_@precio.Id">@precio.Descripcion - @precio.Monto</label>
                         </div>
                     }
@@ -36,31 +32,45 @@
                 <input type="number" id="cantidad" class="form-control" min="1" value="1" />
             </div>
 
-            <form id="carritoForm" method="get" asp-controller="Producto" asp-action="Agregar">
-                <input type="hidden" id="productoId" name="productoId" value="@Model" />
+            <form id="carritoForm" method="get" asp-action="Agregar">
+                <input type="hidden" id="productoId" name="productoId" value="@Model.Id" />
                 <input type="hidden" id="cantidadInput" name="cantidad" value="1" />
-                <input type="hidden" id="precioSeleccionado" name="tipoPrecio" value="null" />
-                <a type="submit" class="btn btn-primary mt-3" onclick="agregarCarrito()">Agregar</a>
+                <input type="hidden" id="precioSeleccionado" name="tipoPrecioId" value="0" />
+                <a href="javascript:void(0);" onclick="agregarCarrito()" class="btn btn-primary mt-3">Agregar</a>
             </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
+
     <script>
-        document.getElementById("carritoForm").addEventListener("submit", function (event) {
+        function agregarCarrito() {
             var cantidad = document.getElementById("cantidad").value;
             var precioSeleccionado = document.querySelector('input[name="precio"]:checked').value;
             document.getElementById("cantidadInput").value = cantidad;
             document.getElementById("precioSeleccionado").value = precioSeleccionado;
-        });
+
+            document.getElementById("carritoForm").submit();
+        }
     </script>
 
     <script>
-        function agregarCarrito() {
-            var url = window.location.href; // Obtiene la URL actual
-            var id = url.substring(url.lastIndexOf('/') + 1); // Extrae el ID de la URL
-            window.location.href = '@Url.Action("Agregar", "Producto", new { id = "__id__" })'.replace('__id__', id);
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            var currentUrl = window.location.href;
+            var regex = /\/Commerce\/Producto\/Detalle\/\d+/;
+
+            if (regex.test(currentUrl)) {
+                if (currentUrl.includes("?")) {
+                    var url = window.location.href; // Obtiene la URL actual
+                    var id = url.substring(url.lastIndexOf('/') + 1); // Extrae el ID de la URL
+                    window.location.href = '@Url.Action("Agregar", "Producto", new { id = "__id__" })'.replace('__id__', id);
+                    // Puedes ejecutar alguna función o lógica aquí
+                } else {
+                    console.log("La URL no contiene ?datos");
+                    // Puedes ejecutar alguna función o lógica alternativa aquí
+                }
+            }
+        });
     </script>
 }
