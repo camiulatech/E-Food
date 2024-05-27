@@ -39,6 +39,7 @@
             <form id="carritoForm" method="get" asp-controller="CarritoCompra" asp-action="Agregar">
                 <input type="hidden" id="producto" name="producto" value="@Model" />
                 <input type="hidden" id="cantidadInput" name="cantidad" value="1" />
+                <input type="hidden" id="precioSeleccionado" name="tipoPrecio" value="normal" />
                 <button type="submit" class="btn btn-primary mt-3">Agregar</button>
             </form>
         </div>
@@ -73,4 +74,15 @@
             document.getElementById("cantidadInput").value = cantidad;
         });
     </script>
+
+  
+    <script>
+        document.getElementById("carritoForm").addEventListener("submit", function (event) {
+            var cantidad = document.getElementById("cantidad").value;
+            var precioSeleccionado = document.querySelector('input[name="precio"]:checked').value;
+            document.getElementById("cantidadInput").value = cantidad;
+            document.getElementById("precioSeleccionado").value = precioSeleccionado;
+        });
+    </script>
+
 }
