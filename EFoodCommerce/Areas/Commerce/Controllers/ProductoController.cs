@@ -4,6 +4,8 @@ using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos.ViewModels;
 using EFood.Modelos;
 using EFood.Utilidades;
+using EFood.Modelos.CarritoCompras;
+using Newtonsoft.Json;
 
 
 namespace EFoodCommerce.Areas.Commerce.Controllers
@@ -13,6 +15,8 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
     {
 
         private readonly IUnidadTrabajo _unidadTrabajo;
+
+        private const string SessionKeyCarrito = "Carrito";
 
         public ProductoController(IUnidadTrabajo unidadTrabajo)
         {
@@ -25,7 +29,28 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             return View();
         }
 
-       
+        public IActionResult Agregar(Producto producto, int cantidad, TipoPrecio tipoPrecio)
+        {
+            var carrito = ObtenerCarritoDeSesion();
+            carrito.AgregarItem(producto, cantidad, tipoPrecio);
+            GuardarCarritoEnSesion(carrito);
+
+            return RedirectToAction("Consultar");
+        }
+
+        private CarritoCompra ObtenerCarritoDeSesion()
+        {
+            var carritoJson = HttpContext.Session.GetString(SessionKeyCarrito);
+            return carritoJson == null ? new CarritoCompra() : JsonConvert.DeserializeObject<CarritoCompra>(carritoJson);
+        }
+
+        private void GuardarCarritoEnSesion(CarritoCompra carrito)
+        {
+            var carritoJson = JsonConvert.SerializeObject(carrito);
+            HttpContext.Session.SetString(SessionKeyCarrito, carritoJson);
+        }
+
+
 
         #region API
 

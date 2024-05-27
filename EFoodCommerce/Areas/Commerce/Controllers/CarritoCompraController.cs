@@ -14,36 +14,11 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
     {
 
         private const string SessionKeyCarrito = "Carrito";
-        private readonly IUnidadTrabajo _unidadTrabajo;
-
-        public CarritoCompraController(IUnidadTrabajo unidadTrabajo)
-        {
-            _unidadTrabajo = unidadTrabajo;
-        }
-
 
         public IActionResult Index()
         {
             var carrito = ObtenerCarritoDeSesion();
             return View(carrito);
-        }
-
-        public IActionResult Agregar(Producto producto, int cantidad, TipoPrecio tipoPrecio)
-        {
-            var carrito = ObtenerCarritoDeSesion();
-
-            decimal precioSeleccionado;
-            if (tipoPrecio == null)
-            {
-                precioSeleccionado = producto.Monto;
-            }
-            else
-            {
-                carrito.AgregarItem(producto, cantidad, tipoPrecio);
-                GuardarCarritoEnSesion(carrito);
-            }
-
-            return RedirectToAction("Index");
         }
 
         public IActionResult Remover(Producto producto)
