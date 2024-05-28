@@ -34,10 +34,12 @@
                             <td>@item.Producto.Nombre</td>
                             <td>@item.Cantidad</td>
                             <td>@item.TipoPrecio.Descripcion</td>
-                            <td>@(Math.Round(item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio/100), 2))</td>
-                            <td>@(Math.Round(((item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100))* item.Cantidad), 2))</td>
+                            <td>@(Math.Round(item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100), 2))</td>
+                            <td>@(Math.Round(((item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100)) * item.Cantidad), 2))</td>
                             <td>
-                                <a asp-action="Remover" asp-route-productoId="@item.Producto.Id">Remover</a>
+                                <a onclick="Remover(@item.Producto.Id, @item.TipoPrecio.Id)" class="btn btn-danger text-white" style="cursor:pointer">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </a>
                             </td>
                         </tr>
                     }
@@ -48,10 +50,45 @@
     </div>
 </div>
 
+
 <br />
 
 <br />
 
 @section Scripts {
-    <script src="~/js/productoconsulta.js"></script>
+    <script>
+        function Remover(productoId, tipoPrecioId) {
+            console.log("Product ID:", productoId);
+            console.log("Tipo Precio ID:", tipoPrecioId);
+            var ids = productoId + '&tipoPrecioId=' + tipoPrecioId
+
+            var url = '@Url.Action("Remover", "CarritoCompra", new { productoId = "__productoId__" })'
+                .replace('__productoId__', ids)
+
+            console.log("URL:", url); // Agrega esta línea para verificar el ID
+            swal({
+                title: "Esta seguro de Eliminar el Producto del Carrito?",
+                text: "Si es así, continue!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            }).then((erase) => {
+                if (erase) {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        success: function (data) {
+                            if (data.success) {
+                                window.location.href = window.location.href;
+                            }
+                            else {
+                            }
+                        }
+                    });
+                }
+            });
+
+
+        }
+    </script>
 }

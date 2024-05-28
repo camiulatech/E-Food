@@ -15,18 +15,32 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
 
         private const string SessionKeyCarrito = "Carrito";
 
+        private readonly IUnidadTrabajo _unidadTrabajo;
+
+        public CarritoCompraController(IUnidadTrabajo unidadTrabajo)
+        {
+            _unidadTrabajo = unidadTrabajo;
+        }
+
         public IActionResult Index()
         {
             var carrito = ObtenerCarritoDeSesion();
             return View(carrito);
         }
 
-        public IActionResult Remover(Producto producto)
+        [HttpPost]
+        public async Task<IActionResult> Remover(int productoId, int tipoPrecioId)
         {
+            var producto = await _unidadTrabajo.Producto.ObtenerPrimero(p => p.Id == productoId);
+            var tipoPrecio = await _unidadTrabajo.TipoPrecio.ObtenerPrimero(t => t.Id == tipoPrecioId);
+            if (producto == null || tipoPrecio == null)
+            {
+                return Json(new { success = false, message = "El producto no se pudo remover" });
+            }
             var carrito = ObtenerCarritoDeSesion();
-            carrito.EliminarItem(producto);
+            carrito.EliminarItem(producto, tipoPrecio);
             GuardarCarritoEnSesion(carrito);
-            return RedirectToAction("Index");
+            return Json(new { success = true, message = "El producto se removió exitosamente!" });
         }
 
         private CarritoCompra ObtenerCarritoDeSesion()

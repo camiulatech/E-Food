@@ -36,10 +36,10 @@ namespace EFood.Modelos.CarritoCompras
             }
         }
 
-        public void EliminarItem(Producto producto)
+        public void EliminarItem(Producto producto, TipoPrecio tipoPrecio)
         {
             // Eliminar el producto del carrito
-            var item = itemCarritoCompras.FirstOrDefault(i => i.Producto.Id == producto.Id);
+            var item = itemCarritoCompras.FirstOrDefault(i => i.Producto.Id == producto.Id && i.TipoPrecio.Id == tipoPrecio.Id);
             if (item != null)
             {
                 itemCarritoCompras.Remove(item);
