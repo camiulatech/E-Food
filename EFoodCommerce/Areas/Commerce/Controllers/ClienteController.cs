@@ -37,7 +37,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                 if (ModelState.IsValid)
                 {
                     // Procesar el pedido, guardar cliente, etc.
-                    return RedirectToAction("PedidoExitoso");
+                    return RedirectToAction("Index");
                 }
             }
 
