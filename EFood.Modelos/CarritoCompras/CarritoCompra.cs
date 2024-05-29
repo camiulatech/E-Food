@@ -52,6 +52,16 @@ namespace EFood.Modelos.CarritoCompras
             itemCarritoCompras.Clear();
         }
 
+        public void ActualizarCantidad(Producto producto, TipoPrecio tipoPrecio, int cantidad)
+        {
+            // Actualizar la cantidad de un producto en el carrito
+            var item = itemCarritoCompras.FirstOrDefault(i => i.Producto.Id == producto.Id && i.TipoPrecio.Id == tipoPrecio.Id);
+            if (item != null)
+            {
+                item.Cantidad = cantidad;
+            }
+        }
+
         public decimal ObtenerPrecio()
         {
             // Calcular el precio total sumando los precios de todos los productos en el carrito
