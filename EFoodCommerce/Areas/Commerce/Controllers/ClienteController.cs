@@ -1,9 +1,10 @@
 ﻿using EFood.AccesoDatos.Repositorio.IRepositorio;
-using EFood.Modelos;
+using EFood.Modelos.CarritoCompras;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EFoodCommerce.Areas.Commerce.Controllers
 {
+    [Area("Commerce")]
     public class ClienteController : Controller
     {
         private readonly IUnidadTrabajo _unidadTrabajo;
@@ -15,7 +16,8 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var cliente = new Cliente();
+            return View(cliente);
         }
 
         [HttpPost]
@@ -28,7 +30,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                     var tiquete = await _unidadTrabajo.TiqueteDescuento
                         .ObtenerPrimero(t => t.Descripcion == model.TiqueteDescuento);
 
-                    if (tiquete == null || tiquete.Disponibles <= 0)
+                    if (tiquete == null || tiquete.Disponibles <= 1)
                     {
                         ModelState.AddModelError("TiqueteDescuento", "El tiquete de descuento no es válido o no está disponible.");
                     }

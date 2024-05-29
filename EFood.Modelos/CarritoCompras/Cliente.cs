@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EFood.Modelos
+namespace EFood.Modelos.CarritoCompras
 {
     public class Cliente
     {
@@ -23,7 +23,7 @@ namespace EFood.Modelos
         [Required(ErrorMessage = "Dirección de Envío es Requerida")]
         public string DireccionEnvio { get; set; }
 
-        public string? TiqueteDescuento { get; set; }
+        public string TiqueteDescuento { get; set; }
 
     }
 }

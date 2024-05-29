@@ -1,4 +1,4 @@
-﻿@model EFood.Modelos.Cliente
+﻿@model EFood.Modelos.CarritoCompras.Cliente
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -14,7 +14,7 @@
     <br />
 
     <div class="p-4 border rounded bg-light">
-        <form asp-action="ValidarCliente" method="post">
+        <form method="post">
             <div class="form-group">
                 <label for="Nombre">Nombre:</label>
                 <input type="text" id="Nombre" name="Nombre" class="form-control" value="@Model.Nombre" />
@@ -40,6 +40,8 @@
                 <input type="text" id="TiqueteDescuento" name="TiqueteDescuento" class="form-control" value="@Model.TiqueteDescuento" />
                 <span asp-validation-for="TiqueteDescuento" class="text-danger"></span>
             </div>
+            <br />
+            <br />
             <button type="submit" class="btn btn-primary">Siguiente</button>
         </form>
     </div>
