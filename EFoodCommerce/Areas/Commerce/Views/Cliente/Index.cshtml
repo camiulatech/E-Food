@@ -1,0 +1,52 @@
+﻿@model EFood.Modelos.CarritoCompras.Cliente
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="text-prim">Información del Cliente</h2>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="p-4 border rounded bg-light">
+        <form method="post">
+            <div class="form-group">
+                <label for="Nombre">Nombre:</label>
+                <input type="text" id="Nombre" name="Nombre" class="form-control" value="@Model.Nombre" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="Apellidos">Apellidos:</label>
+                <input type="text" id="Apellidos" name="Apellidos" class="form-control" value="@Model.Apellidos" />
+                <span asp-validation-for="Apellidos" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="Telefono">Teléfono:</label>
+                <input type="text" id="Telefono" name="Telefono" class="form-control" value="@Model.Telefono" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="DireccionEnvio">Dirección de Envío:</label>
+                <input type="text" id="DireccionEnvio" name="DireccionEnvio" class="form-control" value="@Model.DireccionEnvio" />
+                <span asp-validation-for="DireccionEnvio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="TiqueteDescuento">Tiquete de Descuento:</label>
+                <input type="text" id="TiqueteDescuento" name="TiqueteDescuento" class="form-control" value="@Model.TiqueteDescuento" />
+                <span asp-validation-for="TiqueteDescuento" class="text-danger"></span>
+            </div>
+            <br />
+            <br />
+            <button type="submit" class="btn btn-primary">Siguiente</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,119 @@
+﻿@model EFood.Modelos.CarritoCompras.CarritoCompra
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="text-prim">Carrito de Compras</h2>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="p-4 border rounded bg-light table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th style="width: 15%;">Cantidad</th>
+                    <th>Tipo</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.itemCarritoCompras != null)
+                {
+                    foreach (var item in Model.itemCarritoCompras)
+                    {
+                        <tr class="bg-light">
+                            <td>@item.Producto.Nombre</td>
+                            <td>
+                                <input type="number" class="form-control w-50" value="@item.Cantidad" min="1"
+                                       onchange="ActualizarCantidad(@item.Producto.Id, @item.TipoPrecio.Id, this.value)" />
+                            </td>
+                            <td>@item.TipoPrecio.Descripcion</td>
+                            <td>@(Math.Round(item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100), 2))</td>
+                            <td>@(Math.Round(((item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100)) * item.Cantidad), 2))</td>
+                            <td>
+                                <a onclick="Remover(@item.Producto.Id, @item.TipoPrecio.Id)" class="btn btn-danger text-white" style="cursor:pointer">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <h3>Total: @Model.ObtenerPrecio()</h3>
+    </div>
+</div>
+
+<br />
+
+<br />
+
+@section Scripts {
+    <script>
+        function Remover(productoId, tipoPrecioId) {
+            console.log("Product ID:", productoId);
+            console.log("Tipo Precio ID:", tipoPrecioId);
+            var ids = productoId + '&tipoPrecioId=' + tipoPrecioId;
+
+            var url = '@Url.Action("Remover", "CarritoCompra", new { productoId = "__productoId__" })'
+                .replace('__productoId__', ids);
+
+            console.log("URL:", url); // Agrega esta línea para verificar el ID
+            swal({
+                title: "Esta seguro de Eliminar el Producto del Carrito?",
+                text: "Si es así, continue!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            }).then((erase) => {
+                if (erase) {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        success: function (data) {
+                            if (data.success) {
+                                toastr.success(data.message);
+                                window.location.href = window.location.href;
+                            }
+                            else {
+                                toastr.error(data.message);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function ActualizarCantidad(productoId, tipoPrecioId, cantidad) {
+            if (cantidad < 1) {
+                toastr.error("La cantidad no puede ser menor a 1.");
+                return;
+            }
+
+            var url = '@Url.Action("ActualizarCantidad", "CarritoCompra")';
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { productoId: productoId, tipoPrecioId: tipoPrecioId, cantidad: cantidad },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        window.location.href = window.location.href; // Recargar la página para reflejar los cambios
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        }
+    </script>
+}
