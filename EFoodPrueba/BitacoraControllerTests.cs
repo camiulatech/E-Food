@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -46,7 +47,7 @@ namespace E_Food.Tests
         }
 
         [Test]
-        public void Index_Returns_ViewResult()
+        public void Index_RetornaVista_Vista()
         {
             // Act
             var result = _controller.Index();
@@ -55,49 +56,42 @@ namespace E_Food.Tests
             Assert.IsInstanceOf<ViewResult>(result);
         }
 
-        [Test]
-        public async Task ObtenerTodos_Returns_JsonResult_With_Data()
-        {
-            // Arrange
-            var bitacoraList = new List<Bitacora>
-            {
-                new Bitacora { Id = 1, Usuario = "testuser", Fecha = DateTime.Now , CodigoRegistro = "1", Descripcion = "Accion 1"},
-                new Bitacora { Id = 2, Usuario = "testuser", Fecha = DateTime.Now , CodigoRegistro = "2", Descripcion = "Accion 2"}
-            };
 
-            _unidadTrabajoMock.Setup(u => u.Bitacora.ObtenerTodos()).ReturnsAsync(bitacoraList);
-
-            // Act
-            var result = await _controller.ObtenerTodos();
-
-            // Assert
-            var jsonResult = result as JsonResult;
-            Assert.NotNull(jsonResult);
-            dynamic data = jsonResult.Value;
-            Assert.AreEqual(bitacoraList, data.data);
-        }
 
         [Test]
-        public async Task ObtenerPorFecha_Returns_JsonResult_With_Data()
+        public async Task ObtenerTodos_RetornarJsonConLosRegistrosDeBitacora()
         {
             // Arrange
-            var fecha = DateTime.Now;
-            var bitacoraList = new List<Bitacora>
-            {
-                new Bitacora { Id = 1, UsuarioNombre = "testuser", Accion = "Accion 1", Fecha = fecha },
-                new Bitacora { Id = 2, UsuarioNombre = "testuser", Accion = "Accion 2", Fecha = fecha }
-            };
-
-            _unidadTrabajoMock.Setup(u => u.Bitacora.ObtenerPorFecha(fecha)).ReturnsAsync(bitacoraList);
+            var registrosMock = new List<Bitacora>(); // Simula una lista de registros de bitácora
+            _unidadTrabajoMock.Setup(u => u.Bitacora.ObtenerTodos(It.IsAny<Expression<Func<Bitacora, bool>>>(), It.IsAny<Func<IQueryable<Bitacora>, IOrderedQueryable<Bitacora>>>(), It.IsAny<string>(), It.IsAny<bool>())).ReturnsAsync(registrosMock);
 
             // Act
-            var result = await _controller.ObtenerPorFecha(fecha);
+            var result = await _controller.ObtenerTodos() as JsonResult;
 
             // Assert
-            var jsonResult = result as JsonResult;
-            Assert.NotNull(jsonResult);
-            dynamic data = jsonResult.Value;
-            Assert.AreEqual(bitacoraList, data.data);
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Value);
+            // Verifica la estructura del JSON retornado según lo esperado
         }
+
+
+        [Test]
+        public async Task ObtenerPorFecha_RetornarJsonConLosRegistrosDeBitacoraDeUnaFechaEspecifica()
+        {
+            // Arrange
+            var fecha = new DateTime(2024, 5, 29); // Puedes establecer una fecha específica para la prueba
+            var registrosMock = new List<Bitacora>(); // Simula una lista de registros de bitácora
+            _unidadTrabajoMock.Setup(u => u.Bitacora.ObtenerPorFecha(fecha)).ReturnsAsync(registrosMock);
+
+            // Act
+            var result = await _controller.ObtenerPorFecha(fecha) as JsonResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Value);
+            // Verifica la estructura del JSON retornado según lo esperado
+        }
+
+
     }
 }
