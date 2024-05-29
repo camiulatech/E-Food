@@ -22,6 +22,7 @@ namespace EFood.AccesoDatos.Data
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Error> Errors { get; set; }
         public DbSet<Bitacora> Bitacoras { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
