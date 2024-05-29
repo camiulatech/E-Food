@@ -36,8 +36,17 @@
 
         <div class="row mb-2 mt-2">
             <div class="form-group col-md-6">
+                <label>Código</label>
+                <input type="text" asp-for="Codigo" class="form-control" placeholder="Código del Tiquete" id="nombre" />
+                <span asp-validation-formaction="Codigo" class="text-danger"></span>
+            </div>
+        </div>
+
+
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
                 <label>Descripción</label>
-                <input type="text" asp-for="Descripcion" class="form-control" placeholder="Descripción del Tiquete" id="nombre" />
+                <input type="text" asp-for="Descripcion" class="form-control" placeholder="Descripción del Tiquete" />
                 <span asp-validation-formaction="Descripcion" class="text-danger"></span>
             </div>
         </div>
