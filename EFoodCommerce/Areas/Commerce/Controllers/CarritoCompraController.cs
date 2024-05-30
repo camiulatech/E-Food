@@ -29,21 +29,31 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Remover(int productoId, int tipoPrecioId)
+        public async Task<IActionResult> ValidarCliente(Cliente cliente)
         {
-            var producto = await _unidadTrabajo.Producto.ObtenerPrimero(p => p.Id == productoId);
-            var tipoPrecio = await _unidadTrabajo.TipoPrecio.ObtenerPrimero(t => t.Id == tipoPrecioId);
-            if (producto == null || tipoPrecio == null)
+            if (ModelState.IsValid)
             {
-                TempData[DS.Error] = "El producto no se pudo remover";
-                return Json(new { success = false, message = "El producto no se pudo remover" });
+                if (!string.IsNullOrEmpty(cliente.TiqueteDescuento))
+                {
+                    var tiquete = await _unidadTrabajo.TiqueteDescuento
+                        .ObtenerPrimero(t => t.Codigo == cliente.TiqueteDescuento);
+
+                    if (tiquete == null || tiquete.Disponibles <= 0)
+                    {
+                        ModelState.AddModelError("TiqueteDescuento", "El tiquete de descuento no es válido o no está disponible.");
+                    }
+                }
+
+                if (ModelState.IsValid)
+                {
+                    // Procesar el pedido, guardar cliente, etc.
+                    return RedirectToAction("Index");
+                }
             }
-            var carrito = ObtenerCarritoDeSesion();
-            carrito.EliminarItem(producto, tipoPrecio);
-            GuardarCarritoEnSesion(carrito);
-            TempData[DS.Exitosa] = "El producto se removió exitosamente!";
-            return Json(new { success = true, message = "El producto se removió exitosamente!" });
+
+            return View(cliente);
         }
+
 
         public async Task<IActionResult> ActualizarCantidad(int productoId, int tipoPrecioId, int cantidad)
         {
