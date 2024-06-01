@@ -28,32 +28,6 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             return View(carrito);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ValidarCliente(Cliente cliente)
-        {
-            if (ModelState.IsValid)
-            {
-                if (!string.IsNullOrEmpty(cliente.TiqueteDescuento))
-                {
-                    var tiquete = await _unidadTrabajo.TiqueteDescuento
-                        .ObtenerPrimero(t => t.Codigo == cliente.TiqueteDescuento);
-
-                    if (tiquete == null || tiquete.Disponibles <= 0)
-                    {
-                        ModelState.AddModelError("TiqueteDescuento", "El tiquete de descuento no es válido o no está disponible.");
-                    }
-                }
-
-                if (ModelState.IsValid)
-                {
-                    // Procesar el pedido, guardar cliente, etc.
-                    return RedirectToAction("Index");
-                }
-            }
-
-            return View(cliente);
-        }
-
 
         public async Task<IActionResult> ActualizarCantidad(int productoId, int tipoPrecioId, int cantidad)
         {
@@ -81,6 +55,82 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             HttpContext.Session.SetString(SessionKeyCarrito, carritoJson);
         }
 
+        public IActionResult Datos()
+        {
+            var cliente = new Cliente();
+            return View(cliente);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Datos(Cliente cliente)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!string.IsNullOrEmpty(cliente.TiqueteDescuento))
+                {
+                    var tiquete = await _unidadTrabajo.TiqueteDescuento.ObtenerPrimero(t => t.Codigo == cliente.TiqueteDescuento);
+
+                    if (tiquete == null || tiquete.Disponibles <= 0)
+                    {
+                        TempData[DS.Error] = "El tiquete no es válido";
+                        return RedirectToAction("Datos", cliente);
+                    }
+                    else
+                    {
+                        return RedirectToAction("MetodoPago", cliente);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("MetodoPago", cliente);
+                }
+            }
+            return View(cliente);
+        }
+
+        public async Task<IActionResult> MetodoPago(Cliente cliente)
+        {
+            if (ModelState.IsValid)
+            {
+                ComprasVM comprasVM = new ComprasVM()
+                {
+                    Cliente = cliente,
+                    CarritoCompra = ObtenerCarritoDeSesion()
+                };
+                if (cliente.TiqueteDescuento != null)
+                {
+                    comprasVM.TiqueteDescuento = await _unidadTrabajo.TiqueteDescuento.ObtenerPrimero(t => t.Codigo == cliente.TiqueteDescuento);
+                }
+                return View(comprasVM);
+
+            }
+            return RedirectToAction("Datos", cliente);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MetodoPago([Bind("Tipo")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson, string TiqueteDescuentoJson)
+        {
+            if (!string.IsNullOrEmpty(CarritoCompraJson))
+            {
+                comprasVM.CarritoCompra = JsonConvert.DeserializeObject<CarritoCompra>(CarritoCompraJson);
+            }
+
+            if (!string.IsNullOrEmpty(ClienteJson))
+            {
+                comprasVM.Cliente = JsonConvert.DeserializeObject<Cliente>(ClienteJson);
+            }
+
+            if (!string.IsNullOrEmpty(TiqueteDescuentoJson))
+            {
+                comprasVM.TiqueteDescuento = JsonConvert.DeserializeObject<TiqueteDescuento>(TiqueteDescuentoJson);
+            }
+
+            if (ModelState.IsValid)
+            {
+                return View(comprasVM);
+            }
+            return View(comprasVM);
+        }
 
         #region API
 

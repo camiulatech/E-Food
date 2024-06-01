@@ -57,23 +57,4 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var currentUrl = window.location.href;
-            var regex = /\/Commerce\/Cliente\/\d+/;
-
-            if (regex.test(currentUrl)) {
-                if (currentUrl.includes("?")) {
-                    var url = window.location.href; // Obtiene la URL actual
-                    var id = url.substring(url.lastIndexOf('/') + 1); // Extrae el ID de la URL
-                    //window.location.href = '@Url.Action("ValidarCliente", "Cliente", new { id = "__id__" })'.replace('__id__', id);
-                    console.log("hey");
-                    // Puedes ejecutar alguna función o lógica aquí
-                } else {
-                    console.log("La URL no contiene ?datos");
-                    // Puedes ejecutar alguna función o lógica alternativa aquí
-                }
-            }
-        });
-    </script>
 }
