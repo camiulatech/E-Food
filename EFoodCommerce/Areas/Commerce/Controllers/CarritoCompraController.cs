@@ -108,8 +108,18 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> MetodoPago(ComprasVM comprasVM)
+        public async Task<IActionResult> MetodoPago([Bind("Tipo")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson)
         {
+            if (!string.IsNullOrEmpty(CarritoCompraJson))
+            {
+                comprasVM.CarritoCompra = JsonConvert.DeserializeObject<CarritoCompra>(CarritoCompraJson);
+            }
+
+            if (!string.IsNullOrEmpty(ClienteJson))
+            {
+                comprasVM.Cliente = JsonConvert.DeserializeObject<Cliente>(ClienteJson);
+            }
+
             if (ModelState.IsValid)
             {
                 return View(comprasVM);
