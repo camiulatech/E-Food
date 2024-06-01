@@ -28,14 +28,19 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="row">
         <a>
-            Subtotal: @Model.CarritoCompra.ObtenerPrecio();
+            Subtotal: @Model.CarritoCompra.ObtenerPrecio()
         </a>
         <a>
-            Descuento: @(Model.CarritoCompra.ObtenerPrecio() * (Model.Cliente.TiqueteDescuento.Descuento));
+            Descuento: @(Model.TiqueteDescuento.Descuento * Model.CarritoCompra.ObtenerPrecio() / 100)
+        </a>
+        <a>
+            Total: @(Model.CarritoCompra.ObtenerPrecio() - (Model.CarritoCompra.ObtenerPrecio() * Model.TiqueteDescuento.Descuento / 100))
         </a>
     </div>
+
+    <br />
 
     <div class="row">
 		<div class="col-lg-6">

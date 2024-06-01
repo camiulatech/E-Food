@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace EFood.Modelos.ViewModels
 {
-    public class ComprasVM
+    public class ProductoVM
     {
-        public CarritoCompra CarritoCompra { get; set; }
+        public Producto Producto { get; set; }
 
-        public TipoProcesadorPago TipoProcesadorPago { get; set; }
+        public IEnumerable<SelectListItem> LineaComidaLista { get; set; }
+        public IEnumerable<Producto> Productos { get; set; } // Definir esta propiedad para almacenar los productos
 
-        public Cliente Cliente { get; set; }
+        public int? LineaComidaSeleccionadaId { get; set; } // Nuevo campo para almacenar el ID de la línea de comida seleccionada
 
 
     }
