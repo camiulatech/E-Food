@@ -108,7 +108,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> MetodoPago([Bind("Tipo")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson)
+        public async Task<IActionResult> MetodoPago([Bind("Tipo")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson, string TiqueteDescuentoJson)
         {
             if (!string.IsNullOrEmpty(CarritoCompraJson))
             {
@@ -118,6 +118,11 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             if (!string.IsNullOrEmpty(ClienteJson))
             {
                 comprasVM.Cliente = JsonConvert.DeserializeObject<Cliente>(ClienteJson);
+            }
+
+            if (!string.IsNullOrEmpty(TiqueteDescuentoJson))
+            {
+                comprasVM.TiqueteDescuento = JsonConvert.DeserializeObject<TiqueteDescuento>(TiqueteDescuentoJson);
             }
 
             if (ModelState.IsValid)

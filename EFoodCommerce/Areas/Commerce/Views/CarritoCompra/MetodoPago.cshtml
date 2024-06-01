@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var carritoCompraJson = JsonConvert.SerializeObject(Model.CarritoCompra);
     var clienteJson = JsonConvert.SerializeObject(Model.Cliente);
+    var tiqueteDescuentoJson = JsonConvert.SerializeObject(Model.TiqueteDescuento);
 }
 
 <div class="container">
@@ -24,6 +25,7 @@
 
             <input type="hidden" name="CarritoCompraJson" value="@carritoCompraJson" />
             <input type="hidden" name="ClienteJson" value="@clienteJson" />
+            <input type="hidden" name="TiqueteDescuentoJson" value="@tiqueteDescuentoJson" />
 
             <div class="row mb-2 mt-2">
                 <div class="form-group col-md-6">
