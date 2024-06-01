@@ -105,9 +105,17 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
 
             }
             return RedirectToAction("Datos", cliente);
-
         }
 
+        [HttpPost]
+        public async Task<IActionResult> MetodoPago(ComprasVM comprasVM)
+        {
+            if (ModelState.IsValid)
+            {
+                return View(comprasVM);
+            }
+            return View(comprasVM);
+        }
 
         #region API
 
