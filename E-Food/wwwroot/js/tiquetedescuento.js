@@ -24,10 +24,11 @@ function loadDataTable() {
             "url": "/Admin/TiqueteDescuento/ObtenerTodos"
         },
         "columns": [
-            { "data": "id", "width": "20%" },
-            { "data": "descripcion", "width": "20%" },
-            { "data": "disponibles", "width": "20%" },
-            { "data": "descuento", "width": "20%" },
+            { "data": "id", "width": "16%" },
+            { "data": "codigo", "width": "16%"},
+            { "data": "descripcion", "width": "16%" },
+            { "data": "disponibles", "width": "16%" },
+            { "data": "descuento", "width": "16%" },
             {
                 "data": "id",
                 "render": function (data) {
@@ -41,7 +42,7 @@ function loadDataTable() {
                            </a> 
                         </div>
                     `;
-                }, "width": "20%"
+                }, "width": "16%"
             }
         ]
 

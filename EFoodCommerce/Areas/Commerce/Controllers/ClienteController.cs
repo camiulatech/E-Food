@@ -21,34 +21,59 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ValidarCliente(Cliente model)
+        public async Task<IActionResult> Index(Cliente cliente)
         {
             if (ModelState.IsValid)
             {
-                if (!string.IsNullOrEmpty(model.TiqueteDescuento))
+                if (!string.IsNullOrEmpty(cliente.TiqueteDescuento))
                 {
                     var tiquete = await _unidadTrabajo.TiqueteDescuento
-                        .ObtenerPrimero(t => t.Descripcion == model.TiqueteDescuento);
+                        .ObtenerPrimero(t => t.Codigo == cliente.TiqueteDescuento);
 
-                    if (tiquete == null || tiquete.Disponibles <= 1)
+                    if (tiquete == null || tiquete.Disponibles <= 0)
                     {
                         ModelState.AddModelError("TiqueteDescuento", "El tiquete de descuento no es válido o no está disponible.");
                     }
+
+
                 }
 
-                if (ModelState.IsValid)
-                {
-                    // Procesar el pedido, guardar cliente, etc.
-                    return RedirectToAction("Index");
-                }
+                //if (ModelState.IsValid)
+                //{
+                //    // Procesar el pedido, guardar cliente, etc.
+                //    return RedirectToAction("Index");
+                //}
             }
 
-            return View("Index", model);
+            return View(cliente);
         }
 
-        public IActionResult PedidoExitoso()
+        [HttpPost]
+        public async Task<IActionResult> ValidarCliente(Cliente cliente)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                if (!string.IsNullOrEmpty(cliente.TiqueteDescuento))
+                {
+                    var tiquete = await _unidadTrabajo.TiqueteDescuento
+                        .ObtenerPrimero(t => t.Codigo == cliente.TiqueteDescuento);
+
+                    if (tiquete == null || tiquete.Disponibles <= 0)
+                    {
+                        ModelState.AddModelError("TiqueteDescuento", "El tiquete de descuento no es válido o no está disponible.");
+                    }
+
+                    
+                }
+
+                //if (ModelState.IsValid)
+                //{
+                //    // Procesar el pedido, guardar cliente, etc.
+                //    return RedirectToAction("Index");
+                //}
+            }
+
+            return View(cliente);
         }
     }
 }

@@ -25,6 +25,7 @@ namespace EFood.AccesoDatos.Repositorio
             var tiqueteDescuentoBD = _db.TiqueteDescuentos.FirstOrDefault(c => c.Id == tiqueteDescuento.Id);
             if (tiqueteDescuento != null)
             {
+                tiqueteDescuentoBD.Codigo = tiqueteDescuento.Codigo;
                 tiqueteDescuentoBD.Descripcion = tiqueteDescuento.Descripcion;
                 tiqueteDescuentoBD.Disponibles = tiqueteDescuento.Disponibles;
                 tiqueteDescuentoBD.Descuento = tiqueteDescuento.Descuento;
