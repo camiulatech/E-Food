@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Claims;
 using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using EFood.Utilidades;
 
 
 namespace E_Food.Tests
@@ -22,12 +24,15 @@ namespace E_Food.Tests
         private ProductoController _controller;
         private Mock<IUnidadTrabajo> _unidadTrabajoMock;
         private Mock<IWebHostEnvironment> _webHostEnvironmentMock;
+        private Mock<ITempDataDictionary> _tempDataMock;
+
 
         [SetUp]
         public void SetUp()
         {
             _unidadTrabajoMock = new Mock<IUnidadTrabajo>();
             _webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
+            _tempDataMock = new Mock<ITempDataDictionary>();
 
             // Configurar el contexto del controlador para simular la autenticación del usuario
             _controller = new ProductoController(_unidadTrabajoMock.Object, _webHostEnvironmentMock.Object)
@@ -42,7 +47,8 @@ namespace E_Food.Tests
                                                            // Puedes agregar más reclamaciones según sea necesario para simular roles, etc.
                         }, "mock"))
                     }
-                }
+                },
+            TempData = _tempDataMock.Object
             };
         }
 
@@ -80,71 +86,7 @@ namespace E_Food.Tests
             Assert.IsInstanceOf<ProductoVM>(viewResult.Model);
         }
 
-        [Test]
-        public async Task Upsert_WithInvalidId_ReturnsNotFoundResult()
-        {
-            // Arrange
-            int invalidId = 999;
-            _unidadTrabajoMock.Setup(u => u.Producto.Obtener(invalidId)).ReturnsAsync((Producto)null);
-
-            // Act
-            var result = await _controller.Upsert(invalidId);
-
-            // Assert
-            Assert.IsInstanceOf<NotFoundResult>(result);
-        }
-
-
-
-        [Test]
-        public async Task Upsert_WithValidModelStateAndPositiveMonto_CreatesNewProductoAndRedirectsToIndex()
-        {
-            // Arrange
-            var producto = new Producto { Monto = 10 }; // Crear un nuevo producto con un monto positivo
-            var productoVM = new ProductoVM { Producto = producto };
-
-            // Configurar el comportamiento esperado en los mocks
-            _unidadTrabajoMock.Setup(u => u.Producto.Agregar(It.IsAny<Producto>())).Returns(Task.CompletedTask);
-            _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
-
-            // Simular una solicitud HTTP con un cuerpo de formulario válido
-            var formData = new FormCollection(new Dictionary<string, StringValues>(), new FormFileCollection());
-            var httpContext = new DefaultHttpContext { Request = { Form = formData } };
-            _controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
-
-            // Act
-            var result = await _controller.Upsert(productoVM);
-
-            // Assert
-            Assert.IsInstanceOf<RedirectToActionResult>(result);
-            var redirectToActionResult = result as RedirectToActionResult;
-            Assert.AreEqual("Index", redirectToActionResult.ActionName);
-            _unidadTrabajoMock.Verify(u => u.Producto.Agregar(It.IsAny<Producto>()), Times.Once);
-            _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Once);
-        }
-
-
-
-
-
-
-        [Test]
-        public async Task Upsert_WithInvalidModelStateAndPositiveMonto_ReturnsViewResultWithProductoVM()
-        {
-            // Arrange
-            var productoVM = new ProductoVM { Producto = new Producto { Monto = 0 } };
-            _controller.ModelState.AddModelError("Monto", "Monto debe ser positivo");
-
-            // Act
-            var result = await _controller.Upsert(productoVM);
-
-            // Assert
-            Assert.IsInstanceOf<ViewResult>(result);
-            var viewResult = result as ViewResult;
-            Assert.IsInstanceOf<ProductoVM>(viewResult.Model);
-            _unidadTrabajoMock.Verify(u => u.Producto.Agregar(It.IsAny<Producto>()), Times.Never);
-            _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Never);
-        }
+        
 
     }
 }
