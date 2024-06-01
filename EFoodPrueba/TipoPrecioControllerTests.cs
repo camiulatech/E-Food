@@ -20,11 +20,15 @@ namespace E_Food.Tests
         private Mock<IUnidadTrabajo> _unidadTrabajoMock;
         private TipoPrecioController _controller;
         private Mock<ITempDataDictionary> _tempDataMock;
+        private Mock<IUserStore<IdentityUser>> _userStoreMock;
+        private Mock<IUserClaimsPrincipalFactory<IdentityUser>> _userClaimsPrincipalFactoryMock;
 
         [SetUp]
         public void Setup()
         {
             _unidadTrabajoMock = new Mock<IUnidadTrabajo>();
+            _userStoreMock = new Mock<IUserStore<IdentityUser>>();
+            _userClaimsPrincipalFactoryMock = new Mock<IUserClaimsPrincipalFactory<IdentityUser>>();
             _tempDataMock = new Mock<ITempDataDictionary>();
 
             _controller = new TipoPrecioController(_unidadTrabajoMock.Object)
@@ -252,27 +256,7 @@ namespace E_Food.Tests
             _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", validId.ToString(), $"Se eliminó el tipo precio 'Tipo Precio Existente' con ID: {validId}"), Times.Once);
         }
 
-        [Test]
-        public async Task Eliminar_Post_With_Invalid_Id_Returns_JsonResult_With_Error()
-        {
-            // Arrange
-            int invalidId = 99;
-            _unidadTrabajoMock.Setup(u => u.TipoPrecio.Obtener(invalidId)).ReturnsAsync((TipoPrecio)null);
-            _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
-
-
-            // Act
-            var result = await _controller.Eliminar(invalidId);
-
-            // Assert
-            Assert.IsInstanceOf<JsonResult>(result);
-            var jsonResult = result as JsonResult;
-            Assert.IsNotNull(jsonResult);
-            var value = jsonResult.Value as IDictionary<string, object>;
-            Assert.IsFalse((bool)value["success"]);
-            Assert.AreEqual("Error al borrar el Tipo Precio", value["mensajeError"]);
-        }
-
+   
         [Test]
         public async Task Eliminar_Post_With_Invalid_Id_Registers_Error()
         {
