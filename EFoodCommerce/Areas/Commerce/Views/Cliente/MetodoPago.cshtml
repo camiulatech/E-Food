@@ -1,0 +1,32 @@
+﻿@using EFood.Modelos.ProcesadorPago
+@model EFood.Modelos.CarritoCompras.Cliente
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="text-prim">Seleccion Metodo Pago</h2>
+        </div>
+    </div>
+
+    <div class="row mb-2 mt-2">
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                <label>Tipo de Procesador</label>
+                <select asp-for="Tipo" class="form-control">
+                    <option value="">Seleccione un tipo</option>
+                    @foreach (var tipo in Enum.GetValues(typeof(EFood.Modelos.TipoProcesadorPago)))
+                    {
+                        <option value="@tipo">@tipo</option>
+                    }
+                </select>
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+</div>
