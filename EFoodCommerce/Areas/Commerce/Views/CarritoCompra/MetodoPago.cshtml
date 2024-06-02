@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
-            <h2 class="text-prim">Información del Cliente</h2>
+            <h2 class="text-prim">Método de Pago</h2>
         </div>
     </div>
 
@@ -26,18 +26,19 @@
             <input type="hidden" name="CarritoCompraJson" value="@carritoCompraJson" />
             <input type="hidden" name="ClienteJson" value="@clienteJson" />
             <input type="hidden" name="TiqueteDescuentoJson" value="@tiqueteDescuentoJson" />
+            <input type="hidden" id="hiddenTipoProcesadorPago" name="hiddenTipoProcesadorPago" value="@Model.TipoProcesadorPago" />
 
             <div class="row mb-2 mt-2">
                 <div class="form-group col-md-6">
-                    <label asp-for="Tipo">Tipo de Procesador</label>
-                    <select asp-for="Tipo" class="form-control">
-                        <option value="">Seleccione un tipo</option>
+                    <label asp-for="TipoProcesadorPago">Método de Pago</label>
+                    <select asp-for="TipoProcesadorPago" class="form-control" onchange="updateHiddenTipoProcesadorPago()" name="TipoProcesadorPago">
+                        <option value="">Seleccione un método</option>
                         @foreach (var tipo in Enum.GetValues(typeof(EFood.Modelos.TipoProcesadorPago)))
                         {
                             <option value="@tipo">@tipo</option>
                         }
                     </select>
-                    <span asp-validation-for="Tipo" class="text-danger"></span>
+                    <span asp-validation-for="TipoProcesadorPago" class="text-danger"></span>
                 </div>
             </div>
 
@@ -45,27 +46,15 @@
                 <div class="col-md-12">
                     @if (Model.TiqueteDescuento != null)
                     {
-                        <a>
-                            Subtotal: @Model.CarritoCompra.ObtenerPrecio()
-                        </a>
-                        <a>
-                            Descuento: @(Model.TiqueteDescuento.Descuento * Model.CarritoCompra.ObtenerPrecio() / 100)
-                        </a>
-                        <a>
-                            Total: @(Model.CarritoCompra.ObtenerPrecio() - (Model.CarritoCompra.ObtenerPrecio() * Model.TiqueteDescuento.Descuento / 100))
-                        </a>
+                        <a>Subtotal: @Model.CarritoCompra.ObtenerPrecio()</a>
+                        <a>Descuento: @(Model.TiqueteDescuento.Descuento * Model.CarritoCompra.ObtenerPrecio() / 100)</a>
+                        <a>Total: @(Model.CarritoCompra.ObtenerPrecio() - (Model.CarritoCompra.ObtenerPrecio() * Model.TiqueteDescuento.Descuento / 100))</a>
                     }
                     else
                     {
-                        <a>
-                            Subtotal: @Model.CarritoCompra.ObtenerPrecio()
-                        </a>
-                        <a>
-                            Descuento: 0,00
-                        </a>
-                        <a>
-                            Total: @(Model.CarritoCompra.ObtenerPrecio())
-                        </a>
+                        <a>Subtotal: @Model.CarritoCompra.ObtenerPrecio()</a>
+                        <a>Descuento: 0,00</a>
+                        <a>Total: @(Model.CarritoCompra.ObtenerPrecio())</a>
                     }
                 </div>
             </div>
@@ -87,3 +76,12 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function updateHiddenTipoProcesadorPago() {
+            var selectedValue = document.querySelector("select[name='TipoProcesadorPago']").value;
+            document.getElementById("hiddenTipoProcesadorPago").value = selectedValue;
+        }
+    </script>
+}

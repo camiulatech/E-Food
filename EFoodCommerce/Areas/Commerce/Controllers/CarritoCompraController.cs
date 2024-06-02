@@ -61,6 +61,39 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             return View(cliente);
         }
 
+        public async Task<IActionResult> MetodoPago(Cliente cliente)
+        {
+            if (ModelState.IsValid)
+            {
+                ComprasVM comprasVM = new ComprasVM()
+                {
+                    Cliente = cliente,
+                    CarritoCompra = ObtenerCarritoDeSesion()
+                };
+                if (cliente.TiqueteDescuento != null)
+                {
+                    comprasVM.TiqueteDescuento = await _unidadTrabajo.TiqueteDescuento.ObtenerPrimero(t => t.Codigo == cliente.TiqueteDescuento);
+                }
+                return View(comprasVM);
+
+            }
+            return RedirectToAction("Datos", cliente);
+        }
+
+        public IActionResult DatosPago()
+        {
+            var comprasVMJson = HttpContext.Session.GetString("ComprasVM");
+            if (!string.IsNullOrEmpty(comprasVMJson))
+            {
+                var comprasVM = JsonConvert.DeserializeObject<ComprasVM>(comprasVMJson);
+                return View(comprasVM);
+            }
+            return RedirectToAction("Index");
+        }
+
+
+        #region API
+
         [HttpPost]
         public async Task<IActionResult> Datos(Cliente cliente)
         {
@@ -88,27 +121,51 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             return View(cliente);
         }
 
-        public async Task<IActionResult> MetodoPago(Cliente cliente)
+        [HttpPost]
+        public async Task<IActionResult> MetodoPago([Bind("TipoProcesadorPago")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson, string TiqueteDescuentoJson, string hiddenTipoProcesadorPago)
         {
+            if (!string.IsNullOrEmpty(hiddenTipoProcesadorPago))
+            {
+                comprasVM.TipoProcesadorPago = Enum.Parse<TipoProcesadorPago>(hiddenTipoProcesadorPago);
+            }
+
+            if (!string.IsNullOrEmpty(CarritoCompraJson))
+            {
+                comprasVM.CarritoCompra = JsonConvert.DeserializeObject<CarritoCompra>(CarritoCompraJson);
+            }
+
+            if (!string.IsNullOrEmpty(ClienteJson))
+            {
+                comprasVM.Cliente = JsonConvert.DeserializeObject<Cliente>(ClienteJson);
+            }
+
+            if (!string.IsNullOrEmpty(TiqueteDescuentoJson))
+            {
+                comprasVM.TiqueteDescuento = JsonConvert.DeserializeObject<TiqueteDescuento>(TiqueteDescuentoJson);
+            }
+
             if (ModelState.IsValid)
             {
-                ComprasVM comprasVM = new ComprasVM()
+                if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.TarjetaDebitoCredito)
                 {
-                    Cliente = cliente,
-                    CarritoCompra = ObtenerCarritoDeSesion()
-                };
-                if (cliente.TiqueteDescuento != null)
-                {
-                    comprasVM.TiqueteDescuento = await _unidadTrabajo.TiqueteDescuento.ObtenerPrimero(t => t.Codigo == cliente.TiqueteDescuento);
+                    comprasVM.TarjetaPago = new TarjetaPago();
                 }
-                return View(comprasVM);
-
+                else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.ChequeElectronico)
+                {
+                    comprasVM.ChequePago = new ChequePago();
+                }
+                else
+                {
+                    return View(comprasVM);
+                }
+                HttpContext.Session.SetString("ComprasVM", JsonConvert.SerializeObject(comprasVM));
+                return RedirectToAction("DatosPago");
             }
-            return RedirectToAction("Datos", cliente);
+            return View(comprasVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> MetodoPago([Bind("Tipo")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson, string TiqueteDescuentoJson)
+        public async Task<IActionResult> DatosPago([Bind("TipoProcesadorPago")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson, string TiqueteDescuentoJson)
         {
             if (!string.IsNullOrEmpty(CarritoCompraJson))
             {
@@ -131,8 +188,6 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             }
             return View(comprasVM);
         }
-
-        #region API
 
         #endregion
     }
