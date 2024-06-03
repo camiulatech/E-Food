@@ -44,6 +44,8 @@ namespace EFood.AccesoDatos.Repositorio
             Bitacora = new BitacoraRepositorio(_db);
 
             TipoPrecio = new TipoPrecioRepositorio(_db);
+
+            Pedido = new PedidoRepositorio(_db);
         }
 
         public void Dispose()

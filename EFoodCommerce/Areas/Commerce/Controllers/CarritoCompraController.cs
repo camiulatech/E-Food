@@ -91,6 +91,16 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult ConfirmarPago()
+        {
+            var comprasVMJson = HttpContext.Session.GetString("ComprasVM");
+            if (!string.IsNullOrEmpty(comprasVMJson))
+            {
+                var comprasVM = JsonConvert.DeserializeObject<ComprasVM>(comprasVMJson);
+                return View(comprasVM);
+            }
+            return RedirectToAction("Index");
+        }
 
         #region API
 
@@ -217,13 +227,85 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
 
             if (ModelState.IsValid)
             {
-                if (comprasVM.TarjetaPago.AñoExpiracion < DateTime.Now.Year || (comprasVM.TarjetaPago.AñoExpiracion == DateTime.Now.Year && comprasVM.TarjetaPago.MesExpiracion < DateTime.Now.Month))
+                if (comprasVM.TarjetaPago != null && (comprasVM.TarjetaPago.AñoExpiracion < DateTime.Now.Year || (comprasVM.TarjetaPago.AñoExpiracion == DateTime.Now.Year && comprasVM.TarjetaPago.MesExpiracion < DateTime.Now.Month)))
                 {
                     TempData[DS.Error] = "La tarjeta de crédito ha expirado";
                     return View(comprasVM);
                 }
                 HttpContext.Session.SetString("ComprasVM", JsonConvert.SerializeObject(comprasVM));
-                //return RedirectToAction("DatosPago");
+                return RedirectToAction("ConfirmarPago");
+            }
+            return View(comprasVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmarPago(ComprasVM compras, [Bind("TarjetaPago")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson, string TiqueteDescuentoJson, string hiddenTipoProcesadorPago)
+        {
+            if (!string.IsNullOrEmpty(hiddenTipoProcesadorPago))
+            {
+                comprasVM.TipoProcesadorPago = Enum.Parse<TipoProcesadorPago>(hiddenTipoProcesadorPago);
+            }
+
+            if (!string.IsNullOrEmpty(CarritoCompraJson))
+            {
+                comprasVM.CarritoCompra = JsonConvert.DeserializeObject<CarritoCompra>(CarritoCompraJson);
+            }
+
+            if (!string.IsNullOrEmpty(ClienteJson))
+            {
+                comprasVM.Cliente = JsonConvert.DeserializeObject<Cliente>(ClienteJson);
+            }
+
+            if (!string.IsNullOrEmpty(TiqueteDescuentoJson))
+            {
+                comprasVM.TiqueteDescuento = JsonConvert.DeserializeObject<TiqueteDescuento>(TiqueteDescuentoJson);
+            }
+
+            if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.TarjetaDebitoCredito)
+            {
+                comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true, incluirPropiedades: "Tarjetas");
+
+            }
+            else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.ChequeElectronico)
+            {
+                comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
+                comprasVM.ChequePago = compras.ChequePago;
+            }
+            else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.Efectivo)
+            {
+                comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
+            }
+
+            if (ModelState.IsValid)
+            {
+                DateTime fechaPedido = DateTime.Now;
+                var pedido = new Pedido()
+                {
+                    Fecha = fechaPedido,
+                    Monto = comprasVM.CarritoCompra.ObtenerPrecio(),
+                    Estado = EstadoPedido.Procesado,
+                    TiqueteDescuentoId = comprasVM.TiqueteDescuento?.Id,
+                    ProcesadorPagoId = comprasVM.ProcesadorPago.Id,
+                };
+                await _unidadTrabajo.Pedido.Agregar(pedido);
+                await _unidadTrabajo.Guardar();
+
+                var pedidoCompletado = await _unidadTrabajo.Pedido.ObtenerPrimero(p => p.Fecha == fechaPedido && p.Monto == comprasVM.CarritoCompra.ObtenerPrecio());
+                _unidadTrabajo.Pedido.AgregarProductos(pedidoCompletado, comprasVM.CarritoCompra.ObtenerProductos());
+                await _unidadTrabajo.Guardar();
+
+                if (comprasVM.TiqueteDescuento != null)
+                {
+                    comprasVM.TiqueteDescuento.Disponibles--;
+                    _unidadTrabajo.TiqueteDescuento.Actualizar(comprasVM.TiqueteDescuento);
+                    await _unidadTrabajo.Guardar();
+                }
+
+                comprasVM.CarritoCompra.Limpiar();
+                GuardarCarritoEnSesion(comprasVM.CarritoCompra);
+                TempData[DS.Exitosa] = "Pedido realizado con éxito";
+
+                return RedirectToAction("Index", "Home", new { area = "Inventario" });
             }
             return View(comprasVM);
         }

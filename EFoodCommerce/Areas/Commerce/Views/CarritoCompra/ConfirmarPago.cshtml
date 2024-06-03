@@ -1,0 +1,149 @@
+﻿@using Newtonsoft.Json
+@model EFood.Modelos.ViewModels.ComprasVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var carritoCompraJson = JsonConvert.SerializeObject(Model.CarritoCompra);
+    var clienteJson = JsonConvert.SerializeObject(Model.Cliente);
+    var tiqueteDescuentoJson = JsonConvert.SerializeObject(Model.TiqueteDescuento);
+    var tipoProcesadorPago = JsonConvert.SerializeObject(Model.TipoProcesadorPago);
+    var procesadorPago = JsonConvert.SerializeObject(Model.TipoProcesadorPago);
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="text-prim">Confirmación del Pedido</h2>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="p-4 border rounded bg-light">
+        <form asp-action="MetodoPago" method="post" enctype="multipart/form-data">
+            <div class="row border-0">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            </div>
+
+            <input type="hidden" name="CarritoCompraJson" value="@carritoCompraJson" />
+            <input type="hidden" name="ClienteJson" value="@clienteJson" />
+            <input type="hidden" name="TiqueteDescuentoJson" value="@tiqueteDescuentoJson" />
+            <input type="hidden" name="hiddenTipoProcesadorPago" value="@tipoProcesadorPago" />
+            <input type="hidden" name="ProcesadorPagoJson" value="@procesadorPago" />
+
+            <div class="row" style="background-color: blue;">
+                <label>
+                    Confirmación del Pedido
+                </label>
+            </div>
+            <div class="row"">
+                <h4>@Model.Cliente.Nombre @Model.Cliente.Apellidos</h4>
+            </div>
+            <div class="row">
+                <p>
+                    A continuación el detalle de la información de envío y forma de pago
+                </p>
+            </div>
+            <br/>
+
+            <div class="row" style="background-color: blue;">
+                <label>
+                    Información de Envío
+                </label>
+            </div>
+
+            <div class="row">
+                <p>
+                    Dirección: @Model.Cliente.DireccionEnvio
+                </p>
+            </div>
+
+            <div class="row">
+                <p>
+                    Teléfono: @Model.Cliente.Telefono
+                </p>
+            </div>
+
+            <br />
+
+            <div class="row" style="background-color: blue;">
+                <label>
+                    Forma de Pago
+                </label>
+            </div>
+            @if (Model.TarjetaPago != null)
+            {
+                <div class="col-lg-6">
+                    <p>
+                        Medio: @Model.TipoProcesadorPago
+                    </p>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 text-right">
+                        <p>
+                            Tipo: @Model.TarjetaPago.TipoTarjeta
+                        </p>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <p>
+                            Medio: @Model.TipoProcesadorPago
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p>
+                            Número de Tarjeta: @Model.TarjetaPago.NumeroTarjeta
+                        </p>
+                    </div>
+                </div>
+            }
+            else if (Model.ChequePago != null)
+            {
+                <div class="row">
+                    <div class="col-lg-6 text-right">
+                        <p>
+                            Número Cheque: @Model.ChequePago.NumeroCheque
+                        </p>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <p>
+                            Cuenta: @Model.ChequePago.Cuenta
+                        </p>
+                    </div>
+                </div>
+            }
+            <br />
+
+            <div class="row">
+                <div class="col-md-12">
+                    @if (Model.TiqueteDescuento != null)
+                    {
+                        <a>Total: @(Model.CarritoCompra.ObtenerPrecio() - (Model.CarritoCompra.ObtenerPrecio() * Model.TiqueteDescuento.Descuento / 100))</a>
+                    }
+                    else
+                    {
+                        <a>Total: @(Model.CarritoCompra.ObtenerPrecio())</a>
+                    }
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <a href="/Commerce/CarritoCompra/Index/" class="btn btn-primary text-white" style="cursor:pointer">
+                        <i class="bi bi-arrow-left"></i> Cancelar Pedido
+                    </a>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <button type="submit" class="btn btn-primary" onfocus="false">
+                        <i class="bi bi-plus-square-fill"></i> Guardar Pedido
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
