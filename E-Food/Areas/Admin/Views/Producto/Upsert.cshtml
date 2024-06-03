@@ -82,7 +82,7 @@
                 <div class="col-4">
                     @if (Model.Producto.Id != 0)
                     {
-                        <img src="@DS.ImagenRuta@Model.Producto.UbicacionImagen" width="100%" style="border-radius: 5px; border: 1px solid #bbb" />
+                        <img src="@Url.Content("/Imagenes/" + Model.Producto.UbicacionImagen)" width="100%" style="border-radius: 5px; border: 1px solid #bbb" />
                     }
                 </div>
             </div>
