@@ -149,10 +149,20 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                 if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.TarjetaDebitoCredito)
                 {
                     comprasVM.TarjetaPago = new TarjetaPago();
+                    comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true, incluirPropiedades: "Tarjetas");
+                    foreach (var x in comprasVM.ProcesadorPago.Tarjetas)
+                    {
+                        x.ProcesadorPagos = null;
+                    }
                 }
                 else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.ChequeElectronico)
                 {
                     comprasVM.ChequePago = new ChequePago();
+                    comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
+                }
+                else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.Efectivo)
+                {
+                    comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
                 }
                 else
                 {
@@ -165,8 +175,13 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DatosPago([Bind("TipoProcesadorPago")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson, string TiqueteDescuentoJson)
+        public async Task<IActionResult> DatosPago(ComprasVM compras, [Bind("TarjetaPago")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson, string TiqueteDescuentoJson, string hiddenTipoProcesadorPago)
         {
+            if (!string.IsNullOrEmpty(hiddenTipoProcesadorPago))
+            {
+                comprasVM.TipoProcesadorPago = Enum.Parse<TipoProcesadorPago>(hiddenTipoProcesadorPago);
+            }
+
             if (!string.IsNullOrEmpty(CarritoCompraJson))
             {
                 comprasVM.CarritoCompra = JsonConvert.DeserializeObject<CarritoCompra>(CarritoCompraJson);
@@ -182,9 +197,32 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                 comprasVM.TiqueteDescuento = JsonConvert.DeserializeObject<TiqueteDescuento>(TiqueteDescuentoJson);
             }
 
+            if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.TarjetaDebitoCredito)
+            {
+                comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true, incluirPropiedades: "Tarjetas");
+                foreach (var x in comprasVM.ProcesadorPago.Tarjetas)
+                {
+                    x.ProcesadorPagos = null;
+                }
+            }
+            else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.ChequeElectronico)
+            {
+                comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
+            }
+            else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.Efectivo)
+            {
+                comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
+            }
+
             if (ModelState.IsValid)
             {
-                return View(comprasVM);
+                if (comprasVM.TarjetaPago.AñoExpiracion < DateTime.Now.Year || (comprasVM.TarjetaPago.AñoExpiracion == DateTime.Now.Year && comprasVM.TarjetaPago.MesExpiracion < DateTime.Now.Month))
+                {
+                    TempData[DS.Error] = "La tarjeta de crédito ha expirado";
+                    return View(comprasVM);
+                }
+                HttpContext.Session.SetString("ComprasVM", JsonConvert.SerializeObject(comprasVM));
+                //return RedirectToAction("DatosPago");
             }
             return View(comprasVM);
         }

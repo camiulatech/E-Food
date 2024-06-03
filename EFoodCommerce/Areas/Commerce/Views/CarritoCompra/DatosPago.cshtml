@@ -6,6 +6,8 @@
     var carritoCompraJson = JsonConvert.SerializeObject(Model.CarritoCompra);
     var clienteJson = JsonConvert.SerializeObject(Model.Cliente);
     var tiqueteDescuentoJson = JsonConvert.SerializeObject(Model.TiqueteDescuento);
+    var tipoProcesadorPago = JsonConvert.SerializeObject(Model.TipoProcesadorPago);
+    var procesadorPago = JsonConvert.SerializeObject(Model.TipoProcesadorPago);
 }
 
 <div class="container">
@@ -26,13 +28,15 @@
             <input type="hidden" name="CarritoCompraJson" value="@carritoCompraJson" />
             <input type="hidden" name="ClienteJson" value="@clienteJson" />
             <input type="hidden" name="TiqueteDescuentoJson" value="@tiqueteDescuentoJson" />
+            <input type="hidden" name="hiddenTipoProcesadorPago" value="@tipoProcesadorPago" />
+            <input type="hidden" name="ProcesadorPagoJson" value="@procesadorPago" />
 
             @if (Model.TipoProcesadorPago == EFood.Modelos.TipoProcesadorPago.ChequeElectronico)
-			{
+            {
                 <div class="row">
                     <div class="form-group">
                         <label for="ChequePago.NumeroCheque">Número Cheque:</label>
-                        <input type="text" id="NumeroCheque" name="NumeroCheque" class="form-control" value="@Model.ChequePago.NumeroCheque" />
+                        <input type="text" id="ChequePago.NumeroCheque" name="ChequePago.NumeroCheque" class="form-control" value="@Model.ChequePago.NumeroCheque" />
                         <span asp-validation-for="ChequePago.NumeroCheque" class="text-danger"></span>
                     </div>
                 </div>
@@ -40,18 +44,28 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="ChequePago.Cuenta">Cuenta:</label>
-                        <input type="text" id="Cuenta" name="Cuenta" class="form-control" value="@Model.ChequePago.Cuenta" />
+                        <input type="text" id="ChequePago.Cuenta" name="ChequePago.Cuenta" class="form-control" value="@Model.ChequePago.Cuenta" />
                         <span asp-validation-for="ChequePago.Cuenta" class="text-danger"></span>
                     </div>
                 </div>
-
             }
             else if (Model.TipoProcesadorPago == EFood.Modelos.TipoProcesadorPago.TarjetaDebitoCredito)
             {
                 <div class="row">
+                    <div class="form-group col-lg-12">
+                        @Html.Label("Seleccionar Tarjeta:")
+                        @Html.DropDownListFor(
+                                 m => m.TarjetaPago.TipoTarjeta, // Asegúrate de tener una propiedad en el modelo para esto
+                                 new SelectList(Model.ProcesadorPago.Tarjetas, "Nombre", "Nombre"), // Asumiendo que Tarjetas es una lista de objetos con propiedades Id y Nombre
+                                 new { @class = "custom-class" } // Añadir clases CSS aquí
+                                 )
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="form-group">
                         <label for="TarjetaPago.NumeroTarjeta">Numero de Tarjeta:</label>
-                        <input type="text" id="Apellidos" name="Apellidos" class="form-control" value="@Model.TarjetaPago.NumeroTarjeta" />
+                        <input type="text" id="TarjetaPago.NumeroTarjeta" name="TarjetaPago.NumeroTarjeta" class="form-control" value="@Model.TarjetaPago.NumeroTarjeta" />
                         <span asp-validation-for="TarjetaPago.NumeroTarjeta" class="text-danger"></span>
                     </div>
                 </div>
@@ -59,27 +73,35 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="TarjetaPago.NombreTitular">Nombre del Titular:</label>
-                        <input type="text" id="Apellidos" name="NombreTitular" class="form-control" value="@Model.TarjetaPago.NombreTitular" />
+                        <input type="text" id="TarjetaPago.NombreTitular" name="TarjetaPago.NombreTitular" class="form-control" value="@Model.TarjetaPago.NombreTitular" />
                         <span asp-validation-for="TarjetaPago.NombreTitular" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="form-group">
+                    <div class="form-group col-lg-6">
                         @Html.LabelFor(m => m.TarjetaPago.MesExpiracion)
-                        @Html.DropDownListFor(m => m.TarjetaPago.MesExpiracion, Enumerable.Range(1, 12).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }))
+                        @Html.DropDownListFor(
+                                 m => m.TarjetaPago.MesExpiracion,
+                                 Enumerable.Range(1, 12).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }),
+                                 new { @class = "custom-class" } // Añadir clases CSS aquí
+                                 )
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group col-lg-6 text-right">
                         @Html.LabelFor(m => m.TarjetaPago.AñoExpiracion)
-                        @Html.DropDownListFor(m => m.TarjetaPago.AñoExpiracion, Enumerable.Range(DateTime.Now.Year, 20).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }))
+                        @Html.DropDownListFor(
+                                 m => m.TarjetaPago.AñoExpiracion,
+                                 Enumerable.Range(DateTime.Now.Year, 20).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }),
+                                 new { @class = "custom-class" } // Añadir clases CSS aquí
+                                 )
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group">
                         <label for="TarjetaPago.CodigoSeguridad">CVC:</label>
-                        <input type="text" id="Apellidos" name="CodigoSeguridad" class="form-control" value="@Model.TarjetaPago.CodigoSeguridad" />
+                        <input type="text" id="TarjetaPago.CodigoSeguridad" name="TarjetaPago.CodigoSeguridad" class="form-control" value="@Model.TarjetaPago.CodigoSeguridad" />
                         <span asp-validation-for="TarjetaPago.CodigoSeguridad" class="text-danger"></span>
                     </div>
                 </div>

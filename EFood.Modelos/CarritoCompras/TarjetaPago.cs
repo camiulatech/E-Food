@@ -25,5 +25,7 @@ namespace EFood.Modelos.CarritoCompras
         [MaxLength(4, ErrorMessage = "Codigo de Seguridad debe tener a lo mucho 4 caracteres")]
         [MinLength(3, ErrorMessage = "Codigo de Seguridad debe tener mínimo 3 caracteres")]
         public string CodigoSeguridad { get; set; }
+
+        public string TipoTarjeta { get; set; }
     }
 }
