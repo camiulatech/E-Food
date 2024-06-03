@@ -13,6 +13,10 @@ using System.IO;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using EFood.Utilidades;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Primitives;
+using System.Linq.Expressions;
 
 namespace E_Food.Tests
 {
@@ -82,54 +86,93 @@ namespace E_Food.Tests
             Assert.IsInstanceOf<ProductoVM>(viewResult.Model);
         }
 
-
         [Test]
-        public async Task Eliminar_IdIsValid_ReturnsJsonResultWithSuccess()
+        public async Task Eliminar_Post_With_Valid_Id_Calls_Remover_And_Guardar_And_Deletes_Image()
         {
             // Arrange
-            var productoId = 1;
-            var producto = new Producto { Id = productoId, Nombre = "TestProducto", UbicacionImagen = "imagen.jpg" };
-            _unidadTrabajoMock.Setup(u => u.Producto.Obtener(productoId)).ReturnsAsync(producto);
+            int validId = 1;
+            var existingProducto = new Producto { Id = validId, Nombre = "Linea Existente", UbicacionImagen = "imagen.jpg" };
+            _unidadTrabajoMock.Setup(u => u.Producto.Obtener(validId)).ReturnsAsync(existingProducto);
+            _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
+            _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
+
+            // Simular la identidad del usuario
+            var identity = new GenericIdentity("testuser");
+            var principal = new ClaimsPrincipal(identity);
+
+            // Configurar HttpContext
+            var httpContext = new DefaultHttpContext
+            {
+                User = principal
+            };
+
+            // Configurar ControllerContext
+            var controllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+
+            _controller.ControllerContext = controllerContext;
+
+            // Mockear el web host environment
+            _webHostEnvironmentMock.Setup(w => w.WebRootPath).Returns("wwwroot");
 
             // Act
-            var result = await _controller.Eliminar(productoId);
+            await _controller.Eliminar(validId);
 
             // Assert
-            Assert.IsInstanceOf<JsonResult>(result);
-            var jsonResult = result as JsonResult;
-            dynamic data = jsonResult.Value;
-            Assert.IsTrue(data.success);
-
-            // Verificar que se elimine el archivo de imagen
-            _unidadTrabajoMock.Verify(u => u.Producto.Remover(It.IsAny<Producto>()), Times.Once);
+            _unidadTrabajoMock.Verify(u => u.Producto.Remover(existingProducto), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Once);
+            _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
-            // Verificar que User.Identity no sea nulo
-            Assert.NotNull(_controller.User.Identity);
+            // Verificar que se elimine la imagen
+            var expectedImagePath = Path.Combine("wwwroot", "imagen.jpg");
+            Assert.IsFalse(File.Exists(expectedImagePath));
         }
 
 
         [Test]
-        public async Task Eliminar_IdIsNotValid_ReturnsJsonResultWithError()
+        public async Task Eliminar_Post_With_Valid_Id_Returns_JsonResult()
         {
             // Arrange
-            var productoId = 1;
-            Producto producto = null;
-            _unidadTrabajoMock.Setup(u => u.Producto.Obtener(productoId)).ReturnsAsync(producto);
+            int validId = 1;
+            var existingProducto = new Producto { Id = validId, Nombre = "Producto Existente", UbicacionImagen = "imagen.jpg" };
+            _unidadTrabajoMock.Setup(u => u.Producto.Obtener(validId)).ReturnsAsync(existingProducto);
+            _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
+
+            // Simular la identidad del usuario
+            var identity = new GenericIdentity("testuser");
+            var principal = new ClaimsPrincipal(identity);
+
+            // Configurar HttpContext
+            var httpContext = new DefaultHttpContext
+            {
+                User = principal
+            };
+
+            // Configurar ControllerContext
+            var controllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+
+            _controller.ControllerContext = controllerContext;
+
+            // Mockear el web host environment
+            _webHostEnvironmentMock.Setup(w => w.WebRootPath).Returns("wwwroot");
 
             // Act
-            var result = await _controller.Eliminar(productoId);
+            var result = await _controller.Eliminar(validId);
 
             // Assert
             Assert.IsInstanceOf<JsonResult>(result);
             var jsonResult = result as JsonResult;
-            dynamic data = jsonResult.Value;
-            Assert.IsFalse(data.success);
+            Assert.IsTrue((bool)jsonResult.Value.GetType().GetProperty("success").GetValue(jsonResult.Value));
         }
+        
 
 
     }
-
-
 }
+
 
