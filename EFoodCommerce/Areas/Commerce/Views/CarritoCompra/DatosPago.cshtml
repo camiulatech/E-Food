@@ -1,0 +1,126 @@
+﻿@using Newtonsoft.Json
+@model EFood.Modelos.ViewModels.ComprasVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var carritoCompraJson = JsonConvert.SerializeObject(Model.CarritoCompra);
+    var clienteJson = JsonConvert.SerializeObject(Model.Cliente);
+    var tiqueteDescuentoJson = JsonConvert.SerializeObject(Model.TiqueteDescuento);
+    var tipoProcesadorPago = JsonConvert.SerializeObject(Model.TipoProcesadorPago);
+    var procesadorPago = JsonConvert.SerializeObject(Model.TipoProcesadorPago);
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="text-prim">Ingresar Datos de Pago</h2>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="p-4 border rounded bg-light">
+        <form asp-action="MetodoPago" method="post" enctype="multipart/form-data">
+            <div class="row border-0">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            </div>
+
+            <input type="hidden" name="CarritoCompraJson" value="@carritoCompraJson" />
+            <input type="hidden" name="ClienteJson" value="@clienteJson" />
+            <input type="hidden" name="TiqueteDescuentoJson" value="@tiqueteDescuentoJson" />
+            <input type="hidden" name="hiddenTipoProcesadorPago" value="@tipoProcesadorPago" />
+            <input type="hidden" name="ProcesadorPagoJson" value="@procesadorPago" />
+
+            @if (Model.TipoProcesadorPago == EFood.Modelos.TipoProcesadorPago.ChequeElectronico)
+            {
+                <div class="row">
+                    <div class="form-group">
+                        <label for="ChequePago.NumeroCheque">Número Cheque:</label>
+                        <input type="text" id="ChequePago.NumeroCheque" name="ChequePago.NumeroCheque" class="form-control" value="@Model.ChequePago.NumeroCheque" />
+                        <span asp-validation-for="ChequePago.NumeroCheque" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="ChequePago.Cuenta">Cuenta:</label>
+                        <input type="text" id="ChequePago.Cuenta" name="ChequePago.Cuenta" class="form-control" value="@Model.ChequePago.Cuenta" />
+                        <span asp-validation-for="ChequePago.Cuenta" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            else if (Model.TipoProcesadorPago == EFood.Modelos.TipoProcesadorPago.TarjetaDebitoCredito)
+            {
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        @Html.Label("Seleccionar Tarjeta:")
+                        @Html.DropDownListFor(
+                                 m => m.TarjetaPago.TipoTarjeta, // Asegúrate de tener una propiedad en el modelo para esto
+                                 new SelectList(Model.ProcesadorPago.Tarjetas, "Nombre", "Nombre"), // Asumiendo que Tarjetas es una lista de objetos con propiedades Id y Nombre
+                                 new { @class = "custom-class" } // Añadir clases CSS aquí
+                                 )
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="TarjetaPago.NumeroTarjeta">Numero de Tarjeta:</label>
+                        <input type="text" id="TarjetaPago.NumeroTarjeta" name="TarjetaPago.NumeroTarjeta" class="form-control" value="@Model.TarjetaPago.NumeroTarjeta" />
+                        <span asp-validation-for="TarjetaPago.NumeroTarjeta" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="TarjetaPago.NombreTitular">Nombre del Titular:</label>
+                        <input type="text" id="TarjetaPago.NombreTitular" name="TarjetaPago.NombreTitular" class="form-control" value="@Model.TarjetaPago.NombreTitular" />
+                        <span asp-validation-for="TarjetaPago.NombreTitular" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        @Html.LabelFor(m => m.TarjetaPago.MesExpiracion)
+                        @Html.DropDownListFor(
+                                 m => m.TarjetaPago.MesExpiracion,
+                                 Enumerable.Range(1, 12).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }),
+                                 new { @class = "custom-class" } // Añadir clases CSS aquí
+                                 )
+                    </div>
+
+                    <div class="form-group col-lg-6 text-right">
+                        @Html.LabelFor(m => m.TarjetaPago.AñoExpiracion)
+                        @Html.DropDownListFor(
+                                 m => m.TarjetaPago.AñoExpiracion,
+                                 Enumerable.Range(DateTime.Now.Year, 20).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }),
+                                 new { @class = "custom-class" } // Añadir clases CSS aquí
+                                 )
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="TarjetaPago.CodigoSeguridad">CVC:</label>
+                        <input type="text" id="TarjetaPago.CodigoSeguridad" name="TarjetaPago.CodigoSeguridad" class="form-control" value="@Model.TarjetaPago.CodigoSeguridad" />
+                        <span asp-validation-for="TarjetaPago.CodigoSeguridad" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+
+            <br />
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <a href="/Commerce/CarritoCompra/Index/" class="btn btn-primary text-white" style="cursor:pointer">
+                        <i class="bi bi-arrow-left"></i> Regresar
+                    </a>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <button type="submit" class="btn btn-primary" onfocus="false">
+                        <i class="bi bi-plus-square-fill"></i> Siguiente
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
