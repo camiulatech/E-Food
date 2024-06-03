@@ -208,6 +208,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.ChequeElectronico)
             {
                 comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
+                comprasVM.ChequePago = compras.ChequePago;
             }
             else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.Efectivo)
             {
