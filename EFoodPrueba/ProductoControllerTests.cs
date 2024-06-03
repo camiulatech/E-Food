@@ -11,10 +11,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Claims;
-using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using EFood.Utilidades;
-
 
 namespace E_Food.Tests
 {
@@ -25,7 +23,6 @@ namespace E_Food.Tests
         private Mock<IUnidadTrabajo> _unidadTrabajoMock;
         private Mock<IWebHostEnvironment> _webHostEnvironmentMock;
         private Mock<ITempDataDictionary> _tempDataMock;
-
 
         [SetUp]
         public void SetUp()
@@ -44,11 +41,10 @@ namespace E_Food.Tests
                         User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                         {
                     new Claim(ClaimTypes.Name, "testuser") // Nombre del usuario autenticado
-                                                           // Puedes agregar más reclamaciones según sea necesario para simular roles, etc.
                         }, "mock"))
                     }
                 },
-            TempData = _tempDataMock.Object
+                TempData = _tempDataMock.Object
             };
         }
 
@@ -86,7 +82,54 @@ namespace E_Food.Tests
             Assert.IsInstanceOf<ProductoVM>(viewResult.Model);
         }
 
-        
+
+        [Test]
+        public async Task Eliminar_IdIsValid_ReturnsJsonResultWithSuccess()
+        {
+            // Arrange
+            var productoId = 1;
+            var producto = new Producto { Id = productoId, Nombre = "TestProducto", UbicacionImagen = "imagen.jpg" };
+            _unidadTrabajoMock.Setup(u => u.Producto.Obtener(productoId)).ReturnsAsync(producto);
+
+            // Act
+            var result = await _controller.Eliminar(productoId);
+
+            // Assert
+            Assert.IsInstanceOf<JsonResult>(result);
+            var jsonResult = result as JsonResult;
+            dynamic data = jsonResult.Value;
+            Assert.IsTrue(data.success);
+
+            // Verificar que se elimine el archivo de imagen
+            _unidadTrabajoMock.Verify(u => u.Producto.Remover(It.IsAny<Producto>()), Times.Once);
+            _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Once);
+
+            // Verificar que User.Identity no sea nulo
+            Assert.NotNull(_controller.User.Identity);
+        }
+
+
+        [Test]
+        public async Task Eliminar_IdIsNotValid_ReturnsJsonResultWithError()
+        {
+            // Arrange
+            var productoId = 1;
+            Producto producto = null;
+            _unidadTrabajoMock.Setup(u => u.Producto.Obtener(productoId)).ReturnsAsync(producto);
+
+            // Act
+            var result = await _controller.Eliminar(productoId);
+
+            // Assert
+            Assert.IsInstanceOf<JsonResult>(result);
+            var jsonResult = result as JsonResult;
+            dynamic data = jsonResult.Value;
+            Assert.IsFalse(data.success);
+        }
+
 
     }
+
+
 }
+
