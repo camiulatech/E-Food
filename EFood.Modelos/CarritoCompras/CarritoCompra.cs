@@ -10,6 +10,21 @@ namespace EFood.Modelos.CarritoCompras
     {
         public List<ItemCarritoCompra> itemCarritoCompras { get; set; }
 
+        public List<Producto> ObtenerProductos ()
+        {
+            // Obtener los productos en el carrito
+            List<Producto> productos = new List<Producto>();
+            if (itemCarritoCompras == null)
+            {
+                return productos;
+            }
+            foreach (var item in itemCarritoCompras)
+            {
+                productos.Add(item.Producto);
+            }
+            return productos;
+        }
+
         public void AgregarItem(Producto producto, int cantidad, TipoPrecio tipoPrecio)
         {
             // Verificar si el producto ya está en el carrito
