@@ -57,12 +57,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-var sharedFolderPath = Path.Combine(Directory.GetParent(app.Environment.ContentRootPath).FullName, "Imagenes");
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(sharedFolderPath),
-    RequestPath = "/Imagenes"
-});
+//var sharedFolderPath = Path.Combine(Directory.GetParent(app.Environment.ContentRootPath).FullName, "Imagenes");
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(sharedFolderPath),
+//    RequestPath = "/Imagenes"
+//});
 
 
 

@@ -1,10 +1,8 @@
 {
   "dependencies": {
     "mssql1": {
-      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/EFoodCommerce/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsDefaultConnection_126A0F3F86",
-      "secretStore": null,
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/efood/databases/EFoodBD",
-      "type": "mssql.azure",
+      "ignored": "true",
+      "type": "mssql",
       "connectionId": "ConnectionStrings:DefaultConnection"
     }
   }

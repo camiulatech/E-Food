@@ -60,12 +60,12 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// Add this section to serve static files from the shared "Imagenes" folder
+//Add this section to serve static files from the shared "Imagenes" folder
 var sharedFolderPath = Path.Combine(Directory.GetParent(app.Environment.ContentRootPath).FullName, "Imagenes");
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(sharedFolderPath),
-    RequestPath = "/Imagenes"
+	FileProvider = new PhysicalFileProvider(sharedFolderPath),
+	RequestPath = "/Imagenes"
 });
 
 
