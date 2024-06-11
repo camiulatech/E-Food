@@ -13,7 +13,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Tiempo de expiración de la sesión
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Tiempo de expiraciï¿½n de la sesiï¿½n
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
