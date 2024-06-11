@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <img src="@Model.UbicacionImagen" alt="Imagen del producto" class="img-fluid" /> 
+            <img src="@Model.UbicacionImagen" alt="Imagen del producto" class="img-fluid" />
         </div>
         <div class="col-md-6">
             <h2>Producto: @Model.Nombre</h2>
@@ -15,10 +15,6 @@
 
             <div>
                 <h4>Precios:</h4>
-                <div>
-                    <input type="radio" name="precio" value="normal" id="precio_normal" checked />
-                    <label for="precio_normal">Normal - @Model.Monto</label>
-                </div>
                 @if (Model.TipoPrecios != null && Model.TipoPrecios.Any())
                 {
                     @foreach (var precio in Model.TipoPrecios)
@@ -33,33 +29,48 @@
 
             <div class="form-group">
                 <label for="cantidad">Cantidad:</label>
-                <input type="number" id="cantidad" class="form-control" />
+                <input type="number" id="cantidad" class="form-control" min="1" value="1" />
             </div>
 
-            <button class="btn btn-primary mt-3" onclick="agregarAlCarrito()">Agregar</button>
+            <form id="carritoForm" method="get" asp-action="Agregar">
+                <input type="hidden" id="productoId" name="productoId" value="@Model.Id" />
+                <input type="hidden" id="cantidadInput" name="cantidad" value="1" />
+                <input type="hidden" id="precioSeleccionado" name="tipoPrecioId" value="0" />
+                <a href="javascript:void(0);" onclick="agregarCarrito()" class="btn btn-primary mt-3">Agregar</a>
+            </form>
         </div>
     </div>
 </div>
 
-@* @section Scripts {
+@section Scripts {
+
     <script>
-        function agregarAlCarrito() {
-            const precioSeleccionado = document.querySelector('input[name="precio"]:checked');
-            const cantidad = document.getElementById('cantidad').value;
+        function agregarCarrito() {
+            var cantidad = document.getElementById("cantidad").value;
+            var precioSeleccionado = document.querySelector('input[name="precio"]:checked').value;
+            document.getElementById("cantidadInput").value = cantidad;
+            document.getElementById("precioSeleccionado").value = precioSeleccionado;
 
-            if (!precioSeleccionado) {
-                alert("Por favor seleccione un tipo de precio.");
-                return;
-            }
-
-            if (!cantidad || cantidad <= 0) {
-                alert("Por favor ingrese una cantidad válida.");
-                return;
-            }
-
-            const precioId = precioSeleccionado.value;
-            alert(`Producto agregado al carrito con Precio ID: ${precioId} y Cantidad: ${cantidad}`);
-            // Aquí puedes hacer una llamada AJAX o redirigir a otra acción para agregar el producto al carrito
+            document.getElementById("carritoForm").submit();
         }
     </script>
-} *@
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var currentUrl = window.location.href;
+            var regex = /\/Commerce\/Producto\/Detalle\/\d+/;
+
+            if (regex.test(currentUrl)) {
+                if (currentUrl.includes("?")) {
+                    var url = window.location.href; // Obtiene la URL actual
+                    var id = url.substring(url.lastIndexOf('/') + 1); // Extrae el ID de la URL
+                    window.location.href = '@Url.Action("Agregar", "Producto", new { id = "__id__" })'.replace('__id__', id);
+                    // Puedes ejecutar alguna función o lógica aquí
+                } else {
+                    console.log("La URL no contiene ?datos");
+                    // Puedes ejecutar alguna función o lógica alternativa aquí
+                }
+            }
+        });
+    </script>
+}

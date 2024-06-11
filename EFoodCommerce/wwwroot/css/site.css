@@ -23,6 +23,14 @@ html {
     transition: all 0.2s ease; /* Transición suave de la transformación */
 }
 
+.custom-class {
+    /* Tus estilos personalizados aquí */
+    margin-top: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    /* Otros estilos según tus necesidades */
+}
+
     /* Estilo para cuando el cursor pasa sobre el botón */
     .btn-outline-primary:hover,
     .btn-outline-primary:focus {

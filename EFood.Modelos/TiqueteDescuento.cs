@@ -12,6 +12,10 @@ namespace EFood.Modelos
         [Key]
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Codigo es Requerido")]
+        [MaxLength(10, ErrorMessage = "Codigo debe ser Maximo 10 caracteres")] 
+        public string Codigo { get; set; }
+
         [Required(ErrorMessage = "Descripcion es Requerida")]
         [MaxLength(100, ErrorMessage = "Descripcion debe ser Maximo 100 caracteres")]
         public string Descripcion { get; set; }
