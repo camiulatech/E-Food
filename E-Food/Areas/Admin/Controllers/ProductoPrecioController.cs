@@ -62,10 +62,10 @@ namespace E_Food.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upsert(ProductoPrecioVM productoPrecioVM)
         {
-            productoPrecioVM.Producto = await _unidadTrabajo.Producto.ObtenerPrimero(x => x.Id == productoPrecioVM.Producto.Id, incluirPropiedades: "TipoPrecios");
-            productoPrecioVM.TipoPrecio = await _unidadTrabajo.TipoPrecio.Obtener(productoPrecioVM.TipoPrecio.Id);
             if (productoPrecioVM.Producto != null && productoPrecioVM.TipoPrecio != null)
             {
+                productoPrecioVM.Producto = await _unidadTrabajo.Producto.ObtenerPrimero(x => x.Id == productoPrecioVM.Producto.Id, incluirPropiedades: "TipoPrecios");
+                productoPrecioVM.TipoPrecio = await _unidadTrabajo.TipoPrecio.Obtener(productoPrecioVM.TipoPrecio.Id);
                 var usuarioNombre = User.Identity.Name;
 
                 if (productoPrecioVM.Producto.TipoPrecios == null)

@@ -1,16 +1,24 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFood", "E-Food\EFood.csproj", "{0A5C736C-1340-4B17-BFF5-52C0211ACFA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFood.AccesoDatos", "EFood.AccesoDatos\EFood.AccesoDatos.csproj", "{F4A5C299-864B-445B-BCB5-952857F18F00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFood.AccesoDatos", "EFood.AccesoDatos\EFood.AccesoDatos.csproj", "{F4A5C299-864B-445B-BCB5-952857F18F00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFood.Modelos", "EFood.Modelos\EFood.Modelos.csproj", "{DC145ADC-979F-40CE-A706-FD87AE47D71B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFood.Modelos", "EFood.Modelos\EFood.Modelos.csproj", "{DC145ADC-979F-40CE-A706-FD87AE47D71B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFood.Utilidades", "EFood.Utilidades\EFood.Utilidades.csproj", "{3DC06AA8-3905-4884-82CC-5909F9A07D62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFood.Utilidades", "EFood.Utilidades\EFood.Utilidades.csproj", "{3DC06AA8-3905-4884-82CC-5909F9A07D62}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFoodCommerce", "EFoodCommerce\EFoodCommerce.csproj", "{17DA1894-5180-4D2D-994B-106AC3172261}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Imagenes", "Imagenes", "{5777DA20-2794-4048-A6BF-B55DFDC2B47D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFoodPrueba", "EFoodPrueba\EFoodPrueba.csproj", "{4A19BEDC-2F1E-45F3-AD55-790C62EABAB1}"
+EndProject
+
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +41,14 @@ Global
 		{3DC06AA8-3905-4884-82CC-5909F9A07D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DC06AA8-3905-4884-82CC-5909F9A07D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DC06AA8-3905-4884-82CC-5909F9A07D62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17DA1894-5180-4D2D-994B-106AC3172261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17DA1894-5180-4D2D-994B-106AC3172261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17DA1894-5180-4D2D-994B-106AC3172261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17DA1894-5180-4D2D-994B-106AC3172261}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A19BEDC-2F1E-45F3-AD55-790C62EABAB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A19BEDC-2F1E-45F3-AD55-790C62EABAB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A19BEDC-2F1E-45F3-AD55-790C62EABAB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A19BEDC-2F1E-45F3-AD55-790C62EABAB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

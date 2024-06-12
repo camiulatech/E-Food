@@ -1,0 +1,112 @@
+﻿@using EFood.Utilidades
+@{
+    ViewData["Title"] = "Centro de Ayuda";
+}
+<div class="container">
+    <h1 class="text-prim">@ViewData["Title"]</h1>
+
+    <p style="font-size: 25px">Si tienes problemas con algunas de las funciones puedes observar las ayudas a continuación</p>
+    @if (User.IsInRole(DS.Rol_Admin))
+	{
+		<h3>Mantenimiento</h3>
+		<button type="button" class="collapsible">Problemas al Agregar Objeto</button>
+		<div class="content">
+			<p>Si tienes un error al agregar un objeto, revisa que los datos que ingresaste sean correctos y que la página no tire algun error de que sea requerido algun espacio o formato, si el error continua contacta con el administrador.</p>
+		</div>
+
+		<br />
+
+		<h3>Consultas</h3>
+		<button type="button" class="collapsible">Problemas al Cargar Consultas</button>
+		<div class="content">
+			<p>Si tienes problemas para acceder a las consultas o no te sale ningun valor, verifica que no hayan problemas de internet y que te encuentres logueado adecuadamente,
+				si realizas la verificacion e igualmente el problema persiste contacta con el administrador.
+			</p>
+		</div>
+
+		<br />
+
+		<h3>Seguridad</h3>
+		<button type="button" class="collapsible">Problemas al Crear Usuario</button>
+		<div class="content">
+			<p>Si tienes problemas al crear un usuario, verifica que los datos que estas ingresando esten en el espacio correspondiente y sean correctos,
+				si verificas lo anterior y el error continua contacta con el administrador.
+			</p>
+		</div>
+	}
+	else if (User.IsInRole(DS.Rol_Mantemiento))
+	{
+		<h3>Mantenimiento</h3>
+		<button type="button" class="collapsible">Problemas al Agregar Objeto</button>
+		<div class="content">
+			<p>Si tienes un error al agregar un objeto, revisa que los datos que ingresaste sean correctos y que la página no tire algun error de que sea requerido algun espacio o formato, si el error continua contacta con el administrador.</p>
+		</div>
+	}
+	else if (User.IsInRole(DS.Rol_Consulta))
+	{
+		<h3>Consultas</h3>
+		<button type="button" class="collapsible">Problemas al Cargar Consultas</button>
+		<div class="content">
+			<p>
+				Si tienes problemas para acceder a las consultas o no te sale ningun valor, verifica que no hayan problemas de internet y que te encuentres logueado adecuadamente,
+				si realizas la verificacion e igualmente el problema persiste contacta con el administrador.
+			</p>
+		</div>
+	}
+	else if (User.IsInRole(DS.Rol_Seguridad))
+	{
+		<h3>Seguridad</h3>
+		<button type="button" class="collapsible">Problemas al Crear Usuario</button>
+		<div class="content">
+			<p>Si tienes problemas al crear un usuario, verifica que los datos que estas ingresando esten en el espacio correspondiente y sean correctos,
+				si verificas lo anterior y el error continua contacta con el administrador.
+			</p>
+		</div>
+	}
+	else
+	{
+		<p>Logueate primero para continuar!</p>
+		<h3>Login</h3>
+		<button type="button" class="collapsible">Problemas al loguearse</button>
+		<div class="content">
+			<p>Si tienes problemas para loguearte, verifica que el error no se deba a que ingresas un valor incorrecto, si ese no es el problema 
+				trata de entrar a la cuenta usando la opción olvide mi contraseña e ingresando la respuesta a la pregunta de seguridad que se 
+				configuró al darsele el email y usuario para el trabajo, si aun así no logra ingresar contacte con el administrador.</p>
+		</div>
+	}
+
+	<br />
+
+</div>
+
+@* <div class="container justify-content-around" style="align-content: center; display:flex">
+	<div class="flip-card">
+		<div class="flip-card-inner">
+			<div class="flip-card-front">
+				<img src="~/imagenes/ayudaIcon/images.png" alt="Avatar" style="width:300px;height:300px;">
+			</div>
+			<div class="flip-card-back">
+				<h1>John Doe</h1>
+				<p>Architect & Engineer</p>
+				<p>We love that guy</p>
+			</div>
+		</div>
+	</div>
+</div> *@
+
+<script>
+	var coll = document.getElementsByClassName("collapsible");
+	var i;
+
+	for (i = 0; i < coll.length; i++) {
+		coll[i].addEventListener("click", function () {
+			this.classList.toggle("active1");
+			var content = this.nextElementSibling;
+			if (content.style.maxHeight) {
+				content.style.maxHeight = null;
+			} else {
+				content.style.maxHeight = content.scrollHeight + "px";
+			}
+		});
+	}
+</script>

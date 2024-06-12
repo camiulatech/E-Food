@@ -17,7 +17,7 @@ namespace EFood.Modelos
         public DateTime Fecha { get; set; }
 
         [Required]
-        public float Monto { get; set; }
+        public decimal Monto { get; set; }
 
         [Required]
         public EstadoPedido Estado { get; set; }

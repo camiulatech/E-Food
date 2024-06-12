@@ -22,8 +22,9 @@ namespace EFood.AccesoDatos.Repositorio
         public IErrorRepositorio Error {  get; private set; }
         public IBitacoraRepositorio Bitacora { get; private set; }
         public ITipoPrecioRepositorio TipoPrecio { get; private set; }
-        
-        
+        public IPedidoRepositorio Pedido { get; private set; }
+
+
         public UnidadTrabajo(ApplicationDbContext db) {
             _db = db;
             LineaComida = new LineaComidaRepositorio(_db);
@@ -43,6 +44,8 @@ namespace EFood.AccesoDatos.Repositorio
             Bitacora = new BitacoraRepositorio(_db);
 
             TipoPrecio = new TipoPrecioRepositorio(_db);
+
+            Pedido = new PedidoRepositorio(_db);
         }
 
         public void Dispose()

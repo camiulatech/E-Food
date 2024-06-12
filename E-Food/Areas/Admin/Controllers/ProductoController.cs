@@ -62,15 +62,17 @@ namespace E_Food.Areas.Admin.Controllers
                 var usuarioNombre = User.Identity.Name;
 
                 var archivos = HttpContext.Request.Form.Files;
-                string webRootPath = _webHostEnvironment.WebRootPath;
+                //string webRootPath = _webHostEnvironment.WebRootPath;
 
+                //Nuevo ruta a carpeta de imagenes compartidas
+                string rutaImagenes = Path.Combine(_webHostEnvironment.ContentRootPath, "..", "Imagenes");
                 if (productoVM.Producto.Id == 0)
                 {
-                    string upload = webRootPath + DS.ImagenRuta;
+                    //string upload = webRootPath + DS.ImagenRuta;
                     string fileName = Guid.NewGuid().ToString();
                     string extension = Path.GetExtension(archivos[0].FileName);
 
-                    using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    using (var fileStream = new FileStream(Path.Combine(rutaImagenes, fileName + extension), FileMode.Create))
                     {
                         archivos[0].CopyTo(fileStream);
                     }
@@ -88,17 +90,17 @@ namespace E_Food.Areas.Admin.Controllers
                     var objProducto = await _unidadTrabajo.Producto.ObtenerPrimero(p => p.Id == productoVM.Producto.Id, isTracking: false);
                     if (archivos.Count > 0) //Se carga una nueva imagen
                     {
-                        string upload = webRootPath + DS.ImagenRuta;
+                        //string upload = webRootPath + DS.ImagenRuta;
                         string fileName = Guid.NewGuid().ToString();
                         string extension = Path.GetExtension(archivos[0].FileName);
 
-                        //Borar la imagen anterior
-                        var anteriorFile = Path.Combine(upload, objProducto.UbicacionImagen);
+                        //Borrar la imagen anterior
+                        var anteriorFile = Path.Combine(rutaImagenes, objProducto.UbicacionImagen); 
                         if (System.IO.File.Exists(anteriorFile))
                         {
                             System.IO.File.Delete(anteriorFile);
                         }
-                        using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                        using (var fileStream = new FileStream(Path.Combine(rutaImagenes, fileName + extension), FileMode.Create))
                         {
                             archivos[0].CopyTo(fileStream);
                         }
@@ -176,9 +178,10 @@ namespace E_Food.Areas.Admin.Controllers
                 return Json(new { success = false, mensajeError });
             }
             // Remover imagen
-            string upload = _webHostEnvironment.WebRootPath + DS.ImagenRuta;
-            var anteriorFile = Path.Combine(upload, ProductoBD.UbicacionImagen);
+            string rutaImagenes = Path.Combine(_webHostEnvironment.ContentRootPath, "Imagenes");
+            var anteriorFile = Path.Combine(rutaImagenes, ProductoBD.UbicacionImagen);
             if (System.IO.File.Exists(anteriorFile))
+                if (System.IO.File.Exists(anteriorFile))
             {
                 System.IO.File.Delete(anteriorFile);
             }
