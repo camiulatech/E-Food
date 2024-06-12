@@ -33,8 +33,17 @@ namespace E_Food.Areas.Admin.Controllers
             var todos = await _unidadTrabajo.Pedido.ObtenerTodos(incluirPropiedades:"Productos");
             foreach (var pedido in todos)
             {
+                foreach (var producto in pedido.Productos)
+                {
+                    producto.Pedidos = null;
+                }
                 pedido.TiqueteDescuento = await _unidadTrabajo.TiqueteDescuento.ObtenerPrimero(t => t.Id == pedido.TiqueteDescuentoId.GetValueOrDefault());
                 pedido.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Id == pedido.ProcesadorPagoId);
+                if (pedido.TiqueteDescuento == null)
+                {
+                    pedido.TiqueteDescuento = new TiqueteDescuento();
+                    pedido.TiqueteDescuento.Codigo = "NA";
+                }
             }
             return Json(new { data = todos });
         }
@@ -43,7 +52,22 @@ namespace E_Food.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> ObtenerPorFecha(DateTime fecha)
         {
-            var registros = await _unidadTrabajo.Pedido.ObtenerPorFecha(fecha);
+            var todos = await _unidadTrabajo.Pedido.ObtenerTodos(incluirPropiedades: "Productos");
+            var registros = todos.Where(b => b.Fecha.Date == fecha.Date).ToList();
+            foreach (var pedido in registros)
+            {
+                foreach (var producto in pedido.Productos)
+                {
+                    producto.Pedidos = null;
+                }
+                pedido.TiqueteDescuento = await _unidadTrabajo.TiqueteDescuento.ObtenerPrimero(t => t.Id == pedido.TiqueteDescuentoId.GetValueOrDefault());
+                pedido.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Id == pedido.ProcesadorPagoId);
+                if (pedido.TiqueteDescuento == null)
+                {
+                    pedido.TiqueteDescuento = new TiqueteDescuento();
+                    pedido.TiqueteDescuento.Codigo = "NA";
+                }
+            }
             return Json(new { data = registros });
         }
         #endregion

@@ -32,10 +32,5 @@ namespace EFood.AccesoDatos.Repositorio
             }
             _db.SaveChanges();
         }
-
-        public async Task<IEnumerable<Bitacora>> ObtenerPorFecha(DateTime fecha)
-        {
-            return await _db.Bitacoras.Where(b => b.Fecha.Date == fecha.Date).ToListAsync();
-        }
     }
 }

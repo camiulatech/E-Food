@@ -38,6 +38,7 @@ function loadDataTable() {
             { "data": "monto", "width": "15%" },
             {
                 "data": "estado",
+                "width": "10%",
                 "render": function (data) {
                     switch (data) {
                         case 0:
@@ -51,10 +52,15 @@ function loadDataTable() {
                     }
                 }
             },
-            { "data": "tiquetedescuento.codigo", "width": "15%" },
-            { "data": "procesadorpago.procesador", "width": "10%" },
-            { "data": "productos", "width": "30%" },
-
+            { "data": "tiqueteDescuento.codigo", "width": "10%" },
+            { "data": "procesadorPago.procesador", "width": "15%" },
+            {
+                "data": "productos",
+                "width": "30%",
+                "render": function (data) {
+                    return data.map(p => p.nombre).join(', ');
+                }
+            }
         ]
     });
 }
@@ -97,4 +103,3 @@ function limpiarFiltro() {
         }
     });
 }
-
