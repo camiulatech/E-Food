@@ -33,7 +33,8 @@ namespace E_Food.Areas.Admin.Controllers
             var todos = await _unidadTrabajo.Pedido.ObtenerTodos(incluirPropiedades:"Productos");
             foreach (var pedido in todos)
             {
-                pedido.TiqueteDescuento = await _unidadTrabajo.TiqueteDescuento.ObtenerPrimero(pedido.TiqueteDescuentoId);
+                pedido.TiqueteDescuento = await _unidadTrabajo.TiqueteDescuento.ObtenerPrimero(t => t.Id == pedido.TiqueteDescuentoId.GetValueOrDefault());
+                pedido.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Id == pedido.ProcesadorPagoId);
             }
             return Json(new { data = todos });
         }
