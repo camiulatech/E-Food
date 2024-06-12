@@ -94,10 +94,6 @@ namespace E_Food.Tests
         }
 
 
-
-
-
-
         [Test]
         public async Task Upsert_Post_Crea_Nueva_LineaComida_Registra_Bitacora()
         {
@@ -116,9 +112,6 @@ namespace E_Food.Tests
         }
 
 
-
-
-
         [Test]
         public async Task Upsert_Post_Crea_Nueva_LineaComida_Establece_TempData_Exitosa()
         {
@@ -135,10 +128,6 @@ namespace E_Food.Tests
             // Assert
             _tempDataMock.VerifySet(t => t[DS.Exitosa] = "Linea de Comida creada exitosamente", Times.Once);
         }
-
-
-
-
 
 
         [Test]
@@ -160,8 +149,6 @@ namespace E_Food.Tests
             Assert.NotNull(redirectResult);
             Assert.AreEqual("Index", redirectResult.ActionName);
         }
-
-
 
 
         [Test]
@@ -201,7 +188,6 @@ namespace E_Food.Tests
         }
 
 
-
         [Test]
         public async Task Upsert_Post_Actualiza_LineaComida_Existente_Establece_TempData_Exitosa()
         {
@@ -220,7 +206,7 @@ namespace E_Food.Tests
         }
 
         [Test]
-        public async Task Eliminar_Post_With_Valid_Id_Returns_JsonResult()
+        public async Task Eliminar_Post_Con_Id_Valida_Retorna_JsonResult()
         {
             // Arrange
             int validId = 1;
@@ -255,7 +241,7 @@ namespace E_Food.Tests
 
 
         [Test]
-        public async Task Eliminar_Post_With_Valid_Id_Calls_Remover_And_Guardar()
+        public async Task Eliminar_Post_Con_Id_Valida_Llama_Remover_And_Guardar()
         {
             // Arrange
             int validId = 1;

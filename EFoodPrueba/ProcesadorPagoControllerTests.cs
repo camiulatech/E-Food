@@ -194,7 +194,7 @@ namespace E_Food.Tests
         }
 
         [Test]
-        public async Task Eliminar_Post_With_Valid_Id_Returns_JsonResult()
+        public async Task Eliminar_Post_Con_Id_Valida_Retorna_JsonResult()
         {
             // Arrange
             int validId = 1;
@@ -211,7 +211,7 @@ namespace E_Food.Tests
         }
 
         [Test]
-        public async Task Eliminar_Post_With_Valid_Id_Calls_Remover_And_Guardar()
+        public async Task Eliminar_Post_Con_Id_Valido_Llama_Remover_Y_Guardar()
         {
             // Arrange
             int validId = 1;
