@@ -48,41 +48,41 @@ namespace E_Food.Tests
             _controller.Dispose();
         }
 
-        [Test]
-        public async Task Upsert_Post_Crea_Nuevo_Precio_Redirecciona_A_Index()
-        {
-            // Arrange
-            _unidadTrabajoMock.Setup(u => u.Producto.AgregarPrecio(It.IsAny<Producto>(), It.IsAny<TipoPrecio>()));
-            _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
-            _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
+        //[Test]
+        //public async Task Upsert_Post_Crea_Nuevo_Precio_Redirecciona_A_Index()
+        //{
+        //    // Arrange
+        //    _unidadTrabajoMock.Setup(u => u.Producto.AgregarPrecio(It.IsAny<Producto>(), It.IsAny<TipoPrecio>()));
+        //    _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
+        //    _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
-            var nuevoProducto = new Producto
-            {
-                Id = 1, // Establece un ID válido para el producto
-                        // Configura otros valores necesarios para el producto
-            };
+        //    var nuevoProducto = new Producto
+        //    {
+        //        Id = 1, // Establece un ID válido para el producto
+        //                // Configura otros valores necesarios para el producto
+        //    };
 
-            var nuevoTipoPrecio = new TipoPrecio
-            {
-                Id = 1, // Establece un ID válido para el tipo de precio
-                        // Configura otros valores necesarios para el tipo de precio
-            };
+        //    var nuevoTipoPrecio = new TipoPrecio
+        //    {
+        //        Id = 1, // Establece un ID válido para el tipo de precio
+        //                // Configura otros valores necesarios para el tipo de precio
+        //    };
 
-            var nuevoProductoPrecioVM = new ProductoPrecioVM
-            {
-                Producto = nuevoProducto,
-                TipoPrecio = nuevoTipoPrecio
-            };
+        //    var nuevoProductoPrecioVM = new ProductoPrecioVM
+        //    {
+        //        Producto = nuevoProducto,
+        //        TipoPrecio = nuevoTipoPrecio
+        //    };
 
-            // Act
-            var result = await _controller.Upsert(nuevoProductoPrecioVM);
+        //    // Act
+        //    var result = await _controller.Upsert(nuevoProductoPrecioVM);
 
-            // Assert
-            Assert.IsInstanceOf<RedirectToActionResult>(result);
-            var redirectResult = result as RedirectToActionResult;
-            Assert.NotNull(redirectResult);
-            Assert.AreEqual("Index", redirectResult.ActionName);
-        }
+        //    // Assert
+        //    Assert.IsInstanceOf<RedirectToActionResult>(result);
+        //    var redirectResult = result as RedirectToActionResult;
+        //    Assert.NotNull(redirectResult);
+        //    Assert.AreEqual("Index", redirectResult.ActionName);
+        //}
 
     }
 

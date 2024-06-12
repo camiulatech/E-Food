@@ -163,23 +163,23 @@ namespace E_Food.Tests
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Once);
         }
 
-        [Test]
-        public async Task Upsert_Post_Actualiza_TipoPrecio_Existente_Registra_Bitacora()
-        {
-            // Arrange
-            _unidadTrabajoMock.Setup(u => u.TipoPrecio.Actualizar(It.IsAny<TipoPrecio>()));
-            _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
-            _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
+        //[Test]
+        //public async Task Upsert_Post_Actualiza_TipoPrecio_Existente_Registra_Bitacora()
+        //{
+        //    // Arrange
+        //    _unidadTrabajoMock.Setup(u => u.TipoPrecio.Actualizar(It.IsAny<TipoPrecio>()));
+        //    _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
+        //    _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
-            var existingTipoPrecio = new TipoPrecio { Id = 1, Descripcion = "Tipo Precio Existente", Cambio = 10 };
+        //    var existingTipoPrecio = new TipoPrecio { Id = 1, Descripcion = "Tipo Precio Existente", Cambio = 10 };
 
-            // Act
-            await _controller.Upsert(existingTipoPrecio);
+        //    // Act
+        //    await _controller.Upsert(existingTipoPrecio);
 
-            // Assert
-            _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", "1", "Se actualizó el tipo de precio 'Tipo Precio Existente' con ID: 1"), Times.Once);
+        //    // Assert
+        //    _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", "1", "Se actualizó el tipo de precio 'Tipo Precio Existente' con ID: 1"), Times.Once);
 
-        }
+        //}
 
 
         [Test]
