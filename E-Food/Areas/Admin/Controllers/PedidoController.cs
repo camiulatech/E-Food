@@ -31,6 +31,10 @@ namespace E_Food.Areas.Admin.Controllers
         public async Task<IActionResult> ObtenerTodos()
         {
             var todos = await _unidadTrabajo.Pedido.ObtenerTodos(incluirPropiedades:"Productos");
+            foreach (var pedido in todos)
+            {
+                pedido.TiqueteDescuento = await _unidadTrabajo.TiqueteDescuento.ObtenerPrimero(pedido.TiqueteDescuentoId);
+            }
             return Json(new { data = todos });
         }
 
