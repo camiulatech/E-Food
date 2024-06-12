@@ -61,13 +61,19 @@ namespace E_Food.Tests
             _controller.Dispose();
         }
 
+        private void SetupSessionGetString(string key, string value)
+        {
+            byte[] bytes = value == null ? null : System.Text.Encoding.UTF8.GetBytes(value);
+            _sessionMock.Setup(s => s.TryGetValue(key, out bytes)).Returns(value != null);
+        }
+
         [Test]
         public void Index_Retorna_ViewResult_Con_CarritoCompra()
         {
             // Preparar
             var carrito = new CarritoCompra();
             var carritoJson = JsonConvert.SerializeObject(carrito);
-            _sessionMock.Setup(s => s.GetString(It.IsAny<string>())).Returns(carritoJson);
+            SetupSessionGetString("CarritoCompra", carritoJson);
 
             // Actuar
             var resultado = _controller.Index();
@@ -78,59 +84,6 @@ namespace E_Food.Tests
             Assert.NotNull(viewResult);
             Assert.IsInstanceOf<CarritoCompra>(viewResult.Model);
         }
-
-        //[Test]
-        //public async Task ActualizarCantidad_Actualiza_Cantidad_Retorna_JsonResult()
-        //{
-        //    // Preparar
-        //    int productoId = 1;
-        //    int tipoPrecioId = 1;
-        //    int cantidad = 5;
-
-        //    var producto = new Producto { Id = productoId };
-        //    var tipoPrecio = new TipoPrecio { Id = tipoPrecioId };
-
-        //    _unidadTrabajoMock.Setup(u => u.Producto.ObtenerPrimero(It.IsAny<Expression<Func<Producto, bool>>>()))
-        //                      .ReturnsAsync(producto);
-        //    _unidadTrabajoMock.Setup(u => u.TipoPrecio.ObtenerPrimero(It.IsAny<Expression<Func<TipoPrecio, bool>>>()))
-        //                      .ReturnsAsync(tipoPrecio);
-
-        //    var carrito = new CarritoCompra();
-        //    var carritoJson = JsonConvert.SerializeObject(carrito);
-        //    _sessionMock.Setup(s => s.GetString(It.IsAny<string>())).Returns(carritoJson);
-
-        //    // Actuar
-        //    var resultado = await _controller.ActualizarCantidad(productoId, tipoPrecioId, cantidad);
-
-        //    // Afirmar
-        //    Assert.IsInstanceOf<JsonResult>(resultado);
-        //    var jsonResult = resultado as JsonResult;
-        //    Assert.NotNull(jsonResult);
-        //    dynamic jsonData = jsonResult.Value;
-        //    Assert.IsTrue(jsonData.success);
-        //}
-
-        //[Test]
-        //public async Task ActualizarCantidad_Producto_Invalido_Retorna_Error_JsonResult()
-        //{
-        //    // Preparar
-        //    int productoId = 1;
-        //    int tipoPrecioId = 1;
-        //    int cantidad = 5;
-
-        //    _unidadTrabajoMock.Setup(u => u.Producto.ObtenerPrimero(It.IsAny<Expression<Func<Producto, bool>>>()))
-        //                      .ReturnsAsync((Producto)null);
-
-        //    // Actuar
-        //    var resultado = await _controller.ActualizarCantidad(productoId, tipoPrecioId, cantidad);
-
-        //    // Afirmar
-        //    Assert.IsInstanceOf<JsonResult>(resultado);
-        //    var jsonResult = resultado as JsonResult;
-        //    Assert.NotNull(jsonResult);
-        //    dynamic jsonData = jsonResult.Value;
-        //    Assert.IsFalse(jsonData.success);
-        //}
 
         [Test]
         public void Datos_Retorna_View_Con_Modelo_Cliente()
@@ -143,25 +96,6 @@ namespace E_Food.Tests
             var viewResult = resultado as ViewResult;
             Assert.IsInstanceOf<Cliente>(viewResult.Model);
         }
-
-        //[Test]
-        //public async Task MetodoPago_Modelo_Valido_Redirecciona_A_MetodoPagoView()
-        //{
-        //    // Preparar
-        //    var cliente = new Cliente { Nombre = "Test", TiqueteDescuento = "CODIGOVALIDO" };
-        //    var tiqueteDescuento = new TiqueteDescuento { Codigo = "CODIGOVALIDO", Disponibles = 1 };
-
-        //    _unidadTrabajoMock.Setup(u => u.TiqueteDescuento.ObtenerPrimero(It.IsAny<Expression<Func<TiqueteDescuento, bool>>>()))
-        //                      .ReturnsAsync(tiqueteDescuento);
-
-        //    // Actuar
-        //    var resultado = await _controller.MetodoPago(cliente);
-
-        //    // Afirmar
-        //    Assert.IsInstanceOf<ViewResult>(resultado);
-        //    var viewResult = resultado as ViewResult;
-        //    Assert.IsInstanceOf<ComprasVM>(viewResult.Model);
-        //}
 
         [Test]
         public async Task MetodoPago_Modelo_Invalido_Retorna_Redireccion_A_Datos()
@@ -185,7 +119,7 @@ namespace E_Food.Tests
             // Preparar
             var comprasVM = new ComprasVM();
             var comprasVMJson = JsonConvert.SerializeObject(comprasVM);
-            _sessionMock.Setup(s => s.GetString("ComprasVM")).Returns(comprasVMJson);
+            SetupSessionGetString("ComprasVM", comprasVMJson);
 
             // Actuar
             var resultado = _controller.DatosPago();
@@ -200,7 +134,7 @@ namespace E_Food.Tests
         public void DatosPago_Sesion_Invalida_Redirecciona_A_Index()
         {
             // Preparar
-            _sessionMock.Setup(s => s.GetString("ComprasVM")).Returns((string)null);
+            SetupSessionGetString("ComprasVM", null);
 
             // Actuar
             var resultado = _controller.DatosPago();
@@ -217,7 +151,7 @@ namespace E_Food.Tests
             // Preparar
             var comprasVM = new ComprasVM();
             var comprasVMJson = JsonConvert.SerializeObject(comprasVM);
-            _sessionMock.Setup(s => s.GetString("ComprasVM")).Returns(comprasVMJson);
+            SetupSessionGetString("ComprasVM", comprasVMJson);
 
             // Actuar
             var resultado = _controller.ConfirmarPago();
@@ -232,7 +166,7 @@ namespace E_Food.Tests
         public void ConfirmarPago_Sesion_Invalida_Redirecciona_A_Index()
         {
             // Preparar
-            _sessionMock.Setup(s => s.GetString("ComprasVM")).Returns((string)null);
+            SetupSessionGetString("ComprasVM", null);
 
             // Actuar
             var resultado = _controller.ConfirmarPago();
