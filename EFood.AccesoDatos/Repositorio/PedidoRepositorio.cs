@@ -1,6 +1,7 @@
 ﻿using EFood.AccesoDatos.Data;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,11 @@ namespace EFood.AccesoDatos.Repositorio
                 pedidoBD.Productos.Add(producto);
             }
             _db.SaveChanges();
+        }
+
+        public async Task<IEnumerable<Bitacora>> ObtenerPorFecha(DateTime fecha)
+        {
+            return await _db.Bitacoras.Where(b => b.Fecha.Date == fecha.Date).ToListAsync();
         }
     }
 }

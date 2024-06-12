@@ -10,5 +10,7 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
     public interface IPedidoRepositorio : IRepositorio<Pedido>
     {
         public void AgregarProductos(Pedido pedido, List<Producto> productos);
+
+        public Task<IEnumerable<Bitacora>> ObtenerPorFecha(DateTime fecha);
     }
 }
