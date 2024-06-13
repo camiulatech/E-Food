@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,18 +21,18 @@ builder.Services.AddSession(options =>
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-	options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-	.AddDefaultTokenProviders()
-	.AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-	options.LoginPath = $"/Identity/Account/Login";
-	options.LogoutPath = $"/Identity/Account/Logout";
-	options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
 
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
@@ -43,24 +42,19 @@ builder.Services.AddScoped<IUnidadTrabajo, UnidadTrabajo>();
 builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
-builder.Services.AddAzureClients(clientBuilder =>
-{
-    clientBuilder.AddBlobServiceClient(builder.Configuration["ConnectionString:blob"]!, preferMsi: true);
-    clientBuilder.AddQueueServiceClient(builder.Configuration["ConnectionString:queue"]!, preferMsi: true);
-});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseMigrationsEndPoint();
+    app.UseMigrationsEndPoint();
 }
 else
 {
-	app.UseExceptionHandler("/Home/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	app.UseHsts();
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -70,8 +64,8 @@ app.UseStaticFiles();
 var sharedFolderPath = Path.Combine(Directory.GetParent(app.Environment.ContentRootPath).FullName, "Imagenes");
 app.UseStaticFiles(new StaticFileOptions
 {
-	FileProvider = new PhysicalFileProvider(sharedFolderPath),
-	RequestPath = "/Imagenes"
+    FileProvider = new PhysicalFileProvider(sharedFolderPath),
+    RequestPath = "/Imagenes"
 });
 
 
@@ -84,8 +78,8 @@ app.UseAuthorization();
 
 
 app.MapControllerRoute(
-	name: "default",
-	pattern: "{area=Inventario}/{controller=Home}/{action=Index}/{id?}");
+    name: "default",
+    pattern: "{area=Inventario}/{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();
