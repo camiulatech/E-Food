@@ -14,7 +14,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.5.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -24,6 +27,10 @@
 		<ProjectReference Include="..\EFood.AccesoDatos\EFood.AccesoDatos.csproj" />
 		<ProjectReference Include="..\EFood.Modelos\EFood.Modelos.csproj" />
 		<ProjectReference Include="..\EFood.Utilidades\EFood.Utilidades.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\imagenes\producto\" />
 	</ItemGroup>
 
 </Project>
