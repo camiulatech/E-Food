@@ -11,6 +11,18 @@
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/efood/databases/EFoodBD",
       "type": "mssql.azure",
       "connectionId": "ConnectionStrings:DefaultConnection"
+    },
+    "storage1": {
+      "ignored": "true",
+      "type": "storage",
+      "connectionId": "AzureBlobStorage:ConnectionString"
+    },
+    "storage2": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/EfoodApp/providers/Microsoft.ServiceLinker/linkers/ConnectionString_82286D3633, /subscriptions/36e36fe2-724c-47f4-9ac6-58ba6bfc4349/resourceGroups/EFood/providers/Microsoft.Web/sites/EfoodApp/providers/Microsoft.ServiceLinker/linkers/ConnectionString_0F9D02B0B0",
+      "secretStore": null,
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/efoodimagenes",
+      "type": "storage.azure",
+      "connectionId": "ConnectionString"
     }
   }
 }
