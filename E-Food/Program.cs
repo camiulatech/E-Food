@@ -1,15 +1,22 @@
+using E_Food.Configuraciones;
 using EFood.AccesoDatos.Data;
 using EFood.AccesoDatos.Repositorio;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
+using EFood.AccesoDatos.Servicio;
 using EFood.Utilidades;
+using Humanizer.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var configuration = builder.Configuration; // Obtiene la configuración
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -33,6 +40,16 @@ builder.Services.AddScoped<IUnidadTrabajo, UnidadTrabajo>();
 builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+// Bind Azure Blob Storage configuration from appsettings.json
+builder.Services.Configure<AzureBlobStorageConfiguration>(configuration.GetSection("AzureBlobStorage"));
+
+// Register the IStorageService with Azure Blob Storage configuration
+builder.Services.AddScoped<IServicioStorage, ServicioStorage>(provider =>
+{
+    var azureBlobStorageConfiguration = provider.GetRequiredService<IOptions<AzureBlobStorageConfiguration>>().Value;
+    return new ServicioStorage(azureBlobStorageConfiguration.ConnectionString);
+});
 
 var app = builder.Build();
 

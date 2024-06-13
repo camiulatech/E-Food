@@ -1,4 +1,5 @@
 ﻿@model EFood.Modelos.Producto
+@using EFood.Utilidades
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,7 +8,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <img src="@Model.UbicacionImagen" alt="Imagen del producto" class="img-fluid" />
+            <img src="@Url.Content(EFood.Utilidades.DS.ImagenRuta + Model.UbicacionImagen)" width="100%" style="border-radius: 5px; border: 1px solid #bbb" />
         </div>
         <div class="col-md-6">
             <h2>Producto: @Model.Nombre</h2>
