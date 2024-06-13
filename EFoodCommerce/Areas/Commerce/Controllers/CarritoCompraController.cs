@@ -102,7 +102,33 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult LimpiarCarrito()
+        {
+            var carrito = ObtenerCarritoDeSesion();
+            carrito.Limpiar();
+            GuardarCarritoEnSesion(carrito);
+            TempData[DS.Exitosa] = "Carrito limpiado exitosamente";
+            return RedirectToAction("Index");
+        }
+
         #region API
+
+        [HttpPost]
+        public async Task<IActionResult> Remover(int productoId, int tipoPrecioId)
+        {
+            var producto = await _unidadTrabajo.Producto.ObtenerPrimero(p => p.Id == productoId);
+            var tipoPrecio = await _unidadTrabajo.TipoPrecio.ObtenerPrimero(t => t.Id == tipoPrecioId);
+            if (producto == null || tipoPrecio == null)
+            {
+                TempData[DS.Error] = "El producto no se pudo remover";
+                return Json(new { success = false, message = "El producto no se pudo remover" });
+            }
+            var carrito = ObtenerCarritoDeSesion();
+            carrito.EliminarItem(producto, tipoPrecio);
+            GuardarCarritoEnSesion(carrito);
+            TempData[DS.Exitosa] = "El producto se removió exitosamente!";
+            return Json(new { success = true, message = "El producto se removió exitosamente!" });
+        }
 
         [HttpPost]
         public async Task<IActionResult> Datos(Cliente cliente)

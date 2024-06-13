@@ -52,11 +52,19 @@
         <h3>Total: @Model.ObtenerPrecio()</h3>
         @if (Model.ObtenerPrecio() > 0)
         {
-            <div class="text-center">
-                <a href="/Commerce/CarritoCompra/Datos/" class="btn btn-success text-white" style="cursor:pointer">
-                    Comprar
-                    <i class="bi bi-cart-check-fill"></i>
-                </a>
+            <div class="row">
+                <div class="col-lg-6 text-end">
+                    <a href="/Commerce/CarritoCompra/LimpiarCarrito/" class="btn btn-danger text-white" style="cursor:pointer">
+                        Limpiar Carrito
+                        <i class="bi bi-cart-x"></i>
+                    </a>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <a href="/Commerce/CarritoCompra/Datos/" class="btn btn-success text-white" style="cursor:pointer">
+                        Comprar
+                        <i class="bi bi-cart-check-fill"></i>
+                    </a>
+                </div>
             </div>
         }
     </div>

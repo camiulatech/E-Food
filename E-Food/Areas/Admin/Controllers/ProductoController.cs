@@ -193,13 +193,13 @@ namespace E_Food.Areas.Admin.Controllers
                 return Json(new { success = false, mensajeError });
             }
             // Remover imagen
-            string rutaImagenes = Path.Combine(_webHostEnvironment.ContentRootPath, "Imagenes");
-            var anteriorFile = Path.Combine(rutaImagenes, ProductoBD.UbicacionImagen);
-            if (System.IO.File.Exists(anteriorFile))
-                if (System.IO.File.Exists(anteriorFile))
-            {
-                System.IO.File.Delete(anteriorFile);
-            }
+            //string rutaImagenes = Path.Combine(_webHostEnvironment.ContentRootPath, "Imagenes");
+            //var anteriorFile = Path.Combine(rutaImagenes, ProductoBD.UbicacionImagen);
+            //if (System.IO.File.Exists(anteriorFile))
+            //    if (System.IO.File.Exists(anteriorFile))
+            //{
+            //    System.IO.File.Delete(anteriorFile);
+            //}
 
             _unidadTrabajo.Producto.Remover(ProductoBD);
             await _unidadTrabajo.Guardar();
