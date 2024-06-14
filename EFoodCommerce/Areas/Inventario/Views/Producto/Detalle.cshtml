@@ -24,26 +24,29 @@
             </div>
         </div>
         <div class="col-md-6">
-            <h2 style="color:#2A2C41">Producto: @Model.Nombre</h2>
-            <p>Contenido: @Model.Contenido</p>
+            <h2 style="color:coral">Producto: @Model.Nombre</h2>
 
             <div>
                 <h4 style="color:#2A2C41">Precios:</h4>
                 @if (Model.TipoPrecios != null && Model.TipoPrecios.Any())
                 {
-                    @foreach (var precio in Model.TipoPrecios)
-                    {
-                        <div>
-                            <input type="radio" name="precio" value="@precio.Id" id="precio_@precio.Id" />
-                            <label for="precio_@precio.Id">@precio.Descripcion - @precio.Monto</label>
-                        </div>
-                    }
+                    <div class="col-lg-6">
+                        @foreach (var precio in Model.TipoPrecios)
+                        {
+                            <div>
+                                <input type="radio" name="precio" value="@precio.Id" id="precio_@precio.Id" />
+                                <label for="precio_@precio.Id" style="font-size: 17px">@precio.Descripcion - @precio.Monto</label>
+                            </div>
+                        }
+                    </div>
                 }
             </div>
 
-            <div class="form-group">
-                <label for="cantidad">Cantidad:</label>
-                <input type="number" id="cantidad" class="form-control" min="1" value="1" />
+            <br />
+
+            <div class="form-group col-lg-6">
+                <h4 style="color:#2A2C41">Cantidad:</h4>
+                <input type="number" id="cantidad" class="form-control" min="1" value="1"/>
             </div>
 
             <form id="carritoForm" method="get" asp-action="Agregar">
