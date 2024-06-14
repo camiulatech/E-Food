@@ -95,5 +95,14 @@ namespace EFood.AccesoDatos.Repositorio
                 .ToListAsync();
         }
 
+        public async Task<List<string>> ObtenerSugerencias(string term)
+        {
+            return await _db.Productos
+                           .Where(p => p.Nombre.Contains(term))
+                           .Select(p => p.Nombre)
+                           .Distinct()
+                           .ToListAsync();
+        }
+
     }
 }

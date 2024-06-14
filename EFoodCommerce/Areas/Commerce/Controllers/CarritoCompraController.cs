@@ -213,6 +213,8 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                 else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.Efectivo)
                 {
                     comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
+                    HttpContext.Session.SetString("ComprasVM", JsonConvert.SerializeObject(comprasVM));
+                    return RedirectToAction("ConfirmarPago");
                 }
                 else
                 {

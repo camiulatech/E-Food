@@ -20,15 +20,15 @@
     <div class="container my-2 justify-content-between">
         <div class="col-lg-6 col-md-6 col-sm-6 d-flex">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Buscar ..." aria-label="Buscar" aria-describedby="button-addon2" />
-                <button class="btn btn-outline-primary">
+                <input type="text" id="buscarInput" class="form-control" placeholder="Buscar ..." aria-label="Buscar" aria-describedby="button-addon2" />
+                <button class="btn btn-outline-primary" id="button-addon2">
                     <i class="bi bi-search"></i>
                 </button>
             </div>
         </div>
 
         <div class="d-grid gap-2 d-md-block">
-            <div class="input-group mb-3">
+            <div class="input-group">
                 <form id="frmFiltrar" method="get">
                     <div class="form-group">
                         <select id="lineaComidaSelect" name="idLineaComida" class="form-select">
@@ -73,13 +73,50 @@
 <br />
 
 @section Scripts {
-    @* <script src="~/js/productoconsulta.js"></script> *@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#lineaComidaSelect').change(function() {
                 filtrarPorLineaComida();
             });
+
+            $('#button-addon2').click(function () {
+                buscarProductos();
+            });
+
+            $('#buscarInput').keypress(function (event) {
+                if (event.which == 13) { // Enter key pressed
+                    buscarProductos();
+                    event.preventDefault();
+                }
+            });
+
+            $('#buscarInput').keyup(function () {
+                buscarProductos();
+            });
+
+            $('#buscarInput').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '@Url.Action("ObtenerSugerencias", "Home")',
+                        data: { term: request.term },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2, // Mínimo número de caracteres antes de mostrar sugerencias
+                select: function (event, ui) {
+                    $('#buscarInput').val(ui.item.value);
+                    $('#buscarForm').submit();
+                    return false;
+                }
+            }).data("ui-autocomplete")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div class='autocomplete-suggestion'>" + item.value + "</div>")
+                    .appendTo(ul);
+            };
         });
 
         function filtrarPorLineaComida() {
@@ -93,6 +130,21 @@
                 },
                 error: function(xhr, status, error) {
                     console.error("Error al filtrar los productos: ", error);
+                }
+            });
+        }
+
+        function buscarProductos() {
+            var query = $('#buscarInput').val();
+            $.ajax({
+                url: '@Url.Action("BuscarProductos", "Home")',
+                type: 'GET',
+                data: { query: query },
+                success: function(result) {
+                    $('#productos-container').html(result);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al buscar los productos: ", error);
                 }
             });
         }

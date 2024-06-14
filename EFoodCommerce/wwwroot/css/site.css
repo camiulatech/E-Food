@@ -63,7 +63,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-secondary {
+    background-color: orange;
+    color: #402b27;
+    border-color: gold;
     transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: coral;
+    border-color: orange;
+    color: white;
 }
 
 /* Botón Crear */
@@ -237,6 +246,42 @@ body {
     background-image: url(../imagenes/background.png);
     background-size: cover;
 }
+
+/* Autocompletar */
+.ui-autocomplete {
+    position: absolute;
+    z-index: 1000;
+    cursor: default;
+    padding: 0;
+    margin-top: 2px;
+    list-style: none;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 2px;
+}
+
+.ui-autocomplete .ui-menu-item {
+    padding: 0px;
+    border-bottom: 1px solid #cccccc;
+    border-radius: 2px;
+    margin-top: -5px;
+}
+
+.ui-autocomplete .ui-menu-item:hover {
+    background-color: dodgerblue;
+    border-radius: 2px;
+}
+
+.autocomplete-suggestion {
+    font-family: 'Playfair Display';
+    font-size: 16px;
+    color: #333333;
+    border-radius: 2px;
+}
+
 
 /* Botón SideBar */
 .container1 {

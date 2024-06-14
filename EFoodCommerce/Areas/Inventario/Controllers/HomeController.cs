@@ -51,5 +51,25 @@ namespace EFood.Areas.Inventario.Controllers
             var productosFiltrados = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida);
             return PartialView("_ProductosParciales", productosFiltrados);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> BuscarProductos(string query)
+        {
+            if (string.IsNullOrEmpty(query))
+            {
+                var productos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
+                return PartialView("_ProductosParciales", productos);
+            }
+            var productosFiltrados = await _unidadTrabajo.Producto.ObtenerTodos(x => x.Nombre.Contains(query), incluirPropiedades: "LineaComida");
+
+            return PartialView("_ProductosParciales", productosFiltrados);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ObtenerSugerencias(string term)
+        {
+            var sugerencias = await _unidadTrabajo.Producto.ObtenerSugerencias(term);
+            return Json(sugerencias);
+        }
     }
 }

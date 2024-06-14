@@ -19,5 +19,7 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
         void AgregarPrecio(Producto producto, TipoPrecio tipoPrecio);
 
         void RemoverPrecio(Producto producto, TipoPrecio tipoPrecio);
+
+        Task<List<string>> ObtenerSugerencias(string term);
     }
 }

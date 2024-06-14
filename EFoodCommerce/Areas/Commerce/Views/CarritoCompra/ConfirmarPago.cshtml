@@ -31,7 +31,7 @@
             <input type="hidden" name="hiddenTipoProcesadorPago" value="@tipoProcesadorPago" />
             <input type="hidden" name="ProcesadorPagoJson" value="@procesadorPago" />
 
-            <div class="row" style="background-color: blue;">
+            <div class="row" style="background-color: #2A2C41;color:orange;">
                 <label>
                     Confirmación del Pedido
                 </label>
@@ -46,7 +46,7 @@
             </div>
             <br/>
 
-            <div class="row" style="background-color: blue;">
+            <div class="row" style="background-color: #2A2C41; color:orange;">
                 <label>
                     Información de Envío
                 </label>
@@ -66,29 +66,23 @@
 
             <br />
 
-            <div class="row" style="background-color: blue;">
+            <div class="row" style="background-color: #2A2C41;color:orange;">
                 <label>
                     Forma de Pago
                 </label>
             </div>
             @if (Model.TarjetaPago != null)
             {
-                <div class="col-lg-6">
-                    <p>
-                        Medio: @Model.TipoProcesadorPago
-                    </p>
-                </div>
-
                 <div class="row">
-                    <div class="col-lg-6 text-right">
-                        <p>
-                            Tipo: @Model.TarjetaPago.TipoTarjeta
-                        </p>
-                    </div>
-
                     <div class="col-lg-6">
                         <p>
                             Medio: @Model.TipoProcesadorPago
+                        </p>
+                    </div>
+
+                    <div class="col-lg-6 text-right">
+                        <p>
+                            Tipo: @Model.TarjetaPago.TipoTarjeta
                         </p>
                     </div>
                 </div>
@@ -117,6 +111,16 @@
                     </div>
                 </div>
             }
+            else if (Model.ChequePago == null && Model.TarjetaPago == null)
+			{
+				<div class="row">
+					<div class="col-lg-6 text-right">
+						<p>
+							Tipo de Pago: @Model.TipoProcesadorPago
+						</p>
+					</div>
+				</div>
+			}
             <br />
 
             <div class="row">
@@ -140,7 +144,7 @@
                 </div>
                 <div class="col-lg-6 text-end">
                     <button type="submit" class="btn btn-primary" onfocus="false">
-                        <i class="bi bi-plus-square-fill"></i> Guardar Pedido
+                        <i class="bi bi-plus-square-fill"></i> Realizar Pedido
                     </button>
                 </div>
             </div>
