@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EFood.Modelos
 {
@@ -22,19 +17,17 @@ namespace EFood.Modelos
         [Required]
         public EstadoPedido Estado { get; set; }
 
-        public int? TiqueteDescuentoId { get; set; } // Permite null si no se aplica un descuento
+        public int? TiqueteDescuentoId { get; set; }
 
         [ForeignKey("TiqueteDescuentoId")]
-        public virtual TiqueteDescuento TiqueteDescuento { get; set; } // Propiedad de navegación
+        public virtual TiqueteDescuento TiqueteDescuento { get; set; }
 
         [Required]
         public int ProcesadorPagoId { get; set; }
 
         [ForeignKey("ProcesadorPagoId")]
-        public virtual ProcesadorPago ProcesadorPago { get; set; } // Propiedad de navegación
+        public virtual ProcesadorPago ProcesadorPago { get; set; }
 
-        
-        //PARA CREAR TABLA INTERMEDIA PedidoProducto
         public List<Producto> Productos { get; set; }
     }
 

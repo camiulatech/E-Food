@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace EFood.Modelos
 {
@@ -20,13 +16,12 @@ namespace EFood.Modelos
         [Required(ErrorMessage = "Cambio es Requerido")]
         public decimal Cambio { get; set; }
 
-        [NotMapped] //No se agrega a la tabla
+        [NotMapped]
         public decimal? Monto { get; set; }
 
-        [NotMapped] //No se agrega a la tabla
+        [NotMapped]
         public int? ProductoId { get; set; }
 
-        // Relación con TipoPrecioProducto
         public List<Producto> Productos { get; set; }
     }
 }
