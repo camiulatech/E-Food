@@ -19,27 +19,14 @@ namespace EFood.Areas.Inventario.Controllers
             _unidadTrabajo = unidadTrabajo;
         }
 
-        public async Task<IActionResult> Index(int? idLineaComida)
+        public async Task<IActionResult> Index()
         {
             var productoVM = new ProductoVM();
 
             // Obtener la lista de líneas de comida
             productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
-
-            if (idLineaComida.HasValue)
-            {
-                // Si se proporciona un ID de línea de comida, filtrar los productos por esa línea
-                productoVM.Productos = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida.Value);
-            }
-            else
-            {
-                // Si no se proporciona un ID de línea de comida, cargar todos los productos
-                productoVM.Productos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
-            }
-            productoVM.LineaComidaSeleccionadaId = idLineaComida;
+            productoVM.Productos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
             return View(productoVM);
-            //IEnumerable<Producto> productoLista = await _unidadTrabajo.Producto.ObtenerTodos();
-            //return View(productoLista);
         }
 
         public IActionResult Ayuda()
