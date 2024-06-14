@@ -101,7 +101,10 @@
                 source: function (request, response) {
                     $.ajax({
                         url: '@Url.Action("ObtenerSugerencias", "Home")',
-                        data: { term: request.term },
+                        data: { 
+                            term: request.term,
+                            idLineaComida: $('#lineaComidaSelect').val()
+                        },
                         success: function (data) {
                             response(data);
                         }
@@ -137,14 +140,18 @@
 
         function buscarProductos() {
             var query = $('#buscarInput').val();
+            var lineaComidaId = $('#lineaComidaSelect').val(); // Añadir esta línea para obtener la línea de comida seleccionada
             $.ajax({
                 url: '@Url.Action("BuscarProductos", "Home")',
                 type: 'GET',
-                data: { query: query },
-                success: function(result) {
+                data: {
+                    query: query,
+                    idLineaComida: lineaComidaId // Añadir esta línea para enviar la línea de comida seleccionada
+                },
+                success: function (result) {
                     $('#productos-container').html(result);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error("Error al buscar los productos: ", error);
                 }
             });
