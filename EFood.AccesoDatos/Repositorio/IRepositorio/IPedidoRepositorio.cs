@@ -9,6 +9,8 @@ namespace EFood.AccesoDatos.Repositorio.IRepositorio
 {
     public interface IPedidoRepositorio : IRepositorio<Pedido>
     {
-        public void AgregarProductos(Pedido pedido, List<Producto> productos);
+        void AgregarProductos(Pedido pedido, List<Producto> productos);
+
+        void Actualizar(Pedido pedido);
     }
 }

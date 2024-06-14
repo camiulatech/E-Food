@@ -23,5 +23,7 @@ namespace EFood.Modelos.ViewModels
         public TarjetaPago? TarjetaPago { get; set; }
 
         public ProcesadorPago? ProcesadorPago { get; set; }
+
+        public Pedido? Pedido { get; set; }
     }
 }

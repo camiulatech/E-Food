@@ -32,5 +32,19 @@ namespace EFood.AccesoDatos.Repositorio
             }
             _db.SaveChanges();
         }
+
+        public void Actualizar(Pedido pedido)
+        {
+            var pedidoBD = _db.Pedidos.FirstOrDefault(c => c.Fecha == pedido.Fecha);
+            if (pedidoBD != null)
+            {
+                pedidoBD.Fecha = pedido.Fecha;
+                pedidoBD.Monto = pedido.Monto;
+                pedidoBD.Estado = pedido.Estado;
+                pedidoBD.TiqueteDescuentoId = pedido.TiqueteDescuentoId;
+                pedidoBD.ProcesadorPagoId = pedido.ProcesadorPagoId;
+                _db.SaveChanges();
+            }
+        }
     }
 }
