@@ -44,6 +44,8 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             GuardarCarritoEnSesion(carrito);
 
             TempData[DS.Exitosa] = "Transaccion exitosa!";
+            HttpContext.Session.SetString("ContadorCarrito", carrito.itemCarritoCompras.Count.ToString());
+            TempData[DS.Contador] = carrito.itemCarritoCompras.Count.ToString();
             return RedirectToAction("Consultar");
         }
 

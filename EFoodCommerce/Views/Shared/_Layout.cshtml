@@ -47,6 +47,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                     </ul>
+                    <a id="carrito" asp-area="Commerce" asp-controller="CarritoCompra" asp-action="Index"><span id="badge" class="badge">@TempData[DS.Contador]</span><img src="@Url.Content("~/imagenes/carrito.png")" style="width:65px;height:60px;"></a>
                 </div>
             </div>
         </nav>
@@ -60,17 +61,9 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        @if (!User.Identity.IsAuthenticated)
-        {
-            <div class="container">
-                &copy; 2024 - EFood - <a asp-area="" asp-controller="Home" asp-action="Ayuda">Centro de Ayuda</a>
-            </div>
-        } else
-        {
-            <div class="container">
-                &copy; 2024 - EFood - <a asp-area="Identity" asp-page="/Account/NewPassword">Cambiar contraseña</a>
-            </div>
-        }
+        <div class="container">
+            &copy; 2024 - EFood - <a asp-area="" asp-controller="Home" asp-action="Ayuda">Centro de Ayuda</a>
+        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -135,18 +128,27 @@
     <script>
         var myVar;
 
+        function contarItems() {
+            var contador = HttpContext.Session.GetString("ContadorCarrito");
+            return contador;
+        }
+
         function loading() {
             myVar = setTimeout(showPage, 500);
         }
 
         function showPage() {
             document.getElementById("loader").style.display = "none";
-            // document.getElementById("myDiv").style.visibility = "visible";
-            // document.getElementById("myDiv").style.opacity = "1";
             document.getElementById("myDiv").classList.remove('hidden');
             document.getElementById("myDiv").classList.add('visible');
-
         }
+    </script>
+
+    <script type="text/javascript">
+
+        document.addEventListener("DOMContentLoaded", function () {
+            return fetch('/api/carrito/contador')
+        });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

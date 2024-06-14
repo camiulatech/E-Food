@@ -83,6 +83,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
         public IActionResult DatosPago()
         {
             var comprasVMJson = HttpContext.Session.GetString("ComprasVM");
+            var contador = HttpContext.Session.GetString("ContadorCarrito");
             if (!string.IsNullOrEmpty(comprasVMJson))
             {
                 var comprasVM = JsonConvert.DeserializeObject<ComprasVM>(comprasVMJson);
@@ -107,11 +108,22 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             var carrito = ObtenerCarritoDeSesion();
             carrito.Limpiar();
             GuardarCarritoEnSesion(carrito);
+            TempData[DS.Contador] = "0";
+            HttpContext.Session.SetString("ContadorCarrito", "0");
             TempData[DS.Exitosa] = "Carrito limpiado exitosamente";
             return RedirectToAction("Index");
         }
 
         #region API
+
+        [HttpGet]
+        [Route("api/carrito/contador")]
+        public IActionResult GetContadorCarrito()
+        {
+            var contador = HttpContext.Session.GetString("ContadorCarrito") ?? "0";
+            TempData[DS.Contador] = contador;
+            return Content(contador);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Remover(int productoId, int tipoPrecioId)
@@ -126,6 +138,8 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             var carrito = ObtenerCarritoDeSesion();
             carrito.EliminarItem(producto, tipoPrecio);
             GuardarCarritoEnSesion(carrito);
+            HttpContext.Session.SetString("ContadorCarrito", carrito.itemCarritoCompras.Count.ToString());
+            TempData[DS.Contador] = carrito.itemCarritoCompras.Count.ToString();
             TempData[DS.Exitosa] = "El producto se removió exitosamente!";
             return Json(new { success = true, message = "El producto se removió exitosamente!" });
         }
@@ -329,6 +343,8 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
 
                 comprasVM.CarritoCompra.Limpiar();
                 GuardarCarritoEnSesion(comprasVM.CarritoCompra);
+                TempData[DS.Contador] = "0";
+                HttpContext.Session.SetString("ContadorCarrito", "0");
                 TempData[DS.Exitosa] = "Pedido realizado con éxito";
 
                 return RedirectToAction("Index", "Home", new { area = "Inventario" });
