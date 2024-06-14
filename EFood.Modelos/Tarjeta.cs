@@ -17,7 +17,6 @@ namespace EFood.Modelos
         [MaxLength(60, ErrorMessage = "Descripcion debe ser Maximo 60 caracteres")]
         public string Nombre { get; set; }
 
-        //PARA CREAR TABLA INTERMEDIA TarjetaProcesador
         public List<ProcesadorPago>? ProcesadorPagos { get; set; }
     }
 }
