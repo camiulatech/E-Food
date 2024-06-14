@@ -136,6 +136,7 @@
                     console.error("Error al filtrar los productos: ", error);
                 }
             });
+            buscarProductos();
         }
 
         function buscarProductos() {
@@ -159,6 +160,7 @@
 
         function limpiarFiltro() {
             $('#lineaComidaSelect').val('Seleccionar línea de comida');
+            $('#buscarInput').val('');
             filtrarPorLineaComida();
         }
     </script>
