@@ -79,7 +79,7 @@
     <script>
         $(document).ready(function() {
             $('#lineaComidaSelect').change(function() {
-                filtrarPorLineaComida();
+                buscarProductos();
             });
 
             $('#button-addon2').click(function () {
@@ -123,31 +123,15 @@
             };
         });
 
-        function filtrarPorLineaComida() {
-            var selectedValue = $('#lineaComidaSelect').val();
+        function buscarProductos() {
+            var query = $('#buscarInput').val();
+            var lineaComidaId = $('#lineaComidaSelect').val();
             $.ajax({
                 url: '@Url.Action("FiltrarProductos", "Home")',
                 type: 'GET',
-                data: { idLineaComida: selectedValue },
-                success: function(result) {
-                    $('#productos-container').html(result);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error al filtrar los productos: ", error);
-                }
-            });
-            buscarProductos();
-        }
-
-        function buscarProductos() {
-            var query = $('#buscarInput').val();
-            var lineaComidaId = $('#lineaComidaSelect').val(); // Añadir esta línea para obtener la línea de comida seleccionada
-            $.ajax({
-                url: '@Url.Action("BuscarProductos", "Home")',
-                type: 'GET',
                 data: {
                     query: query,
-                    idLineaComida: lineaComidaId // Añadir esta línea para enviar la línea de comida seleccionada
+                    idLineaComida: lineaComidaId
                 },
                 success: function (result) {
                     $('#productos-container').html(result);
@@ -161,7 +145,7 @@
         function limpiarFiltro() {
             $('#lineaComidaSelect').val('Seleccionar línea de comida');
             $('#buscarInput').val('');
-            filtrarPorLineaComida();
+            buscarProductos();
         }
     </script>
 }

@@ -41,19 +41,7 @@ namespace EFood.Areas.Inventario.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FiltrarProductos(int idLineaComida)
-        {
-            if (idLineaComida == 0)
-            {
-                var productos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
-                return PartialView("_ProductosParciales", productos);
-            }
-            var productosFiltrados = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida);
-            return PartialView("_ProductosParciales", productosFiltrados);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> BuscarProductos(string query, int idLineaComida)
+        public async Task<IActionResult> FiltrarProductos(string query, int idLineaComida)
         {
             if (idLineaComida == 0)
             {
