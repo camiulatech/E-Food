@@ -242,9 +242,9 @@ body {
     margin-bottom: 10px;
     font-family: "Playfair Display", sans-serif;
     font-style: normal;
-    background: no-repeat;
+    background: repeat;
     background-image: url(../imagenes/background.png);
-    background-size: cover;
+    background-size: contain;
 }
 
 /* Autocompletar */
