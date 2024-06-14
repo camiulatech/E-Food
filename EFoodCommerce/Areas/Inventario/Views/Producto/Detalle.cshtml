@@ -8,14 +8,27 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <img src="@Url.Content(EFood.Utilidades.DS.ImagenRuta + Model.UbicacionImagen)" width="100%" style="border-radius: 5px; border: 1px solid #bbb" />
+            <div class="coupon">
+                <div class="container2" style="background-color:#2A2C41; color:orange; border-radius:15px 15px 0 0;">
+                    <h3>@Model.Nombre</h3>
+                </div>
+                <img src="@Url.Content(EFood.Utilidades.DS.ImagenRuta + Model.UbicacionImagen)" alt="Avatar" style="width:100%;background-color:white;">
+                <div class="container2" style="background-color:aliceblue">
+                    <h2><b>Contenido</b></h2>
+                    <p>@Model.Contenido</p>
+                </div>
+                <div class="container2" style="background-color:aliceblue; border-radius:0 0 13px 13px;">
+                    <p>Precio Unitario Normal: <span class="promo">₡ @Model.Monto</span></p>
+                    <p class="expire">Disponible</p>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
-            <h2>Producto: @Model.Nombre</h2>
+            <h2 style="color:#2A2C41">Producto: @Model.Nombre</h2>
             <p>Contenido: @Model.Contenido</p>
 
             <div>
-                <h4>Precios:</h4>
+                <h4 style="color:#2A2C41">Precios:</h4>
                 @if (Model.TipoPrecios != null && Model.TipoPrecios.Any())
                 {
                     @foreach (var precio in Model.TipoPrecios)
