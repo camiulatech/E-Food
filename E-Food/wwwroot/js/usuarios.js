@@ -2,9 +2,6 @@
 
 $(document).ready(function () {
     loadDatatable();
-
-
-
 });
 
 
@@ -47,9 +44,6 @@ function loadDatatable() {
 
             }
         ]
-
-
-
     });
 }
 
