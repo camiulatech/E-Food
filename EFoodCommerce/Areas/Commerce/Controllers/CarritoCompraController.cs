@@ -224,6 +224,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                     };
                     comprasVM.Pedido = pedido;
                     await _unidadTrabajo.Pedido.Agregar(pedido);
+                    await _unidadTrabajo.Guardar();
                     HttpContext.Session.SetString("ComprasVM", JsonConvert.SerializeObject(comprasVM));
                     return RedirectToAction("ConfirmarPago");
                 }
@@ -263,10 +264,6 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.TarjetaDebitoCredito)
             {
                 comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true, incluirPropiedades: "Tarjetas");
-                foreach (var x in comprasVM.ProcesadorPago.Tarjetas)
-                {
-                    x.ProcesadorPagos = null;
-                }
             }
             else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.ChequeElectronico)
             {
@@ -291,6 +288,14 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                 };
                 comprasVM.Pedido = pedido;
                 await _unidadTrabajo.Pedido.Agregar(pedido);
+                await _unidadTrabajo.Guardar();
+                if (comprasVM.ProcesadorPago.Tipo == TipoProcesadorPago.TarjetaDebitoCredito)
+                {
+                    foreach (var x in comprasVM.ProcesadorPago.Tarjetas)
+                    {
+                        x.ProcesadorPagos = null;
+                    }
+                }
                 if (comprasVM.TarjetaPago != null && (comprasVM.TarjetaPago.AñoExpiracion < DateTime.Now.Year || (comprasVM.TarjetaPago.AñoExpiracion == DateTime.Now.Year && comprasVM.TarjetaPago.MesExpiracion < DateTime.Now.Month)))
                 {
                     TempData[DS.Error] = "La tarjeta de crédito ha expirado";
@@ -330,12 +335,6 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                 comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true, incluirPropiedades: "Tarjetas");
 
             }
-
-            if (!string.IsNullOrEmpty(PedidoJson))
-            {
-                comprasVM.Pedido = JsonConvert.DeserializeObject<Pedido>(PedidoJson);
-            }
-
             else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.ChequeElectronico)
             {
                 comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
@@ -346,7 +345,10 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                 comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
             }
 
-
+            if (!string.IsNullOrEmpty(PedidoJson))
+            {
+                comprasVM.Pedido = JsonConvert.DeserializeObject<Pedido>(PedidoJson);
+            }
 
             if (ModelState.IsValid)
             {
@@ -377,6 +379,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                 {
                     comprasVM.Pedido.Estado = EstadoPedidoHidden;
                     _unidadTrabajo.Pedido.Actualizar(comprasVM.Pedido);
+                    await _unidadTrabajo.Guardar();
 
                     var carrito = ObtenerCarritoDeSesion();
                     HttpContext.Session.SetString("ContadorCarrito", carrito.itemCarritoCompras.Count.ToString());
