@@ -29,11 +29,9 @@ namespace E_Food.Areas.Admin.Controllers
 
             if (id == null)
             {
-                //Crear nuevo Procesador
                 procesadorPago.Estado = true;
                 return View(procesadorPago);
             }
-            //Editar procesador
             procesadorPago = await _unidadTrabajo.ProcesadorPago.Obtener(id.GetValueOrDefault());
             if (procesadorPago == null)
             {

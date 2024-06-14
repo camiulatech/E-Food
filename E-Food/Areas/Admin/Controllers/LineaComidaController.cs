@@ -1,10 +1,8 @@
-﻿using EFood.AccesoDatos.Repositorio;
-using EFood.AccesoDatos.Repositorio.IRepositorio;
+﻿using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
 using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace E_Food.Areas.Admin.Controllers
 {
@@ -26,18 +24,14 @@ namespace E_Food.Areas.Admin.Controllers
             return View();
         }
 
-        //Es un get por defecto
         public async Task<IActionResult> Upsert(int? id)
         {
             LineaComida lineaComida = new LineaComida();
 
             if (id == null)
             {
-                //Crear nueva Linea de Comida
-
                 return View(lineaComida);
             }
-            //Actualizar Linea de Comida
             lineaComida = await _unidadTrabajo.LineaComida.Obtener(id.GetValueOrDefault());
             if (lineaComida == null)
             {
@@ -54,7 +48,6 @@ namespace E_Food.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                // Obtiene el nombre del usuario actualmente logueado
                 var usuarioNombre = User.Identity.Name;
 
                 if (lineaComida.Id == 0)
@@ -62,12 +55,10 @@ namespace E_Food.Areas.Admin.Controllers
                     await _unidadTrabajo.LineaComida.Agregar(lineaComida);
                     await _unidadTrabajo.Guardar();
 
-                    // Ahora que la línea de comida se ha agregado a la base de datos, obtenemos su ID real
                     var idRegistro = lineaComida.Id;
 
                     TempData[DS.Exitosa] = "Linea de Comida creada exitosamente";
 
-                    // Registra en la bitácora
                     await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se insertó la línea de comida '{lineaComida.Nombre}' con ID: {idRegistro}");
                 }
                 else
@@ -75,7 +66,6 @@ namespace E_Food.Areas.Admin.Controllers
                     _unidadTrabajo.LineaComida.Actualizar(lineaComida);
                     TempData[DS.Exitosa] = "Linea de Comida actualizada exitosamente";
 
-                    // Registra en la bitácora
                     await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, lineaComida.Id.ToString(), $"Se actualizó la línea de comida '{lineaComida.Nombre}' con ID: {lineaComida.Id}");
                 }
                 await _unidadTrabajo.Guardar();

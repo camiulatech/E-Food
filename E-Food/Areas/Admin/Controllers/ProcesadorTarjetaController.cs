@@ -1,13 +1,8 @@
-﻿using EFood.AccesoDatos.Data;
-using EFood.AccesoDatos.Repositorio;
-using EFood.AccesoDatos.Repositorio.IRepositorio;
+﻿using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
-using EFood.Modelos.ViewModels;
 using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Security.Claims;
 
 namespace E_Food.Areas.Admin.Controllers
 {
@@ -110,8 +105,8 @@ namespace E_Food.Areas.Admin.Controllers
 
                 var idRegistro = procesador.Id;
 
-                // Registra en la bitácora
                 await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se agregó la Tarjeta '{tarjeta.Nombre}' al Procesado de Pago con ID: {idRegistro}");
+                
                 await _unidadTrabajo.Guardar();
                 return Json(new { success = true, message = "Tarjeta agregada exitosamente" });
             }
