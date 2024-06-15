@@ -4,10 +4,7 @@ using EFood.Modelos;
 using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using EFood.Modelos.ViewModels;
-using Microsoft.AspNetCore.Hosting;
-using EFood.AccesoDatos.Repositorio;
 using EFood.AccesoDatos.Servicio;
-using NuGet.Packaging.Signing;
 
 namespace E_Food.Areas.Admin.Controllers
 {
@@ -67,21 +64,10 @@ namespace E_Food.Areas.Admin.Controllers
                 var usuarioNombre = User.Identity.Name;
 
                 var archivos = HttpContext.Request.Form.Files;
-                //string webRootPath = _webHostEnvironment.WebRootPath;
 
-                //Nuevo ruta a carpeta de imagenes compartidas
                 string rutaImagenes = Path.Combine(_webHostEnvironment.ContentRootPath, "..", "Imagenes");
                 if (productoVM.Producto.Id == 0)
                 {
-                    //string upload = webRootPath + DS.ImagenRuta;
-                    //string fileName = Guid.NewGuid().ToString();
-                    //string extension = Path.GetExtension(archivos[0].FileName);
-
-                    //using (var fileStream = new FileStream(Path.Combine(rutaImagenes, fileName + extension), FileMode.Create))
-                    //{
-                    //    archivos[0].CopyTo(fileStream);
-                    //}
-
                     var fileName = Guid.NewGuid().ToString();
                     string extension = Path.GetExtension(archivos[0].FileName);
                     var filePath = "";
@@ -103,11 +89,9 @@ namespace E_Food.Areas.Admin.Controllers
                 }
                 else
                 {
-                    // Actualizar
                     var objProducto = await _unidadTrabajo.Producto.ObtenerPrimero(p => p.Id == productoVM.Producto.Id, isTracking: false);
-                    if (archivos.Count > 0) //Se carga una nueva imagen
+                    if (archivos.Count > 0) 
                     {
-                        //string upload = webRootPath + DS.ImagenRuta;
                         string fileName = Guid.NewGuid().ToString();
                         string extension = Path.GetExtension(archivos[0].FileName);
                         var filePath = "";
@@ -121,7 +105,7 @@ namespace E_Food.Areas.Admin.Controllers
 
                         productoVM.Producto.UbicacionImagen = fileName + extension;
 
-                    } //Caso no se carga imagen
+                    } 
                     else
                     {
                         productoVM.Producto.UbicacionImagen = objProducto.UbicacionImagen;
@@ -133,7 +117,7 @@ namespace E_Food.Areas.Admin.Controllers
                 TempData[DS.Exitosa] = "Transaccion exitosa!";
                 await _unidadTrabajo.Guardar();
                 return View("Index");
-            } // If not Valid
+            } 
             if (productoVM.Producto.Monto <= 0)
             {
                 TempData[DS.Error] = "Verifica que el precio inicial sea un valor positivo";
@@ -163,17 +147,14 @@ namespace E_Food.Areas.Admin.Controllers
         {
             var productoVM = new ProductoVM();
 
-            // Obtener la lista de líneas de comida
             productoVM.LineaComidaLista = _unidadTrabajo.Producto.ObtenerLineasComidasListaDesplegable("LineaComida");
 
             if (idLineaComida.HasValue)
             {
-                // Si se proporciona un ID de línea de comida, filtrar los productos por esa línea
                 productoVM.Productos = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida.Value);
             }
             else
             {
-                // Si no se proporciona un ID de línea de comida, cargar todos los productos
                 productoVM.Productos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
             }
             productoVM.LineaComidaSeleccionadaId = idLineaComida;
@@ -192,14 +173,6 @@ namespace E_Food.Areas.Admin.Controllers
                 await _unidadTrabajo.Error.RegistrarError(mensajeError, 420);
                 return Json(new { success = false, mensajeError });
             }
-            // Remover imagen
-            //string rutaImagenes = Path.Combine(_webHostEnvironment.ContentRootPath, "Imagenes");
-            //var anteriorFile = Path.Combine(rutaImagenes, ProductoBD.UbicacionImagen);
-            //if (System.IO.File.Exists(anteriorFile))
-            //    if (System.IO.File.Exists(anteriorFile))
-            //{
-            //    System.IO.File.Delete(anteriorFile);
-            //}
 
             _unidadTrabajo.Producto.Remover(ProductoBD);
             await _unidadTrabajo.Guardar();

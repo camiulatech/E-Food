@@ -1,12 +1,8 @@
 ﻿using EFood.AccesoDatos.Data;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace EFood.AccesoDatos.Repositorio
 {
@@ -24,12 +20,12 @@ namespace EFood.AccesoDatos.Repositorio
 
         public async Task Agregar(T entidad)
         {
-            await dbSet.AddAsync(entidad); // insert into Table
+            await dbSet.AddAsync(entidad);
         }
 
         public async Task<T> Obtener(int id)
         {
-            return await dbSet.FindAsync(id);   // select * from (solo por id)
+            return await dbSet.FindAsync(id);
         }
 
         public async Task<T> ObtenerPrimero(Expression<Func<T, bool>> filtro = null, string incluirPropiedades = null, bool isTracking = true)
@@ -37,7 +33,7 @@ namespace EFood.AccesoDatos.Repositorio
             IQueryable<T> query = dbSet;
             if (filtro != null)
             {
-                query = query.Where(filtro);    // select * from where
+                query = query.Where(filtro);
             }
             if (incluirPropiedades != null)
             {
@@ -58,7 +54,7 @@ namespace EFood.AccesoDatos.Repositorio
             IQueryable<T> query = dbSet;
             if (filtro != null)
             {
-                query = query.Where(filtro);    // select * from where
+                query = query.Where(filtro);
             }
             if (incluirPropiedades != null)
             {

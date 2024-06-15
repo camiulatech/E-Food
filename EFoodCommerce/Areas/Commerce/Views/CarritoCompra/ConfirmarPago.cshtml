@@ -1,4 +1,5 @@
 ﻿@using Newtonsoft.Json
+@using EFood.Modelos
 @model EFood.Modelos.ViewModels.ComprasVM
 
 @{
@@ -8,6 +9,7 @@
     var tiqueteDescuentoJson = JsonConvert.SerializeObject(Model.TiqueteDescuento);
     var tipoProcesadorPago = JsonConvert.SerializeObject(Model.TipoProcesadorPago);
     var procesadorPago = JsonConvert.SerializeObject(Model.TipoProcesadorPago);
+    var pedidoJson = JsonConvert.SerializeObject(Model.Pedido);
 }
 
 <div class="container">
@@ -30,13 +32,15 @@
             <input type="hidden" name="TiqueteDescuentoJson" value="@tiqueteDescuentoJson" />
             <input type="hidden" name="hiddenTipoProcesadorPago" value="@tipoProcesadorPago" />
             <input type="hidden" name="ProcesadorPagoJson" value="@procesadorPago" />
+            <input type="hidden" name="PedidoJson" value="@pedidoJson" />
+            <input type="hidden" id="estadoPedido" name="EstadoPedidoHidden" value="@Model.Pedido.Estado" />
 
             <div class="row" style="background-color: #2A2C41;color:orange;">
                 <label>
                     Confirmación del Pedido
                 </label>
             </div>
-            <div class="row"">
+            <div class="row">
                 <h4>@Model.Cliente.Nombre @Model.Cliente.Apellidos</h4>
             </div>
             <div class="row">
@@ -44,7 +48,7 @@
                     A continuación el detalle de la información de envío y forma de pago
                 </p>
             </div>
-            <br/>
+            <br />
 
             <div class="row" style="background-color: #2A2C41; color:orange;">
                 <label>
@@ -112,15 +116,15 @@
                 </div>
             }
             else if (Model.ChequePago == null && Model.TarjetaPago == null)
-			{
-				<div class="row">
-					<div class="col-lg-6 text-right">
-						<p>
-							Tipo de Pago: @Model.TipoProcesadorPago
-						</p>
-					</div>
-				</div>
-			}
+            {
+                <div class="row">
+                    <div class="col-lg-6 text-right">
+                        <p>
+                            Tipo de Pago: @Model.TipoProcesadorPago
+                        </p>
+                    </div>
+                </div>
+            }
             <br />
 
             <div class="row">
@@ -138,9 +142,9 @@
 
             <div class="row">
                 <div class="col-lg-6">
-                    <a href="/Commerce/CarritoCompra/Index/" class="btn btn-primary text-white" style="cursor:pointer">
+                    <button type="button" id="cancelar" class="btn btn-primary text-white" style="cursor:pointer" onclick="cancelarPedido()">
                         <i class="bi bi-arrow-left-circle-fill"></i> Cancelar Pedido
-                    </a>
+                    </button>
                 </div>
                 <div class="col-lg-6 text-end">
                     <button type="submit" class="btn btn-primary" onfocus="false">
@@ -151,3 +155,16 @@
         </form>
     </div>
 </div>
+
+<br />
+<br />
+<br />
+
+<script>
+    function cancelarPedido() {
+        // Cambiar el valor del campo oculto a 2 (cancelado)
+        document.getElementById("estadoPedido").value = 1;
+        // Enviar el formulario
+        document.querySelector("form").submit();
+    }
+</script>

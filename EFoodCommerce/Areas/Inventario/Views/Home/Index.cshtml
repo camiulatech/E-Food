@@ -52,10 +52,10 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
                     <div class="card w-100 my-2"> 
                         <img src="@DS.ImagenRuta@producto.UbicacionImagen" class="card-img-top" style="aspect-ratio: 1 / 1" />
-                        <div class="card-body d-flex flex-column"> 
-                            <h5 class="card-title">@producto.Nombre</h5>
-                            <p class="card-text">@producto.LineaComida.Nombre</p>
-                            <p class="card-text">₡ @String.Format("{0:#,##0.00}", producto.Monto)</p>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title" style="margin-bottom:-1px;">@producto.Nombre</h5>
+                            <p class="card-text" style="font-size:14px;">@producto.LineaComida.Nombre</p>
+                            <p class="card-text" style="margin-bottom:4px">₡ @String.Format("{0:#,##0.00}", producto.Monto)</p>
                             <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto bg-white"> 
                                 <a href="@Url.Action("Detalle", "Producto", new { id = producto.Id })" class="btn btn-outline-primary">
                                     <i class="bi bi-tags-fill"></i> Detalle
@@ -79,7 +79,7 @@
     <script>
         $(document).ready(function() {
             $('#lineaComidaSelect').change(function() {
-                filtrarPorLineaComida();
+                buscarProductos();
             });
 
             $('#button-addon2').click(function () {
@@ -87,7 +87,7 @@
             });
 
             $('#buscarInput').keypress(function (event) {
-                if (event.which == 13) { // Enter key pressed
+                if (event.which == 13) {
                     buscarProductos();
                     event.preventDefault();
                 }
@@ -101,13 +101,16 @@
                 source: function (request, response) {
                     $.ajax({
                         url: '@Url.Action("ObtenerSugerencias", "Home")',
-                        data: { term: request.term },
+                        data: { 
+                            term: request.term,
+                            idLineaComida: $('#lineaComidaSelect').val()
+                        },
                         success: function (data) {
                             response(data);
                         }
                     });
                 },
-                minLength: 2, // Mínimo número de caracteres antes de mostrar sugerencias
+                minLength: 2,
                 select: function (event, ui) {
                     $('#buscarInput').val(ui.item.value);
                     $('#buscarForm').submit();
@@ -120,31 +123,20 @@
             };
         });
 
-        function filtrarPorLineaComida() {
-            var selectedValue = $('#lineaComidaSelect').val();
+        function buscarProductos() {
+            var query = $('#buscarInput').val();
+            var lineaComidaId = $('#lineaComidaSelect').val();
             $.ajax({
                 url: '@Url.Action("FiltrarProductos", "Home")',
                 type: 'GET',
-                data: { idLineaComida: selectedValue },
-                success: function(result) {
+                data: {
+                    query: query,
+                    idLineaComida: lineaComidaId
+                },
+                success: function (result) {
                     $('#productos-container').html(result);
                 },
-                error: function(xhr, status, error) {
-                    console.error("Error al filtrar los productos: ", error);
-                }
-            });
-        }
-
-        function buscarProductos() {
-            var query = $('#buscarInput').val();
-            $.ajax({
-                url: '@Url.Action("BuscarProductos", "Home")',
-                type: 'GET',
-                data: { query: query },
-                success: function(result) {
-                    $('#productos-container').html(result);
-                },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error("Error al buscar los productos: ", error);
                 }
             });
@@ -152,7 +144,8 @@
 
         function limpiarFiltro() {
             $('#lineaComidaSelect').val('Seleccionar línea de comida');
-            filtrarPorLineaComida();
+            $('#buscarInput').val('');
+            buscarProductos();
         }
     </script>
 }

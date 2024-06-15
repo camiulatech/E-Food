@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EFood.Modelos
 {
@@ -33,8 +27,6 @@ namespace EFood.Modelos
         [MaxLength(200, ErrorMessage = "El método debe ser máximo de 200 caracteres")]
         public string Metodo { get; set; }
 
-
-        //PARA CREAR TABLA INTERMEDIA TarjetaProcesador
         public List<Tarjeta>? Tarjetas { get; set; }
     }
 

@@ -41,34 +41,34 @@ namespace EFood.Areas.Inventario.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FiltrarProductos(int idLineaComida)
+        public async Task<IActionResult> FiltrarProductos(string query, int idLineaComida)
         {
             if (idLineaComida == 0)
             {
-                var productos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
-                return PartialView("_ProductosParciales", productos);
-            }
-            var productosFiltrados = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida);
-            return PartialView("_ProductosParciales", productosFiltrados);
-        }
+                if (string.IsNullOrEmpty(query))
+                {
+                    var productos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
+                    return PartialView("_ProductosParciales", productos);
+                }
+                var productosFiltrados = await _unidadTrabajo.Producto.ObtenerTodos(x => x.Nombre.Contains(query), incluirPropiedades: "LineaComida");
 
-        [HttpGet]
-        public async Task<IActionResult> BuscarProductos(string query)
-        {
+                return PartialView("_ProductosParciales", productosFiltrados);
+            }
             if (string.IsNullOrEmpty(query))
             {
-                var productos = await _unidadTrabajo.Producto.ObtenerTodos(incluirPropiedades: "LineaComida");
+                var productos = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida);
                 return PartialView("_ProductosParciales", productos);
             }
-            var productosFiltrados = await _unidadTrabajo.Producto.ObtenerTodos(x => x.Nombre.Contains(query), incluirPropiedades: "LineaComida");
+            var productosFiltradosConLineaComida = await _unidadTrabajo.Producto.FiltrarPorLineaComida(idLineaComida);
+            var productosBuscados = productosFiltradosConLineaComida.Where(p => p.Nombre.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            return PartialView("_ProductosParciales", productosFiltrados);
+            return PartialView("_ProductosParciales", productosBuscados);
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObtenerSugerencias(string term)
+        public async Task<IActionResult> ObtenerSugerencias(string term, int idLineaComida)
         {
-            var sugerencias = await _unidadTrabajo.Producto.ObtenerSugerencias(term);
+            var sugerencias = await _unidadTrabajo.Producto.ObtenerSugerencias(term, idLineaComida);
             return Json(sugerencias);
         }
     }

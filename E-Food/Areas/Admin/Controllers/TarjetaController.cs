@@ -3,7 +3,6 @@ using EFood.Modelos;
 using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing;
 
 namespace E_Food.Areas.Admin.Controllers
 {
@@ -31,11 +30,8 @@ namespace E_Food.Areas.Admin.Controllers
 
             if (id == null)
             {
-                //Crear nueva Tarjeta
-
                 return View(tarjeta);
             }
-            //Editar Tarjeta
             tarjeta = await _unidadTrabajo.Tarjeta.Obtener(id.GetValueOrDefault());
             if (tarjeta == null)
             {
@@ -132,10 +128,7 @@ namespace E_Food.Areas.Admin.Controllers
 
         }
 
-
-
         #endregion
-
 
     }
 }

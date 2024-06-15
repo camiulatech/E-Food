@@ -5,7 +5,6 @@ using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace E_Food.Areas.Admin.Controllers
 {

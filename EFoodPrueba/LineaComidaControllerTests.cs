@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using System.Threading.Tasks;
 using E_Food.Areas.Admin.Controllers;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
@@ -8,10 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Security.Principal;
-using System.Linq.Expressions;
 
 namespace E_Food.Tests
 {
@@ -57,17 +54,14 @@ namespace E_Food.Tests
         [Test]
         public async Task Upsert_Post_Crea_Nueva_LineaComida_Redirecciona_A_Index()
         {
-            // Arrange
             _unidadTrabajoMock.Setup(u => u.LineaComida.Agregar(It.IsAny<LineaComida>())).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
             var nuevaLineaComida = new LineaComida { Id = 0, Nombre = "Nueva Linea" };
 
-            // Act
             var result = await _controller.Upsert(nuevaLineaComida);
 
-            // Assert
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             var redirectResult = result as RedirectToActionResult;
             Assert.NotNull(redirectResult);
@@ -78,17 +72,14 @@ namespace E_Food.Tests
         [Test]
         public async Task Upsert_Post_Crea_Nueva_LineaComida_Llama_Agregar_Y_Guardar()
         {
-            // Arrange
             _unidadTrabajoMock.Setup(u => u.LineaComida.Agregar(It.IsAny<LineaComida>())).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
             var nuevaLineaComida = new LineaComida { Id = 0, Nombre = "Nueva Linea" };
 
-            // Act
             await _controller.Upsert(nuevaLineaComida);
 
-            // Assert
             _unidadTrabajoMock.Verify(u => u.LineaComida.Agregar(It.IsAny<LineaComida>()), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Exactly(2));
         }
@@ -96,22 +87,17 @@ namespace E_Food.Tests
 
 
 
-
-
         [Test]
         public async Task Upsert_Post_Crea_Nueva_LineaComida_Registra_Bitacora()
         {
-            // Arrange
             _unidadTrabajoMock.Setup(u => u.LineaComida.Agregar(It.IsAny<LineaComida>())).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
             var nuevaLineaComida = new LineaComida { Id = 0, Nombre = "Nueva Linea" };
 
-            // Act
             await _controller.Upsert(nuevaLineaComida);
 
-            // Assert
             _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", "0", "Se insertó la línea de comida 'Nueva Linea' con ID: 0"), Times.Once);
         }
 
@@ -122,17 +108,14 @@ namespace E_Food.Tests
         [Test]
         public async Task Upsert_Post_Crea_Nueva_LineaComida_Establece_TempData_Exitosa()
         {
-            // Arrange
             _unidadTrabajoMock.Setup(u => u.LineaComida.Agregar(It.IsAny<LineaComida>())).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
             var nuevaLineaComida = new LineaComida { Id = 0, Nombre = "Nueva Linea" };
 
-            // Act
             await _controller.Upsert(nuevaLineaComida);
 
-            // Assert
             _tempDataMock.VerifySet(t => t[DS.Exitosa] = "Linea de Comida creada exitosamente", Times.Once);
         }
 
@@ -144,17 +127,14 @@ namespace E_Food.Tests
         [Test]
         public async Task Upsert_Post_Actualiza_LineaComida_Existente_Redirecciona_A_Index()
         {
-            // Arrange
             _unidadTrabajoMock.Setup(u => u.LineaComida.Actualizar(It.IsAny<LineaComida>()));
             _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
             var existingLineaComida = new LineaComida { Id = 1, Nombre = "Linea Existente" };
 
-            // Act
             var result = await _controller.Upsert(existingLineaComida);
 
-            // Assert
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             var redirectResult = result as RedirectToActionResult;
             Assert.NotNull(redirectResult);
@@ -167,17 +147,14 @@ namespace E_Food.Tests
         [Test]
         public async Task Upsert_Post_Actualiza_LineaComida_Existente_Llama_Actualizar_Y_Guardar()
         {
-            // Arrange
             _unidadTrabajoMock.Setup(u => u.LineaComida.Actualizar(It.IsAny<LineaComida>()));
             _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
             var existingLineaComida = new LineaComida { Id = 1, Nombre = "Linea Existente" };
 
-            // Act
             await _controller.Upsert(existingLineaComida);
 
-            // Assert
             _unidadTrabajoMock.Verify(u => u.LineaComida.Actualizar(It.IsAny<LineaComida>()), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Once);
         }
@@ -186,17 +163,14 @@ namespace E_Food.Tests
         [Test]
         public async Task Upsert_Post_Actualiza_LineaComida_Existente_Registra_Bitacora()
         {
-            // Arrange
             _unidadTrabajoMock.Setup(u => u.LineaComida.Actualizar(It.IsAny<LineaComida>()));
             _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
             var existingLineaComida = new LineaComida { Id = 1, Nombre = "Linea Existente" };
 
-            // Act
             await _controller.Upsert(existingLineaComida);
 
-            // Assert
             _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora("testuser", "1", "Se actualizó la línea de comida 'Linea Existente' con ID: 1"), Times.Once);
         }
 
@@ -205,40 +179,36 @@ namespace E_Food.Tests
         [Test]
         public async Task Upsert_Post_Actualiza_LineaComida_Existente_Establece_TempData_Exitosa()
         {
-            // Arrange
             _unidadTrabajoMock.Setup(u => u.LineaComida.Actualizar(It.IsAny<LineaComida>()));
             _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
             var existingLineaComida = new LineaComida { Id = 1, Nombre = "Linea Existente" };
 
-            // Act
             await _controller.Upsert(existingLineaComida);
 
-            // Assert
             _tempDataMock.VerifySet(t => t[DS.Exitosa] = "Linea de Comida actualizada exitosamente", Times.Once);
         }
 
         [Test]
-        public async Task Eliminar_Post_With_Valid_Id_Returns_JsonResult()
+        public async Task Eliminar_Post_Con_Id_Valido_Retorna_ResultadoJson()
         {
-            // Arrange
+
             int validId = 1;
             var existingLineaComida = new LineaComida { Id = validId, Nombre = "Linea Existente" };
             _unidadTrabajoMock.Setup(u => u.LineaComida.Obtener(validId)).ReturnsAsync(existingLineaComida);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
-            // Simular la identidad del usuario
             var identity = new GenericIdentity("testuser");
             var principal = new ClaimsPrincipal(identity);
 
-            // Configurar HttpContext
+
             var httpContext = new DefaultHttpContext
             {
                 User = principal
             };
 
-            // Configurar ControllerContext
+
             var controllerContext = new ControllerContext
             {
                 HttpContext = httpContext
@@ -246,36 +216,33 @@ namespace E_Food.Tests
 
             _controller.ControllerContext = controllerContext;
 
-            // Act
+
             var result = await _controller.Eliminar(validId);
 
-            // Assert
             Assert.IsInstanceOf<JsonResult>(result);
         }
 
 
         [Test]
-        public async Task Eliminar_Post_With_Valid_Id_Calls_Remover_And_Guardar()
+        public async Task Eliminar_Post_Con_Id_Valido_Llama_Remover_Y_Guardar()
         {
-            // Arrange
             int validId = 1;
             var existingLineaComida = new LineaComida { Id = validId, Nombre = "Linea Existente" };
             _unidadTrabajoMock.Setup(u => u.LineaComida.Obtener(validId)).ReturnsAsync(existingLineaComida);
             _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
-            // Simular la identidad del usuario
+
             var identity = new GenericIdentity("testuser");
             var principal = new ClaimsPrincipal(identity);
 
-            // Configurar HttpContext
+
             var httpContext = new DefaultHttpContext
             {
                 User = principal
             };
 
 
-            // Configurar ControllerContext
             var controllerContext = new ControllerContext
             {
                 HttpContext = httpContext
@@ -283,10 +250,10 @@ namespace E_Food.Tests
 
             _controller.ControllerContext = controllerContext;
 
-            // Act
+
             await _controller.Eliminar(validId);
 
-            // Assert
+   
             _unidadTrabajoMock.Verify(u => u.LineaComida.Remover(existingLineaComida), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
