@@ -1,13 +1,9 @@
-﻿using EFood.AccesoDatos.Data;
-using EFood.AccesoDatos.Repositorio;
-using EFood.AccesoDatos.Repositorio.IRepositorio;
+﻿using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
 using EFood.Modelos.ViewModels;
 using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Security.Claims;
 
 namespace E_Food.Areas.Admin.Controllers
 {
@@ -33,7 +29,6 @@ namespace E_Food.Areas.Admin.Controllers
             return View();
         }
 
-        //Es un get por defecto
         public async Task<IActionResult> Upsert(int? id)
         {
             ProductoPrecioVM productoPrecioVM = new ProductoPrecioVM()
@@ -85,7 +80,6 @@ namespace E_Food.Areas.Admin.Controllers
                 var idRegistro = productoPrecioVM.Producto.Id;
                 TempData[DS.Exitosa] = "Tipo de Precio creado exitosamente";
 
-                // Registra en la bitácora
                 await _unidadTrabajo.Bitacora.RegistrarBitacora(usuarioNombre, idRegistro.ToString(), $"Se agregó el tipo de precio '{productoPrecioVM.TipoPrecio.Descripcion}' al producto con ID: {idRegistro}");
                 await _unidadTrabajo.Guardar();
                 return Redirect("/Admin/ProductoPrecio/Index/"+productoPrecioVM.Producto.Id);

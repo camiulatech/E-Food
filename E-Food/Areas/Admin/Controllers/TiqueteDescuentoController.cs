@@ -2,7 +2,6 @@
 using EFood.Modelos;
 using EFood.Utilidades;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Food.Areas.Admin.Controllers
@@ -32,11 +31,8 @@ namespace E_Food.Areas.Admin.Controllers
 
             if (id == null)
             {
-                //Crear nueva Linea de Comida
-
                 return View(tiqueteDescuento);
             }
-            //Actualizar Linea de Comida
             tiqueteDescuento = await _unidadTrabajo.TiqueteDescuento.Obtener(id.GetValueOrDefault());
             if (tiqueteDescuento == null)
             {
@@ -140,10 +136,7 @@ namespace E_Food.Areas.Admin.Controllers
 
         }
 
-
-
         #endregion
-
 
     }
 }

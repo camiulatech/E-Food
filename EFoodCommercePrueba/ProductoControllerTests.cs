@@ -5,7 +5,7 @@ using System.Security.Claims;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
 using EFood.Modelos.ViewModels;
-using EFoodCommerce.Areas.Commerce.Controllers;
+using EFoodCommerce.Areas.Inventario.Controllers;
 
 namespace E_Food.Tests
 {

@@ -2,12 +2,6 @@
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EFood.AccesoDatos.Repositorio
 {
@@ -39,7 +33,7 @@ namespace EFood.AccesoDatos.Repositorio
 
         public async Task<Usuario> ObtenerPorIdAsync(string id)
         {
-            return await _db.Usuarios.FindAsync(id);   // select * from (solo por id)
+            return await _db.Usuarios.FindAsync(id);
         }
     }
 }

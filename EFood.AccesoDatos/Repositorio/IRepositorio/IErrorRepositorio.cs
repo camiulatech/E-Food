@@ -1,7 +1,4 @@
 ﻿using EFood.Modelos;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace EFood.AccesoDatos.Repositorio.IRepositorio
 {

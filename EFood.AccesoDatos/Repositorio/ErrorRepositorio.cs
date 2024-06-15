@@ -2,10 +2,6 @@
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EFood.AccesoDatos.Repositorio
 {
@@ -20,7 +16,6 @@ namespace EFood.AccesoDatos.Repositorio
 
         public async Task RegistrarError(string mensaje, int NumeroError)
         {
-            // Crear una nueva instancia de Error con el mensaje y la fecha actual
             var error = new Error
             {
                 Fecha = DateTime.Now,
@@ -29,7 +24,6 @@ namespace EFood.AccesoDatos.Repositorio
                 NumeroError = NumeroError
             };
 
-            // Agregar el nuevo error al DbSet y guardar los cambios en la base de datos
             _db.Errors.Add(error);
             await _db.SaveChangesAsync();
         }

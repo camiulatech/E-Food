@@ -2,12 +2,6 @@
 using EFood.Modelos;
 using EFood.AccesoDatos.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace EFood.AccesoDatos.Repositorio
