@@ -20,7 +20,7 @@
                     <th>Producto</th>
                     <th style="width: 15%;">Cantidad</th>
                     <th>Tipo</th>
-                    <th>Precio</th>
+                    <th>Precio Unitario</th>
                     <th>Total</th>
                     <th></th>
                 </tr>
@@ -37,8 +37,8 @@
                                        onchange="ActualizarCantidad(@item.Producto.Id, @item.TipoPrecio.Id, this.value)" />
                             </td>
                             <td>@item.TipoPrecio.Descripcion</td>
-                            <td>@(Math.Round(item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100), 2))</td>
-                            <td>@(Math.Round(((item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100)) * item.Cantidad), 2))</td>
+                            <td>₡@(Math.Round(item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100), 2))</td>
+                            <td>₡@(Math.Round(((item.Producto.Monto + (item.Producto.Monto * item.TipoPrecio.Cambio / 100)) * item.Cantidad), 2))</td>
                             <td>
                                 <a onclick="Remover(@item.Producto.Id, @item.TipoPrecio.Id)" class="btn btn-danger text-white" style="cursor:pointer">
                                     <i class="bi bi-trash3-fill"></i>
@@ -49,21 +49,29 @@
                 }
             </tbody>
         </table>
-        <h3>Total: @Model.ObtenerPrecio()</h3>
+        <h3>Total: ₡@Model.ObtenerPrecio()</h3>
         @if (Model.ObtenerPrecio() > 0)
         {
-            <div class="text-center">
-                <a href="/Commerce/CarritoCompra/Datos/" class="btn btn-success text-white" style="cursor:pointer">
-                    Comprar
-                    <i class="bi bi-cart-check-fill"></i>
-                </a>
+            <div class="row">
+                <div class="col-lg-6 text-end">
+                    <a href="/Commerce/CarritoCompra/LimpiarCarrito/" class="btn btn-danger text-white" style="cursor:pointer">
+                        Limpiar Carrito
+                        <i class="bi bi-cart-x"></i>
+                    </a>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <a href="/Commerce/CarritoCompra/Datos/" class="btn btn-success text-white" style="cursor:pointer">
+                        Comprar
+                        <i class="bi bi-cart-check-fill"></i>
+                    </a>
+                </div>
             </div>
         }
     </div>
 </div>
 
 <br />
-
+<br />
 <br />
 
 @section Scripts {

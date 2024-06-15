@@ -1,10 +1,4 @@
 ﻿using EFood.Modelos.CarritoCompras;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EFood.Modelos.ViewModels
 {
@@ -23,5 +17,7 @@ namespace EFood.Modelos.ViewModels
         public TarjetaPago? TarjetaPago { get; set; }
 
         public ProcesadorPago? ProcesadorPago { get; set; }
+
+        public Pedido? Pedido { get; set; }
     }
 }

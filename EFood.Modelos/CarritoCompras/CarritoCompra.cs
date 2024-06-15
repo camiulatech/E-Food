@@ -12,7 +12,6 @@ namespace EFood.Modelos.CarritoCompras
 
         public List<Producto> ObtenerProductos ()
         {
-            // Obtener los productos en el carrito
             List<Producto> productos = new List<Producto>();
             if (itemCarritoCompras == null)
             {
@@ -27,7 +26,6 @@ namespace EFood.Modelos.CarritoCompras
 
         public void AgregarItem(Producto producto, int cantidad, TipoPrecio tipoPrecio)
         {
-            // Verificar si el producto ya está en el carrito
             if (itemCarritoCompras == null)
             {
                 itemCarritoCompras = new List<ItemCarritoCompra>();
@@ -36,12 +34,10 @@ namespace EFood.Modelos.CarritoCompras
 
             if (itemExistente != null)
             {
-                // Si el producto ya está en el carrito, actualizamos la cantidad
                 itemExistente.Cantidad += cantidad;
             }
             else
             {
-                // Si el producto no está en el carrito, lo añadimos como un nuevo elemento
                 itemCarritoCompras.Add(new ItemCarritoCompra
                 {
                     Producto = producto,
@@ -53,7 +49,6 @@ namespace EFood.Modelos.CarritoCompras
 
         public void EliminarItem(Producto producto, TipoPrecio tipoPrecio)
         {
-            // Eliminar el producto del carrito
             var item = itemCarritoCompras.FirstOrDefault(i => i.Producto.Id == producto.Id && i.TipoPrecio.Id == tipoPrecio.Id);
             if (item != null)
             {
@@ -63,13 +58,11 @@ namespace EFood.Modelos.CarritoCompras
 
         public void Limpiar()
         {
-            // Limpiar el carrito
             itemCarritoCompras.Clear();
         }
 
         public void ActualizarCantidad(Producto producto, TipoPrecio tipoPrecio, int cantidad)
         {
-            // Actualizar la cantidad de un producto en el carrito
             var item = itemCarritoCompras.FirstOrDefault(i => i.Producto.Id == producto.Id && i.TipoPrecio.Id == tipoPrecio.Id);
             if (item != null)
             {
@@ -79,7 +72,6 @@ namespace EFood.Modelos.CarritoCompras
 
         public decimal ObtenerPrecio()
         {
-            // Calcular el precio total sumando los precios de todos los productos en el carrito
             decimal precioTotal = 0;
             if (itemCarritoCompras == null)
             {

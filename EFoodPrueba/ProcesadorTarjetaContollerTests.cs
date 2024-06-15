@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using System.Threading.Tasks;
 using E_Food.Areas.Admin.Controllers;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos;
@@ -8,9 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.Security.Principal;
 using System.Linq.Expressions;
 
 namespace E_Food.Tests
@@ -55,30 +52,30 @@ namespace E_Food.Tests
         }
 
         [Test]
-        public async Task Index_IdIsNull_ReturnsViewResult()
+        public async Task Index_IdEsNulo_RetornaVista()
         {
-            // Arrange
+            
             _unidadTrabajoMock.Setup(repo => repo.ProcesadorPago.ObtenerPrimero(It.IsAny<Expression<Func<ProcesadorPago, bool>>>(), null, true))
                 .ReturnsAsync(new ProcesadorPago { Tipo = TipoProcesadorPago.TarjetaDebitoCredito });
 
-            // Act
+            
             var result = await _controller.Index(null);
 
-            // Assert
+            
             Assert.IsInstanceOf<ViewResult>(result);
         }
 
         [Test]
-        public async Task Index_ValidId_ProcesadorPagoIsNull_RedirectsToProcesadorPagoIndex()
+        public async Task Index_IdValido_ProcesadorPagoEsNulo_RedireccionaAIndexDeProcesadorPago()
         {
-            // Arrange
+            
             _unidadTrabajoMock.Setup(repo => repo.ProcesadorPago.ObtenerPrimero(It.IsAny<Expression<Func<ProcesadorPago, bool>>>(), null, true))
                 .ReturnsAsync((ProcesadorPago)null);
 
-            // Act
+            
             var result = await _controller.Index(1);
 
-            // Assert
+            
             var redirectToActionResult = result as RedirectResult;
             Assert.IsNotNull(redirectToActionResult);
             Assert.AreEqual("/Admin/ProcesadorPago/Index", redirectToActionResult.Url);
@@ -86,39 +83,39 @@ namespace E_Food.Tests
 
 
         [Test]
-        public async Task Index_ValidId_ProcesadorPagoIsNull_SetsTempDataError()
+        public async Task Index_IdValido_ProcesadorPagoEsNulo_EstableceErrorEnTempData()
         {
-            // Arrange
+            
             _unidadTrabajoMock.Setup(repo => repo.ProcesadorPago.ObtenerPrimero(It.IsAny<Expression<Func<ProcesadorPago, bool>>>(), null, true))
                 .ReturnsAsync((ProcesadorPago)null);
 
-            // Act
+            
             await _controller.Index(1);
 
-            // Assert
+            
             _tempDataMock.VerifySet(t => t[DS.Error] = "Para asignar tarjetas el procesador debe ser de tipo Tarjeta Crédito/Débito!", Times.Once);
         }
 
         [Test]
-        public async Task Index_ValidId_ProcesadorPagoIsNotNull_ReturnsViewResult()
+        public async Task Index_IdValido_ProcesadorPagoNoEsNulo_RetornaVista()
         {
-            // Arrange
+            
             var procesadorPago = new ProcesadorPago { Id = 1, Tipo = TipoProcesadorPago.TarjetaDebitoCredito };
             _unidadTrabajoMock.Setup(repo => repo.ProcesadorPago.ObtenerPrimero(It.IsAny<Expression<Func<ProcesadorPago, bool>>>(), null, true))
                 .ReturnsAsync(procesadorPago);
 
-            // Act
+            
             var result = await _controller.Index(1);
 
-            // Assert
+            
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
         }
 
         [Test]
-        public async Task ObtenerTodos_ValidId_ReturnsJsonResult()
+        public async Task ObtenerTodos_IdValido_RetornaJsonResult()
         {
-            // Arrange
+            
             var procesador = new ProcesadorPago
             {
                 Id = 1,
@@ -128,19 +125,19 @@ namespace E_Food.Tests
             _unidadTrabajoMock.Setup(repo => repo.ProcesadorPago.ObtenerPrimero(It.IsAny<Expression<Func<ProcesadorPago, bool>>>(), "Tarjetas", true))
                 .ReturnsAsync(procesador);
 
-            // Act
+            
             var result = await _controller.ObtenerTodos(1);
 
-            // Assert
+            
             var jsonResult = result as JsonResult;
             Assert.IsNotNull(jsonResult);
         }
 
 
         [Test]
-        public async Task ObtenerNoAsociados_ValidId_ReturnsJsonResult()
+        public async Task ObtenerNoAsociados_IdValido_RetornaJsonResult()
         {
-            // Arrange
+            
             var procesador = new ProcesadorPago
             {
                 Id = 1,
@@ -156,26 +153,23 @@ namespace E_Food.Tests
             _unidadTrabajoMock.Setup(repo => repo.Tarjeta.ObtenerTodos(It.IsAny<Expression<Func<Tarjeta, bool>>>(), It.IsAny<Func<IQueryable<Tarjeta>, IOrderedQueryable<Tarjeta>>>(), null, true))
                 .ReturnsAsync(tarjetasNoAsociadas);
 
-            // Act
+            
             var result = await _controller.ObtenerNoAsociados(1);
 
-            // Assert
+            
             var jsonResult = result as JsonResult;
             Assert.IsNotNull(jsonResult);
-            //var data = jsonResult.Value as List<Tarjeta>;
             var data = jsonResult.Value as dynamic;
             Assert.IsNotNull(data);
-            //    //Assert.AreEqual(1, data.Count);
-            //    //Assert.AreEqual(2, data[0].Id);
         }
 
 
         [Test]
-        public async Task Upsert_Post_Calls_AgregarTarjeta()
+        public async Task Upsert_Post_Llama_AgregarTarjeta()
         {
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
-            // Arrange
+            
             var procesador = new ProcesadorPago
             {
                 Id = 1,
@@ -188,17 +182,17 @@ namespace E_Food.Tests
             _unidadTrabajoMock.Setup(repo => repo.Tarjeta.Obtener(It.IsAny<int>())).ReturnsAsync(tarjeta);
             _unidadTrabajoMock.Setup(repo => repo.Guardar()).Returns(Task.CompletedTask);
 
-            // Act
+            
             await _controller.Upsert("1,2");
 
-            // Assert
+            
             _unidadTrabajoMock.Verify(repo => repo.ProcesadorPago.AgregarTarjeta(procesador, tarjeta), Times.Once);
         }
 
         [Test]
-        public async Task Eliminar_Post_With_Valid_Id_Returns_JsonResult()
+        public async Task Eliminar_Post_Con_IdValido_Retorna_JsonResult()
         {
-            // Arrange
+            
             int idProcesador = 1;
             int idTarjeta = 2;
             var procesadorPago = new ProcesadorPago { Id = idProcesador, Tarjetas = new List<Tarjeta> { new Tarjeta { Id = idTarjeta, Nombre = "Tarjeta1" } } };
@@ -209,18 +203,15 @@ namespace E_Food.Tests
             _unidadTrabajoMock.Setup(u => u.Guardar()).Returns(Task.CompletedTask);
             _unidadTrabajoMock.Setup(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
-            // Act
+            
             var result = await _controller.Eliminar($"{idProcesador},{idTarjeta}");
 
-            // Assert
+            
             var jsonResult = result as JsonResult;
             Assert.IsNotNull(jsonResult);
             _unidadTrabajoMock.Verify(u => u.ProcesadorPago.RemoverTarjeta(procesadorPago, tarjeta), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Once);
             _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
-
-
-
     }
 }

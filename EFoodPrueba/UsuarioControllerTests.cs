@@ -1,18 +1,14 @@
 ﻿using EFood.Modelos;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
-using EFood.Utilidades;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
-using NUnit.Framework;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using E_Food.Areas.Admin.Controllers;
 using EFood.AccesoDatos.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace E_Food.Tests
 {
@@ -65,77 +61,77 @@ namespace E_Food.Tests
         }
 
         [Test]
-        public void Index_ReturnsViewResult()
+        public void Index_RetornaVista()
         {
-            // Act
+            
             var result = _controller.Index();
 
-            // Assert
+            
             Assert.IsInstanceOf<ViewResult>(result);
         }
 
         [Test]
-        public async Task Edit_WithNullId_ReturnsNotFoundResult()
+        public async Task Editar_ConIdNulo_RetornaNoEncontrado()
         {
-            // Arrange
+            
             string userId = null;
 
-            // Act
+            
             var result = await _controller.Edit(userId);
 
-            // Assert
+            
             Assert.IsInstanceOf<NotFoundResult>(result);
         }
 
         [Test]
-        public async Task Edit_WithValidModel_ReturnsRedirectToActionResult()
+        public async Task Editar_ConModeloValido_RetornaRedireccionARuta()
         {
-            // Arrange
+            
             var usuarioMock = new Usuario { Id = "validUserId", PreguntaSolicitud = "Pregunta", RespuestaSeguridad = "Respuesta", Estado = true };
 
-            // Act
+            
             var result = await _controller.Edit(usuarioMock);
 
-            // Assert
+            
             Assert.IsInstanceOf<RedirectToActionResult>(result);
         }
 
         [Test]
-        public async Task Edit_WithValidModel_CallsActualizar()
+        public async Task Editar_ConModeloValido_LlamaActualizar()
         {
-            // Arrange
+            
             var usuarioMock = new Usuario { Id = "validUserId", PreguntaSolicitud = "Pregunta", RespuestaSeguridad = "Respuesta", Estado = true };
 
-            // Act
+            
             await _controller.Edit(usuarioMock);
 
-            // Assert
+            
             _unidadTrabajoMock.Verify(u => u.Usuario.Actualizar(It.Is<Usuario>(u => u.Id == usuarioMock.Id)), Times.Once);
         }
 
         [Test]
-        public async Task Edit_WithValidModel_CallsGuardar()
+        public async Task Editar_ConModeloValido_LlamaGuardar()
         {
-            // Arrange
+            
             var usuarioMock = new Usuario { Id = "validUserId", PreguntaSolicitud = "Pregunta", RespuestaSeguridad = "Respuesta", Estado = true };
 
-            // Act
+            
             await _controller.Edit(usuarioMock);
 
-            // Assert
+            
             _unidadTrabajoMock.Verify(u => u.Guardar(), Times.Once);
         }
 
         [Test]
-        public async Task Edit_WithValidModel_CallsRegistrarBitacora()
+        public async Task Editar_ConModeloValido_LlamaRegistrarBitacora()
         {
-            // Arrange
+            
             var usuarioMock = new Usuario { Id = "validUserId", PreguntaSolicitud = "Pregunta", RespuestaSeguridad = "Respuesta", Estado = true };
 
-            // Act
+            
             await _controller.Edit(usuarioMock);
 
-            // Assert
+            
             _unidadTrabajoMock.Verify(u => u.Bitacora.RegistrarBitacora(
                 It.Is<string>(un => un == "testuser"),
                 It.Is<string>(uid => uid == usuarioMock.Id),
@@ -144,20 +140,20 @@ namespace E_Food.Tests
         }
 
         [Test]
-        public void Edit_WithValidModel_HasUserIdentity()
+        public void Editar_ConModeloValido_TieneIdentidadDeUsuario()
         {
-            // Act
+            
             var userIdentity = _controller.User.Identity;
 
-            // Assert
+            
             Assert.IsNotNull(userIdentity);
             Assert.IsNotNull(userIdentity.Name);
         }
 
         [Test]
-        public async Task Edit_WithValidModel_UpdatesUsuarioCorrectly()
+        public async Task Editar_ConModeloValido_ActualizaUsuarioCorrectamente()
         {
-            // Arrange
+            
             var usuarioInicial = new Usuario
             {
                 Id = "validUserId",
@@ -177,10 +173,10 @@ namespace E_Food.Tests
             _unidadTrabajoMock.Setup(u => u.Usuario.ObtenerPorIdAsync(usuarioMock.Id))
                               .ReturnsAsync(usuarioInicial);
 
-            // Act
+            
             await _controller.Edit(usuarioMock);
 
-            // Assert
+            
             Assert.IsNotNull(_usuarioActualizado);
             Assert.AreEqual(usuarioMock.Id, _usuarioActualizado.Id);
             Assert.AreEqual(usuarioMock.PreguntaSolicitud, _usuarioActualizado.PreguntaSolicitud);

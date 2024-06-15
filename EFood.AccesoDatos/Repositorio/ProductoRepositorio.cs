@@ -2,12 +2,6 @@
 using EFood.Modelos;
 using EFood.AccesoDatos.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace EFood.AccesoDatos.Repositorio
@@ -93,6 +87,23 @@ namespace EFood.AccesoDatos.Repositorio
                 .Include(p => p.LineaComida)
                 .Where(p => p.IdLineaComida == idLineaComida)
                 .ToListAsync();
+        }
+
+        public async Task<List<string>> ObtenerSugerencias(string term, int idLineaComida)
+        {
+            if (idLineaComida != 0)
+            {
+                return await _db.Productos
+                           .Where(p => p.Nombre.Contains(term) && p.IdLineaComida == idLineaComida)
+                           .Select(p => p.Nombre)
+                           .Distinct()
+                           .ToListAsync();
+            }
+            return await _db.Productos
+                           .Where(p => p.Nombre.Contains(term))
+                           .Select(p => p.Nombre)
+                           .Distinct()
+                           .ToListAsync();
         }
 
     }

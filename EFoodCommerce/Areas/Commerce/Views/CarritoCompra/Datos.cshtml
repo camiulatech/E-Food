@@ -50,10 +50,24 @@
             </div>
 
             <br />
-            <button type="submit" class="btn btn-primary" onfocus="false"><i class="bi bi-plus-square-fill"></i> Siguiente </button>
+            <div class="row">
+                <div class="col-lg-6">
+                    <a href="/Commerce/CarritoCompra/Index/" class="btn btn-primary text-white" style="cursor:pointer">
+                        <i class="bi bi-arrow-left-circle-fill"></i> Cancelar
+                    </a>
+                </div>
+                <div class="col-lg-6 text-end">
+                    <button type="submit" class="btn btn-primary" onfocus="false">
+                        <i class="bi bi-arrow-right-circle-fill"></i> Siguiente 
+                    </button>
+                </div>
+            </div>
         </form>
     </div>
 </div>
+
+<br />
+<br />
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using EFood.AccesoDatos.Repositorio.IRepositorio;
 using EFood.Modelos.ViewModels;
 using EFood.Modelos;
@@ -83,6 +82,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
         public IActionResult DatosPago()
         {
             var comprasVMJson = HttpContext.Session.GetString("ComprasVM");
+            var contador = HttpContext.Session.GetString("ContadorCarrito");
             if (!string.IsNullOrEmpty(comprasVMJson))
             {
                 var comprasVM = JsonConvert.DeserializeObject<ComprasVM>(comprasVMJson);
@@ -102,7 +102,46 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult LimpiarCarrito()
+        {
+            var carrito = ObtenerCarritoDeSesion();
+            carrito.Limpiar();
+            GuardarCarritoEnSesion(carrito);
+            TempData[DS.Contador] = "0";
+            HttpContext.Session.SetString("ContadorCarrito", "0");
+            TempData[DS.Exitosa] = "Carrito limpiado exitosamente";
+            return RedirectToAction("Index");
+        }
+
         #region API
+
+        [HttpGet]
+        [Route("api/carrito/contador")]
+        public IActionResult GetContadorCarrito()
+        {
+            var contador = HttpContext.Session.GetString("ContadorCarrito") ?? "0";
+            TempData[DS.Contador] = contador;
+            return Content(contador);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Remover(int productoId, int tipoPrecioId)
+        {
+            var producto = await _unidadTrabajo.Producto.ObtenerPrimero(p => p.Id == productoId);
+            var tipoPrecio = await _unidadTrabajo.TipoPrecio.ObtenerPrimero(t => t.Id == tipoPrecioId);
+            if (producto == null || tipoPrecio == null)
+            {
+                TempData[DS.Error] = "El producto no se pudo remover";
+                return Json(new { success = false, message = "El producto no se pudo remover" });
+            }
+            var carrito = ObtenerCarritoDeSesion();
+            carrito.EliminarItem(producto, tipoPrecio);
+            GuardarCarritoEnSesion(carrito);
+            HttpContext.Session.SetString("ContadorCarrito", carrito.itemCarritoCompras.Count.ToString());
+            TempData[DS.Contador] = carrito.itemCarritoCompras.Count.ToString();
+            TempData[DS.Exitosa] = "El producto se removió exitosamente!";
+            return Json(new { success = true, message = "El producto se removió exitosamente!" });
+        }
 
         [HttpPost]
         public async Task<IActionResult> Datos(Cliente cliente)
@@ -173,6 +212,20 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                 else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.Efectivo)
                 {
                     comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
+                    DateTime fechaPedido = DateTime.Now;
+                    var pedido = new Pedido()
+                    {
+                        Fecha = fechaPedido,
+                        Monto = comprasVM.CarritoCompra.ObtenerPrecio(),
+                        Estado = EstadoPedido.EnCurso,
+                        TiqueteDescuentoId = comprasVM.TiqueteDescuento?.Id,
+                        ProcesadorPagoId = comprasVM.ProcesadorPago.Id,
+                    };
+                    comprasVM.Pedido = pedido;
+                    await _unidadTrabajo.Pedido.Agregar(pedido);
+                    await _unidadTrabajo.Guardar();
+                    HttpContext.Session.SetString("ComprasVM", JsonConvert.SerializeObject(comprasVM));
+                    return RedirectToAction("ConfirmarPago");
                 }
                 else
                 {
@@ -210,10 +263,6 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.TarjetaDebitoCredito)
             {
                 comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true, incluirPropiedades: "Tarjetas");
-                foreach (var x in comprasVM.ProcesadorPago.Tarjetas)
-                {
-                    x.ProcesadorPagos = null;
-                }
             }
             else if (comprasVM.TipoProcesadorPago == TipoProcesadorPago.ChequeElectronico)
             {
@@ -227,6 +276,25 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
 
             if (ModelState.IsValid)
             {
+                DateTime fechaPedido = DateTime.Now;
+                var pedido = new Pedido()
+                {
+                    Fecha = fechaPedido,
+                    Monto = comprasVM.CarritoCompra.ObtenerPrecio(),
+                    Estado = EstadoPedido.EnCurso,
+                    TiqueteDescuentoId = comprasVM.TiqueteDescuento?.Id,
+                    ProcesadorPagoId = comprasVM.ProcesadorPago.Id,
+                };
+                comprasVM.Pedido = pedido;
+                await _unidadTrabajo.Pedido.Agregar(pedido);
+                await _unidadTrabajo.Guardar();
+                if (comprasVM.ProcesadorPago.Tipo == TipoProcesadorPago.TarjetaDebitoCredito)
+                {
+                    foreach (var x in comprasVM.ProcesadorPago.Tarjetas)
+                    {
+                        x.ProcesadorPagos = null;
+                    }
+                }
                 if (comprasVM.TarjetaPago != null && (comprasVM.TarjetaPago.AñoExpiracion < DateTime.Now.Year || (comprasVM.TarjetaPago.AñoExpiracion == DateTime.Now.Year && comprasVM.TarjetaPago.MesExpiracion < DateTime.Now.Month)))
                 {
                     TempData[DS.Error] = "La tarjeta de crédito ha expirado";
@@ -239,7 +307,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConfirmarPago(ComprasVM compras, [Bind("TarjetaPago")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson, string TiqueteDescuentoJson, string hiddenTipoProcesadorPago)
+        public async Task<IActionResult> ConfirmarPago(ComprasVM compras, [Bind("TarjetaPago")] ComprasVM comprasVM, string CarritoCompraJson, string ClienteJson, string TiqueteDescuentoJson, string hiddenTipoProcesadorPago, string PedidoJson,EstadoPedido EstadoPedidoHidden)
         {
             if (!string.IsNullOrEmpty(hiddenTipoProcesadorPago))
             {
@@ -276,36 +344,49 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                 comprasVM.ProcesadorPago = await _unidadTrabajo.ProcesadorPago.ObtenerPrimero(p => p.Tipo == comprasVM.TipoProcesadorPago && p.Estado == true);
             }
 
+            if (!string.IsNullOrEmpty(PedidoJson))
+            {
+                comprasVM.Pedido = JsonConvert.DeserializeObject<Pedido>(PedidoJson);
+            }
+
             if (ModelState.IsValid)
             {
-                DateTime fechaPedido = DateTime.Now;
-                var pedido = new Pedido()
+                if (EstadoPedidoHidden == EstadoPedido.EnCurso || EstadoPedidoHidden == EstadoPedido.Procesado)
                 {
-                    Fecha = fechaPedido,
-                    Monto = comprasVM.CarritoCompra.ObtenerPrecio(),
-                    Estado = EstadoPedido.Procesado,
-                    TiqueteDescuentoId = comprasVM.TiqueteDescuento?.Id,
-                    ProcesadorPagoId = comprasVM.ProcesadorPago.Id,
-                };
-                await _unidadTrabajo.Pedido.Agregar(pedido);
-                await _unidadTrabajo.Guardar();
-
-                var pedidoCompletado = await _unidadTrabajo.Pedido.ObtenerPrimero(p => p.Fecha == fechaPedido && p.Monto == comprasVM.CarritoCompra.ObtenerPrecio());
-                _unidadTrabajo.Pedido.AgregarProductos(pedidoCompletado, comprasVM.CarritoCompra.ObtenerProductos());
-                await _unidadTrabajo.Guardar();
-
-                if (comprasVM.TiqueteDescuento != null)
-                {
-                    comprasVM.TiqueteDescuento.Disponibles--;
-                    _unidadTrabajo.TiqueteDescuento.Actualizar(comprasVM.TiqueteDescuento);
+                    comprasVM.Pedido.Estado = EstadoPedido.Procesado;
+                    _unidadTrabajo.Pedido.Actualizar(comprasVM.Pedido);
+                    var pedidoCompletado = await _unidadTrabajo.Pedido.ObtenerPrimero(p => p.Fecha == comprasVM.Pedido.Fecha && p.Monto == comprasVM.CarritoCompra.ObtenerPrecio());
+                    _unidadTrabajo.Pedido.AgregarProductos(pedidoCompletado, comprasVM.CarritoCompra.ObtenerProductos());
                     await _unidadTrabajo.Guardar();
+
+                    if (comprasVM.TiqueteDescuento != null)
+                    {
+                        comprasVM.TiqueteDescuento.Disponibles--;
+                        _unidadTrabajo.TiqueteDescuento.Actualizar(comprasVM.TiqueteDescuento);
+                        await _unidadTrabajo.Guardar();
+                    }
+
+                    comprasVM.CarritoCompra.Limpiar();
+                    GuardarCarritoEnSesion(comprasVM.CarritoCompra);
+                    TempData[DS.Contador] = "0";
+                    HttpContext.Session.SetString("ContadorCarrito", "0");
+                    TempData[DS.Exitosa] = "Pedido realizado con éxito";
+
+                    return RedirectToAction("Index", "Home", new { area = "Inventario" });
                 }
+                else if (EstadoPedidoHidden == EstadoPedido.Cancelado)
+                {
+                    comprasVM.Pedido.Estado = EstadoPedidoHidden;
+                    _unidadTrabajo.Pedido.Actualizar(comprasVM.Pedido);
+                    await _unidadTrabajo.Guardar();
 
-                comprasVM.CarritoCompra.Limpiar();
-                GuardarCarritoEnSesion(comprasVM.CarritoCompra);
-                TempData[DS.Exitosa] = "Pedido realizado con éxito";
+                    var carrito = ObtenerCarritoDeSesion();
+                    HttpContext.Session.SetString("ContadorCarrito", carrito.itemCarritoCompras.Count.ToString());
+                    TempData[DS.Contador] = carrito.itemCarritoCompras.Count.ToString();
+                    TempData[DS.Error] = "Pedido cancelado";
 
-                return RedirectToAction("Index", "Home", new { area = "Inventario" });
+                    return RedirectToAction("Index");
+                }
             }
             return View(comprasVM);
         }

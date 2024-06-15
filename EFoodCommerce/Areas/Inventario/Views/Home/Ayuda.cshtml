@@ -5,94 +5,104 @@
 <div class="container">
     <h1 class="text-prim">@ViewData["Title"]</h1>
 
-    <p style="font-size: 25px">Si tienes problemas con algunas de las funciones puedes observar las ayudas a continuación</p>
-    @if (User.IsInRole(DS.Rol_Admin))
-	{
-		<h3>Mantenimiento</h3>
-		<button type="button" class="collapsible">Problemas al Agregar Objeto</button>
-		<div class="content">
-			<p>Si tienes un error al agregar un objeto, revisa que los datos que ingresaste sean correctos y que la página no tire algun error de que sea requerido algun espacio o formato, si el error continua contacta con el administrador.</p>
-		</div>
+    <p style="font-size: 25px">Si tienes problemas con el funcionamiento de la página puedes observar las ayudas a continuación, o bien 
+		contactar con <a href="mailto:soporte@efood.com?subject=Solicitud de soporte" style="color: orange; text-decoration: underline;">soporte</a>.
+	</p>
+	<h3>Página Principal</h3>
+	<button type="button" class="collapsible">Problemas al ver productos</button>
+	<div class="content">
+		<p>
+			Si tienes problemas para ver los productos, verifica que el error no se deba a que estas ingresando valores en la barra de busqueda que esten modificando
+			el filtrado de los productos, si ese no es el problema trata de limpiar el filtro de busqueda y si aun así no logras ver los productos contacta con soporte.
+		</p>
+	</div>
+	<br />
 
-		<br />
-
-		<h3>Consultas</h3>
-		<button type="button" class="collapsible">Problemas al Cargar Consultas</button>
-		<div class="content">
-			<p>Si tienes problemas para acceder a las consultas o no te sale ningun valor, verifica que no hayan problemas de internet y que te encuentres logueado adecuadamente,
-				si realizas la verificacion e igualmente el problema persiste contacta con el administrador.
-			</p>
-		</div>
-
-		<br />
-
-		<h3>Seguridad</h3>
-		<button type="button" class="collapsible">Problemas al Crear Usuario</button>
-		<div class="content">
-			<p>Si tienes problemas al crear un usuario, verifica que los datos que estas ingresando esten en el espacio correspondiente y sean correctos,
-				si verificas lo anterior y el error continua contacta con el administrador.
-			</p>
-		</div>
-	}
-	else if (User.IsInRole(DS.Rol_Mantemiento))
-	{
-		<h3>Mantenimiento</h3>
-		<button type="button" class="collapsible">Problemas al Agregar Objeto</button>
-		<div class="content">
-			<p>Si tienes un error al agregar un objeto, revisa que los datos que ingresaste sean correctos y que la página no tire algun error de que sea requerido algun espacio o formato, si el error continua contacta con el administrador.</p>
-		</div>
-	}
-	else if (User.IsInRole(DS.Rol_Consulta))
-	{
-		<h3>Consultas</h3>
-		<button type="button" class="collapsible">Problemas al Cargar Consultas</button>
-		<div class="content">
-			<p>
-				Si tienes problemas para acceder a las consultas o no te sale ningun valor, verifica que no hayan problemas de internet y que te encuentres logueado adecuadamente,
-				si realizas la verificacion e igualmente el problema persiste contacta con el administrador.
-			</p>
-		</div>
-	}
-	else if (User.IsInRole(DS.Rol_Seguridad))
-	{
-		<h3>Seguridad</h3>
-		<button type="button" class="collapsible">Problemas al Crear Usuario</button>
-		<div class="content">
-			<p>Si tienes problemas al crear un usuario, verifica que los datos que estas ingresando esten en el espacio correspondiente y sean correctos,
-				si verificas lo anterior y el error continua contacta con el administrador.
-			</p>
-		</div>
-	}
-	else
-	{
-		<p>Logueate primero para continuar!</p>
-		<h3>Login</h3>
-		<button type="button" class="collapsible">Problemas al loguearse</button>
-		<div class="content">
-			<p>Si tienes problemas para loguearte, verifica que el error no se deba a que ingresas un valor incorrecto, si ese no es el problema 
-				trata de entrar a la cuenta usando la opción olvide mi contraseña e ingresando la respuesta a la pregunta de seguridad que se 
-				configuró al darsele el email y usuario para el trabajo, si aun así no logra ingresar contacte con el administrador.</p>
-		</div>
-	}
+	<button type="button" class="collapsible">Problemas al buscar y al filtrar</button>
+	<div class="content">
+		<p>
+			Si tienes problemas para filtrar los productos verifica que el error no se deba a que estas ingresando valores incorrectos en los filtros y que tengas una
+			buena conexión a internet, si el problema persiste contacta con soporte.
+		</p>
+	</div>
 
 	<br />
+	<br />
+
+	<h3>Carrito de Compras</h3>
+	<button type="button" class="collapsible">Problemas al comprar</button>
+	<div class="content">
+		<p>
+			Si tiene problemas al comprar, verifica que el error no se deba a que estas ingresando valores incorrectos en los campos de compra, además verifica que 
+			rellenaste todos los valores que se solicitaban, adicionalmente verifica tu conexión a internet, si el problema continua contacta con soporte.
+		</p>
+	</div>
+	<br />
+
+	<button type="button" class="collapsible">Problemas al pagar</button>
+	<div class="content">
+		<p>
+			Si tienes problemas al pagar verifica que ingresaste valores correctos en los espacios de métodos de pago, además revisa que cuentes con fondos suficientes y que 
+			en caso de ser pago con tarjeta o cheque electrónico, la tarjeta o cuenta que estas utilizando este habilitada para compras en línea,
+			si el problema persiste contacta con soporte.
+		</p>
+	</div>
+	<br />
+
+	<button type="button" class="collapsible">Problemas al ingresar datos</button>
+	<div class="content">
+		<p>
+			Si tienes problemas al ingresar valores en las casillas de las distintas vistas, verifica que el dato que estes ingresando este admitido en ese espacio,
+			 además verifica que no estes ingresando valores incorrectos, si el problema persiste contacta con soporte.
+		</p>
+	</div>
+	<br />
+
+	<button type="button" class="collapsible">Problemas al cambiar cantidad</button>
+	<div class="content">
+		<p>
+			Si tienes problemas al cambiar la cantidad de un producto en el carrito de compras, verifica que el error no se deba a que estas ingresando valores incorrectos,
+			 si el problema persiste contacta con soporte.
+		</p>
+	</div>
+
+	<br />
+	<br />
+
+	<h3>Detalle de Producto</h3>
+	<button type="button" class="collapsible">Problemas al agregar al carrito</button>
+	<div class="content">
+		<p>
+			Si tienes problemas al agregar un producto al carrito de compras, verifica que estas seleccionando un tipo de tamaño, además verifica que estas ingresando
+			 una cantidad válida, si el problema persiste contacta con soporte.
+		</p>
+	</div>
+	<br />
+
+	<button type="button" class="collapsible">Problemas al seleccionar precio</button>
+	<div class="content">
+		<p>
+			Si tienes problemas al seleccionar un precio o si no te aparece ningun precio para el producto, verifica que tengas conexión a internet y vuelve a intentar, 
+			si el problema persiste contacta con soporte.
+		</p>
+	</div>
+
+	<br />
+	<br />
+
+	<h3>Contactar a Soporte</h3>
+	<button type="button" class="collapsible">Correo de Soporte</button>
+	<div class="content">
+		<p>
+			<a href="mailto:soporte@efood.com?subject=Solicitud de soporte" style="color: orange; text-decoration: underline;">soporte@efood.com</a>
+		</p>
+	</div>
 
 </div>
 
-@* <div class="container justify-content-around" style="align-content: center; display:flex">
-	<div class="flip-card">
-		<div class="flip-card-inner">
-			<div class="flip-card-front">
-				<img src="~/imagenes/ayudaIcon/images.png" alt="Avatar" style="width:300px;height:300px;">
-			</div>
-			<div class="flip-card-back">
-				<h1>John Doe</h1>
-				<p>Architect & Engineer</p>
-				<p>We love that guy</p>
-			</div>
-		</div>
-	</div>
-</div> *@
+<br />
+<br />
+<br />
 
 <script>
 	var coll = document.getElementsByClassName("collapsible");

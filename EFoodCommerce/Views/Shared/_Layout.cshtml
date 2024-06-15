@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="~/imagenes//icono.ico" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/EFood.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EFoodCommerce.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
@@ -21,6 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body onload="loading()">
     <header class="main-header" id="main-header">
@@ -29,8 +30,6 @@
                 <div id="mySidebar" class="sidebar">
                     <a asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                     <a asp-area="" asp-controller="Home" asp-action="Ayuda">Centro de Ayuda</a>
-                    <a asp-area="Commerce" asp-controller="CarritoCompra" asp-action="Index">Carrito de Compra</a>
-                    <a asp-area="Commerce" asp-controller="Producto" asp-action="Consultar">Productos</a>
                 </div>
 
                 <div id="main1" class="container1" onclick="sidebar(this)">
@@ -38,7 +37,7 @@
                     <div class="bar2"></div>
                     <div class="bar3"></div>
                 </div>
-                <img src="@Url.Content("/Imagenes/20dd87a9-70ad-4ecb-9dec-2ab28af905b7.png")" style="width:85px;height:70px;">
+                <img src="@Url.Content("~/imagenes/logo2.png")" style="width:85px;height:70px;">
                 <a class="navbar-brand justify-content-lg-start" asp-area="" asp-controller="Home" asp-action="Index">EFood-Commerce</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +46,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                     </ul>
+                    <a id="carrito" asp-area="Commerce" asp-controller="CarritoCompra" asp-action="Index"><span id="badge" class="badge">@TempData[DS.Contador]</span><img src="@Url.Content("~/imagenes/carrito.png")" style="width:65px;height:60px;"></a>
                 </div>
             </div>
         </nav>
@@ -60,23 +60,17 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        @if (!User.Identity.IsAuthenticated)
-        {
-            <div class="container">
-                &copy; 2024 - EFood - <a asp-area="" asp-controller="Home" asp-action="Ayuda">Centro de Ayuda</a>
-            </div>
-        } else
-        {
-            <div class="container">
-                &copy; 2024 - EFood - <a asp-area="Identity" asp-page="/Account/NewPassword">Cambiar contraseña</a>
-            </div>
-        }
+        <div class="container">
+            &copy; 2024 - EFood - <a asp-area="" asp-controller="Home" asp-action="Ayuda">Centro de Ayuda</a> - soporte@efood.com
+        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/lib/select2/js/select2.min.js"></script>
     <script>
@@ -135,18 +129,27 @@
     <script>
         var myVar;
 
+        function contarItems() {
+            var contador = HttpContext.Session.GetString("ContadorCarrito");
+            return contador;
+        }
+
         function loading() {
             myVar = setTimeout(showPage, 500);
         }
 
         function showPage() {
             document.getElementById("loader").style.display = "none";
-            // document.getElementById("myDiv").style.visibility = "visible";
-            // document.getElementById("myDiv").style.opacity = "1";
             document.getElementById("myDiv").classList.remove('hidden');
             document.getElementById("myDiv").classList.add('visible');
-
         }
+    </script>
+
+    <script type="text/javascript">
+
+        document.addEventListener("DOMContentLoaded", function () {
+            return fetch('/api/carrito/contador')
+        });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

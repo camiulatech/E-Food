@@ -8,9 +8,9 @@ using EFood.Modelos.CarritoCompras;
 using Newtonsoft.Json;
 
 
-namespace EFoodCommerce.Areas.Commerce.Controllers
+namespace EFoodCommerce.Areas.Inventario.Controllers
 {
-    [Area("Commerce")]
+    [Area("Inventario")]
     public class ProductoController : Controller
     {
 
@@ -44,7 +44,9 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
             GuardarCarritoEnSesion(carrito);
 
             TempData[DS.Exitosa] = "Transaccion exitosa!";
-            return RedirectToAction("Consultar");
+            HttpContext.Session.SetString("ContadorCarrito", carrito.itemCarritoCompras.Count.ToString());
+            TempData[DS.Contador] = carrito.itemCarritoCompras.Count.ToString();
+            return RedirectToAction("Index", "Home", new { area = "Inventario" });
         }
 
         private CarritoCompra ObtenerCarritoDeSesion()
