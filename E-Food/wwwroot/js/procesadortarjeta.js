@@ -1,7 +1,7 @@
 ﻿let datatable;
 
 $(document).ready(function () {
-    const id = obtenerUltimoID(); // Obtener el último ID de la URL
+    const id = obtenerUltimoID();
 
     loadDataTable(id);
     loadDataTable1(id);
@@ -86,13 +86,13 @@ function loadDataTable1(id) {
 }
 
 function obtenerUltimoID() {
-    const url = window.location.href; // Obtener la URL completa
-    const partesURL = url.split('/'); // Dividir la URL en partes usando '/' como delimitador
-    return partesURL[partesURL.length - 1]; // El último elemento en el arreglo partesURL es el ID
+    const url = window.location.href;
+    const partesURL = url.split('/');
+    return partesURL[partesURL.length - 1];
 }
 
 function Eliminar(id1) {
-    const id = obtenerUltimoID(); // Obtener el último ID de la URL
+    const id = obtenerUltimoID();
     const val = `${id}, ${id1}`
     const url = `/Admin/ProcesadorTarjeta/Eliminar/${val}`
     swal({
@@ -124,7 +124,7 @@ function Eliminar(id1) {
 }
 
 function Upsert(id1) {
-    const id = obtenerUltimoID(); // Obtener el último ID de la URL
+    const id = obtenerUltimoID();
     const val = `${id}, ${id1}`
     const url = `/Admin/ProcesadorTarjeta/Upsert/${val}`
     swal({

@@ -84,7 +84,7 @@
             var url = '@Url.Action("Remover", "CarritoCompra", new { productoId = "__productoId__" })'
                 .replace('__productoId__', ids);
 
-            console.log("URL:", url); // Agrega esta línea para verificar el ID
+            console.log("URL:", url);
             swal({
                 title: "Esta seguro de Eliminar el Producto del Carrito?",
                 text: "Si es así, continue!",
@@ -125,7 +125,7 @@
                 success: function (data) {
                     if (data.success) {
                         toastr.success(data.message);
-                        window.location.href = window.location.href; // Recargar la página para reflejar los cambios
+                        window.location.href = window.location.href;
                     } else {
                         toastr.error(data.message);
                     }
