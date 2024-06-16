@@ -5,7 +5,25 @@ namespace EFood.Modelos.CarritoCompras
     public class TarjetaPago
     {
         [Required(ErrorMessage = "Numero de Tarjeta es Requerido")]
+        [MaxLength(18, ErrorMessage = "Número de Tarjeta no puede exceder 18 caracteres")]
+        [MinLength(13, ErrorMessage = "Número de Tarjeta debe tener mínimo 13 caracteres")]
         public string NumeroTarjeta { get; set; }
+
+        public string NumeroTarjetaFormateado
+        {
+            get
+            {   if (!string.IsNullOrEmpty(NumeroTarjeta))
+                    if (NumeroTarjeta.Length <= 4)
+                    {
+                        return NumeroTarjeta;
+                    }
+                    else
+                    {
+                        return new string('*', NumeroTarjeta.Length - 4) + NumeroTarjeta.Substring(NumeroTarjeta.Length - 4);
+                    }
+                return string.Empty;
+            }
+        }
 
         [Required(ErrorMessage = "Nombre del Titular es Requerido")]
         public string NombreTitular { get; set; }

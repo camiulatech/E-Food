@@ -370,7 +370,7 @@ namespace EFoodCommerce.Areas.Commerce.Controllers
                     GuardarCarritoEnSesion(comprasVM.CarritoCompra);
                     TempData[DS.Contador] = "0";
                     HttpContext.Session.SetString("ContadorCarrito", "0");
-                    TempData[DS.Exitosa] = "Pedido realizado con éxito";
+                    TempData[DS.Exitosa] = "Pedido realizado con éxito con el código " + pedidoCompletado.Id;
 
                     return RedirectToAction("Index", "Home", new { area = "Inventario" });
                 }
